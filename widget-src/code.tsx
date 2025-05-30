@@ -20,6 +20,10 @@ function Widget() {
     "requestContent",
     `{}`
   );
+  const [isRequestEditing, setIsRequestEditing] = useSyncedState(
+    "isRequestEditing",
+    false
+  );
   const [showResponsePopup, setShowResponsePopup] = useSyncedState(
     "showResponsePopup",
     false
@@ -36,6 +40,10 @@ function Widget() {
   },
   "message": "Operation completed successfully"
 }`
+  );
+  const [isResponseEditing, setIsResponseEditing] = useSyncedState(
+    "isResponseEditing",
+    false
   );
 
   usePropertyMenu(
@@ -160,8 +168,9 @@ function Widget() {
         onClose={() => setShowRequestPopup(false)}
         title="Expected Request Body"
         content={requestContent}
-        editable={true}
+        editable={isRequestEditing}
         onContentChange={setRequestContent}
+        onToggleEdit={() => setIsRequestEditing(!isRequestEditing)}
       />
 
       <Popup
@@ -169,8 +178,9 @@ function Widget() {
         onClose={() => setShowResponsePopup(false)}
         title="Expected Response Body"
         content={responseContent}
-        editable={true}
+        editable={isResponseEditing}
         onContentChange={setResponseContent}
+        onToggleEdit={() => setIsResponseEditing(!isResponseEditing)}
       />
     </AutoLayout>
   );

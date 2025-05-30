@@ -1,6 +1,9 @@
 const { widget } = figma;
 const { AutoLayout, Text, Input } = widget;
 
+import { HighlightedText } from "./HighlightedText";
+import { EditIcon, JsonIcon, CloseIcon } from "./icons/index";
+
 type PopupProps = {
   isVisible: boolean;
   onClose: () => void;
@@ -8,6 +11,7 @@ type PopupProps = {
   content: string;
   editable?: boolean;
   onContentChange?: (content: string) => void;
+  onToggleEdit?: () => void;
 };
 
 export function Popup({
@@ -17,6 +21,7 @@ export function Popup({
   content,
   editable = false,
   onContentChange,
+  onToggleEdit,
 }: PopupProps) {
   if (!isVisible) return null;
 
@@ -40,15 +45,20 @@ export function Popup({
         <Text fontSize={16} fill="#333333" fontWeight={600} width="fill-parent">
           {title}
         </Text>
-        <Text
-          fontSize={16}
-          fill="#666666"
-          fontWeight={400}
-          onClick={onClose}
-          tooltip="Close"
-        >
-          ✕
-        </Text>
+        {onToggleEdit && (
+          <AutoLayout
+            onClick={onToggleEdit}
+            tooltip={editable ? "Switch to view mode" : "Switch to edit mode"}
+            padding={4}
+            cornerRadius={4}
+            fill="#00000000"
+            horizontalAlignItems="center"
+            verticalAlignItems="center"
+          >
+            {editable ? <JsonIcon /> : <EditIcon />}
+          </AutoLayout>
+        )}
+        <CloseIcon onClick={onClose} tooltip="Close" />
       </AutoLayout>
 
       <AutoLayout
@@ -79,14 +89,12 @@ export function Popup({
             }}
           />
         ) : (
-          <Text
+          <HighlightedText
+            content={content}
             fontSize={12}
-            fill="#333333"
             fontFamily="Monaco"
             width="fill-parent"
-          >
-            {content}
-          </Text>
+          />
         )}
       </AutoLayout>
     </AutoLayout>
