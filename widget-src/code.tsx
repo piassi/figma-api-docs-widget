@@ -34,19 +34,9 @@ function Widget() {
         />
 
         <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
-          <Button
-            label="Request"
-            onClick={state.toggleRequestPopup}
-            backgroundColor="#4A90E2"
-            strokeColor="#3A7BC8"
-          />
+          <Button label="Request" onClick={state.toggleRequestPopup} />
 
-          <Button
-            label="Response"
-            onClick={state.toggleResponsePopup}
-            backgroundColor="#28A745"
-            strokeColor="#1E7E34"
-          />
+          <Button label="Response" onClick={state.toggleResponsePopup} />
         </AutoLayout>
       </AutoLayout>
 

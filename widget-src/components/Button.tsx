@@ -4,16 +4,16 @@ const { AutoLayout, Text } = widget;
 type ButtonProps = {
   label: string;
   onClick: () => void;
-  backgroundColor: string;
-  strokeColor: string;
+  backgroundColor?: string;
+  strokeColor?: string;
   tooltip?: string;
 };
 
 export function Button({
   label,
   onClick,
-  backgroundColor,
-  strokeColor,
+  backgroundColor = "#000000",
+  strokeColor = "#000000",
   tooltip,
 }: ButtonProps) {
   return (
