@@ -151,19 +151,26 @@ function Widget() {
         <AutoLayout direction={"horizontal"} spacing={16} width={"fill-parent"}>
           <AutoLayout
             direction={"vertical"}
-            padding={8}
-            cornerRadius={8}
-            fill={"#F5F5F5"}
-            stroke={"#E0E0E0"}
+            padding={16}
+            cornerRadius={12}
+            fill={"#4A90E2"}
+            stroke={"#3A7BC8"}
+            strokeWidth={1}
             width={"fill-parent"}
             verticalAlignItems={"center"}
             horizontalAlignItems={"center"}
-            height={40}
+            height={50}
+            effect={{
+              type: "drop-shadow",
+              color: "#00000020",
+              offset: { x: 0, y: 2 },
+              blur: 4,
+            }}
           >
             <Text
-              fontSize={18}
-              fill={"#333333"}
-              fontWeight={500}
+              fontSize={16}
+              fill={"#FFFFFF"}
+              fontWeight={600}
               tooltip={`Request Body Example:
 {
   "id": "string",
@@ -184,19 +191,26 @@ function Widget() {
 
           <AutoLayout
             direction={"vertical"}
-            padding={8}
-            cornerRadius={8}
-            fill={"#F5F5F5"}
-            stroke={"#E0E0E0"}
+            padding={16}
+            cornerRadius={12}
+            fill={"#28A745"}
+            stroke={"#1E7E34"}
+            strokeWidth={1}
             width={"fill-parent"}
             verticalAlignItems={"center"}
             horizontalAlignItems={"center"}
-            height={40}
+            height={50}
+            effect={{
+              type: "drop-shadow",
+              color: "#00000020",
+              offset: { x: 0, y: 2 },
+              blur: 4,
+            }}
           >
             <Text
-              fontSize={18}
-              fill={"#333333"}
-              fontWeight={500}
+              fontSize={16}
+              fill={"#FFFFFF"}
+              fontWeight={600}
               tooltip={`Response Body Example:
 {
   "success": true,
