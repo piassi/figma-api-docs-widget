@@ -1,7 +1,74 @@
-// This is an API endpoint documentation widget
-
 const { widget } = figma;
 const { useSyncedState, usePropertyMenu, AutoLayout, Text, Input } = widget;
+
+function Popup({
+  isVisible,
+  onClose,
+  title,
+  content,
+}: {
+  isVisible: boolean;
+  onClose: () => void;
+  title: string;
+  content: string;
+}) {
+  if (!isVisible) return null;
+
+  return (
+    <AutoLayout
+      direction={"vertical"}
+      spacing={12}
+      padding={20}
+      cornerRadius={8}
+      fill={"#FFFFFF"}
+      stroke={"#E0E0E0"}
+      strokeWidth={1}
+      width={500}
+    >
+      <AutoLayout
+        direction={"horizontal"}
+        spacing={8}
+        width={"fill-parent"}
+        verticalAlignItems={"center"}
+      >
+        <Text
+          fontSize={16}
+          fill={"#333333"}
+          fontWeight={600}
+          width={"fill-parent"}
+        >
+          {title}
+        </Text>
+        <Text
+          fontSize={16}
+          fill={"#666666"}
+          fontWeight={400}
+          onClick={onClose}
+          tooltip="Close"
+        >
+          ✕
+        </Text>
+      </AutoLayout>
+
+      <AutoLayout
+        direction={"vertical"}
+        padding={16}
+        cornerRadius={4}
+        fill={"#F8F8F8"}
+        width={"fill-parent"}
+      >
+        <Text
+          fontSize={12}
+          fill={"#333333"}
+          fontFamily={"Monaco"}
+          width={"fill-parent"}
+        >
+          {content}
+        </Text>
+      </AutoLayout>
+    </AutoLayout>
+  );
+}
 
 function Widget() {
   const [count, setCount] = useSyncedState("count", 0);
@@ -15,7 +82,6 @@ function Widget() {
     false
   );
 
-  // Property menu for HTTP method selection
   usePropertyMenu(
     [
       {
@@ -56,7 +122,6 @@ function Widget() {
     }
   );
 
-  // Get color based on HTTP method
   const getMethodColor = (method: string) => {
     switch (method) {
       case "GET":
@@ -80,7 +145,6 @@ function Widget() {
 
   return (
     <AutoLayout direction={"vertical"} spacing={16} padding={0}>
-      {/* Main Widget */}
       <AutoLayout
         direction={"vertical"}
         spacing={16}
@@ -90,7 +154,6 @@ function Widget() {
         stroke={"#E6E6E6"}
         width={500}
       >
-        {/* API Endpoint Header */}
         <AutoLayout
           direction={"horizontal"}
           spacing={8}
@@ -120,9 +183,7 @@ function Widget() {
           />
         </AutoLayout>
 
-        {/* Request and Response Boxes */}
         <AutoLayout direction={"horizontal"} spacing={16} width={"fill-parent"}>
-          {/* Request Box */}
           <AutoLayout
             direction={"vertical"}
             padding={8}
@@ -156,7 +217,6 @@ function Widget() {
             </Text>
           </AutoLayout>
 
-          {/* Response Box */}
           <AutoLayout
             direction={"vertical"}
             padding={8}
@@ -175,59 +235,11 @@ function Widget() {
         </AutoLayout>
       </AutoLayout>
 
-      {/* Custom Request Popup */}
-      {showRequestPopup && (
-        <AutoLayout
-          direction={"vertical"}
-          spacing={12}
-          padding={20}
-          cornerRadius={8}
-          fill={"#FFFFFF"}
-          stroke={"#E0E0E0"}
-          strokeWidth={1}
-          width={500}
-        >
-          {/* Popup Header */}
-          <AutoLayout
-            direction={"horizontal"}
-            spacing={8}
-            width={"fill-parent"}
-            verticalAlignItems={"center"}
-          >
-            <Text
-              fontSize={16}
-              fill={"#333333"}
-              fontWeight={600}
-              width={"fill-parent"}
-            >
-              Expected Request Body
-            </Text>
-            <Text
-              fontSize={16}
-              fill={"#666666"}
-              fontWeight={400}
-              onClick={() => setShowRequestPopup(false)}
-              tooltip="Close"
-            >
-              ✕
-            </Text>
-          </AutoLayout>
-
-          {/* Request Body Content */}
-          <AutoLayout
-            direction={"vertical"}
-            padding={16}
-            cornerRadius={4}
-            fill={"#F8F8F8"}
-            width={"fill-parent"}
-          >
-            <Text
-              fontSize={12}
-              fill={"#333333"}
-              fontFamily={"Monaco"}
-              width={"fill-parent"}
-            >
-              {`{
+      <Popup
+        isVisible={showRequestPopup}
+        onClose={() => setShowRequestPopup(false)}
+        title="Expected Request Body"
+        content={`{
   "id": "string",
   "name": "string", 
   "email": "user@exstuample.com",
@@ -238,10 +250,7 @@ function Widget() {
   },
   "timestamp": "2024-01-01T00:00:00Z"
 }`}
-            </Text>
-          </AutoLayout>
-        </AutoLayout>
-      )}
+      />
     </AutoLayout>
   );
 }
