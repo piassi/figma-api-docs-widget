@@ -1,14 +1,7 @@
 // This is an API endpoint documentation widget
 
 const { widget } = figma;
-const {
-  useSyncedState,
-  usePropertyMenu,
-  AutoLayout,
-  Text,
-  Input,
-  useWidgetNodeId,
-} = widget;
+const { useSyncedState, usePropertyMenu, AutoLayout, Text, Input } = widget;
 
 function Widget() {
   const [count, setCount] = useSyncedState("count", 0);
@@ -17,11 +10,10 @@ function Widget() {
     "endpointPath",
     "/my_api_endpoint/path"
   );
-  const [isRequestPopupOpen, setIsRequestPopupOpen] = useSyncedState(
-    "isRequestPopupOpen",
+  const [showRequestPopup, setShowRequestPopup] = useSyncedState(
+    "showRequestPopup",
     false
   );
-  const widgetNodeId = useWidgetNodeId();
 
   // Property menu for HTTP method selection
   usePropertyMenu(
@@ -87,64 +79,66 @@ function Widget() {
   };
 
   return (
-    <AutoLayout
-      direction={"vertical"}
-      spacing={16}
-      padding={20}
-      cornerRadius={12}
-      fill={"#FFFFFF"}
-      stroke={"#E6E6E6"}
-      width={500}
-    >
-      {/* API Endpoint Header */}
+    <AutoLayout direction={"vertical"} spacing={16} padding={0}>
+      {/* Main Widget */}
       <AutoLayout
-        direction={"horizontal"}
-        spacing={8}
-        padding={{ horizontal: 24, vertical: 12 }}
-        cornerRadius={25}
-        fill={getMethodColor(httpMethod)}
-        verticalAlignItems={"center"}
-        width={"fill-parent"}
+        direction={"vertical"}
+        spacing={16}
+        padding={20}
+        cornerRadius={12}
+        fill={"#FFFFFF"}
+        stroke={"#E6E6E6"}
+        width={500}
       >
-        <Text fontSize={16} fill={"#FFFFFF"} fontWeight={600}>
-          {httpMethod}
-        </Text>
-        <Input
-          value={endpointPath}
-          onTextEditEnd={(e) => {
-            setEndpointPath(e.characters);
-          }}
-          fontSize={16}
-          fill={"#FFFFFF"}
-          fontWeight={600}
-          placeholder="/api/endpoint/path"
-          width={"fill-parent"}
-          inputFrameProps={{
-            fill: "#00000000",
-            stroke: "#00000000",
-          }}
-        />
-      </AutoLayout>
-
-      {/* Request and Response Boxes */}
-      <AutoLayout direction={"horizontal"} spacing={16} width={"fill-parent"}>
-        {/* Request Box */}
+        {/* API Endpoint Header */}
         <AutoLayout
-          direction={"vertical"}
-          padding={8}
-          cornerRadius={8}
-          fill={"#F5F5F5"}
-          stroke={"#E0E0E0"}
-          width={"fill-parent"}
+          direction={"horizontal"}
+          spacing={8}
+          padding={{ horizontal: 24, vertical: 12 }}
+          cornerRadius={25}
+          fill={getMethodColor(httpMethod)}
           verticalAlignItems={"center"}
-          horizontalAlignItems={"center"}
-          height={40}
+          width={"fill-parent"}
         >
-          <Text
-            fontSize={18}
-            fill={"#333333"}
-            fontWeight={500}
-            tooltip={`Request Body Example:
+          <Text fontSize={16} fill={"#FFFFFF"} fontWeight={600}>
+            {httpMethod}
+          </Text>
+          <Input
+            value={endpointPath}
+            onTextEditEnd={(e) => {
+              setEndpointPath(e.characters);
+            }}
+            fontSize={16}
+            fill={"#FFFFFF"}
+            fontWeight={600}
+            placeholder="/api/endpoint/path"
+            width={"fill-parent"}
+            inputFrameProps={{
+              fill: "#00000000",
+              stroke: "#00000000",
+            }}
+          />
+        </AutoLayout>
+
+        {/* Request and Response Boxes */}
+        <AutoLayout direction={"horizontal"} spacing={16} width={"fill-parent"}>
+          {/* Request Box */}
+          <AutoLayout
+            direction={"vertical"}
+            padding={8}
+            cornerRadius={8}
+            fill={"#F5F5F5"}
+            stroke={"#E0E0E0"}
+            width={"fill-parent"}
+            verticalAlignItems={"center"}
+            horizontalAlignItems={"center"}
+            height={40}
+          >
+            <Text
+              fontSize={18}
+              fill={"#333333"}
+              fontWeight={500}
+              tooltip={`Request Body Example:
 {
   "id": "string",
   "name": "string", 
@@ -154,85 +148,100 @@ function Widget() {
     "field2": 123
   }
 }`}
-            onClick={async () => {
-              // If popup is already open, close it
-              if (isRequestPopupOpen) {
-                figma.closePlugin();
-                setIsRequestPopupOpen(false);
-                return;
-              }
+              onClick={() => {
+                setShowRequestPopup(!showRequestPopup);
+              }}
+            >
+              Request
+            </Text>
+          </AutoLayout>
 
-              // Otherwise, open the popup
-              setIsRequestPopupOpen(true);
+          {/* Response Box */}
+          <AutoLayout
+            direction={"vertical"}
+            padding={8}
+            cornerRadius={8}
+            fill={"#F5F5F5"}
+            stroke={"#E0E0E0"}
+            width={"fill-parent"}
+            verticalAlignItems={"center"}
+            horizontalAlignItems={"center"}
+            height={40}
+          >
+            <Text fontSize={18} fill={"#333333"} fontWeight={500}>
+              Response
+            </Text>
+          </AutoLayout>
+        </AutoLayout>
+      </AutoLayout>
 
-              // Get widget position to place popup below it
-              const widgetNode = (await figma.getNodeByIdAsync(
-                widgetNodeId
-              )) as WidgetNode;
-              const popupX = widgetNode.x;
-              const popupY = widgetNode.y + widgetNode.height + 10;
+      {/* Custom Request Popup */}
+      {showRequestPopup && (
+        <AutoLayout
+          direction={"vertical"}
+          spacing={12}
+          padding={20}
+          cornerRadius={8}
+          fill={"#FFFFFF"}
+          stroke={"#E0E0E0"}
+          strokeWidth={1}
+          width={500}
+        >
+          {/* Popup Header */}
+          <AutoLayout
+            direction={"horizontal"}
+            spacing={8}
+            width={"fill-parent"}
+            verticalAlignItems={"center"}
+          >
+            <Text
+              fontSize={16}
+              fill={"#333333"}
+              fontWeight={600}
+              width={"fill-parent"}
+            >
+              Expected Request Body
+            </Text>
+            <Text
+              fontSize={16}
+              fill={"#666666"}
+              fontWeight={400}
+              onClick={() => setShowRequestPopup(false)}
+              tooltip="Close"
+            >
+              ✕
+            </Text>
+          </AutoLayout>
 
-              return new Promise((resolve) => {
-                figma.showUI(
-                  `
-                  <div style="padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-                    <h3 style="margin-top: 0;">Expected Request Body</h3>
-                    <pre style="background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 12px;">
-{
+          {/* Request Body Content */}
+          <AutoLayout
+            direction={"vertical"}
+            padding={16}
+            cornerRadius={4}
+            fill={"#F8F8F8"}
+            width={"fill-parent"}
+          >
+            <Text
+              fontSize={12}
+              fill={"#333333"}
+              fontFamily={"Monaco"}
+              width={"fill-parent"}
+            >
+              {`{
   "id": "string",
   "name": "string", 
-  "email": "user@example.com",
+  "email": "user@exstuample.com",
   "data": {
     "field1": "value1",
     "field2": 123,
     "optional_field": "string"
   },
   "timestamp": "2024-01-01T00:00:00Z"
-}
-                    </pre>
-                  </div>
-                `,
-                  {
-                    width: 400,
-                    height: 300,
-                    position: {
-                      x: popupX,
-                      y: popupY,
-                    },
-                  }
-                );
-
-                figma.ui.onmessage = (msg) => {
-                  if (msg.type === "close") {
-                    setIsRequestPopupOpen(false);
-                    figma.closePlugin();
-                    resolve(null);
-                  }
-                };
-              });
-            }}
-          >
-            Request
-          </Text>
+}`}
+            </Text>
+          </AutoLayout>
         </AutoLayout>
-
-        {/* Response Box */}
-        <AutoLayout
-          direction={"vertical"}
-          padding={8}
-          cornerRadius={8}
-          fill={"#F5F5F5"}
-          stroke={"#E0E0E0"}
-          width={"fill-parent"}
-          verticalAlignItems={"center"}
-          horizontalAlignItems={"center"}
-          height={40}
-        >
-          <Text fontSize={18} fill={"#333333"} fontWeight={500}>
-            Response
-          </Text>
-        </AutoLayout>
-      </AutoLayout>
+      )}
     </AutoLayout>
   );
 }
