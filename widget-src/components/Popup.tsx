@@ -22,32 +22,27 @@ export function Popup({
 
   return (
     <AutoLayout
-      direction={"vertical"}
+      direction="vertical"
       spacing={12}
       padding={20}
       cornerRadius={8}
-      fill={"#FFFFFF"}
-      stroke={"#E0E0E0"}
+      fill="#FFFFFF"
+      stroke="#E0E0E0"
       strokeWidth={1}
       width={500}
     >
       <AutoLayout
-        direction={"horizontal"}
+        direction="horizontal"
         spacing={8}
-        width={"fill-parent"}
-        verticalAlignItems={"center"}
+        width="fill-parent"
+        verticalAlignItems="center"
       >
-        <Text
-          fontSize={16}
-          fill={"#333333"}
-          fontWeight={600}
-          width={"fill-parent"}
-        >
+        <Text fontSize={16} fill="#333333" fontWeight={600} width="fill-parent">
           {title}
         </Text>
         <Text
           fontSize={16}
-          fill={"#666666"}
+          fill="#666666"
           fontWeight={400}
           onClick={onClose}
           tooltip="Close"
@@ -57,11 +52,11 @@ export function Popup({
       </AutoLayout>
 
       <AutoLayout
-        direction={"vertical"}
+        direction="vertical"
         padding={16}
         cornerRadius={4}
-        fill={"#F8F8F8"}
-        width={"fill-parent"}
+        fill="#F8F8F8"
+        width="fill-parent"
       >
         {editable && onContentChange ? (
           <Input
@@ -70,9 +65,9 @@ export function Popup({
               onContentChange(e.characters);
             }}
             fontSize={12}
-            fill={"#333333"}
-            fontFamily={"Monaco"}
-            width={"fill-parent"}
+            fill="#333333"
+            fontFamily="Monaco"
+            width="fill-parent"
             placeholder="Enter JSON content..."
             inputBehavior="multiline"
             inputFrameProps={{
@@ -86,9 +81,9 @@ export function Popup({
         ) : (
           <Text
             fontSize={12}
-            fill={"#333333"}
-            fontFamily={"Monaco"}
-            width={"fill-parent"}
+            fill="#333333"
+            fontFamily="Monaco"
+            width="fill-parent"
           >
             {content}
           </Text>

@@ -36,7 +36,7 @@ export function HttpMethodBadge({ method }: HttpMethodBadgeProps) {
       horizontalAlignItems="center"
       verticalAlignItems="center"
     >
-      <Text fontSize={16} fill={"#FFFFFF"} fontWeight={600}>
+      <Text fontSize={16} fill="#FFFFFF" fontWeight={600}>
         {method}
       </Text>
     </AutoLayout>

@@ -78,24 +78,24 @@ function Widget() {
   );
 
   return (
-    <AutoLayout direction={"vertical"} spacing={16} padding={0}>
+    <AutoLayout direction="vertical" spacing={16} padding={0}>
       <AutoLayout
-        direction={"vertical"}
+        direction="vertical"
         spacing={16}
         padding={20}
         cornerRadius={12}
-        fill={"#FFFFFF"}
-        stroke={"#E6E6E6"}
+        fill="#FFFFFF"
+        stroke="#E6E6E6"
         width={500}
       >
         <AutoLayout
-          direction={"horizontal"}
+          direction="horizontal"
           spacing={14}
           padding={{ horizontal: 16, vertical: 12 }}
           cornerRadius={16}
-          fill={"#F0F0F0"}
-          verticalAlignItems={"center"}
-          width={"fill-parent"}
+          fill="#F0F0F0"
+          verticalAlignItems="center"
+          width="fill-parent"
           horizontalAlignItems="center"
         >
           <HttpMethodBadge method={httpMethod} />
@@ -105,10 +105,10 @@ function Widget() {
               setEndpointPath(e.characters);
             }}
             fontSize={16}
-            fill={"#333333"}
+            fill="#333333"
             fontWeight={600}
             placeholder="/api/endpoint/path"
-            width={"fill-parent"}
+            width="fill-parent"
             inputFrameProps={{
               fill: "#00000000",
               stroke: "#00000000",
@@ -116,17 +116,17 @@ function Widget() {
           />
         </AutoLayout>
 
-        <AutoLayout direction={"horizontal"} spacing={16} width={"fill-parent"}>
+        <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
           <AutoLayout
-            direction={"vertical"}
+            direction="vertical"
             padding={16}
             cornerRadius={12}
-            fill={"#4A90E2"}
-            stroke={"#3A7BC8"}
+            fill="#4A90E2"
+            stroke="#3A7BC8"
             strokeWidth={1}
-            width={"fill-parent"}
-            verticalAlignItems={"center"}
-            horizontalAlignItems={"center"}
+            width="fill-parent"
+            verticalAlignItems="center"
+            horizontalAlignItems="center"
             height={50}
             effect={{
               type: "drop-shadow",
@@ -137,7 +137,7 @@ function Widget() {
           >
             <Text
               fontSize={16}
-              fill={"#FFFFFF"}
+              fill="#FFFFFF"
               fontWeight={600}
               tooltip={`Request Body Example:
 {
@@ -158,15 +158,15 @@ function Widget() {
           </AutoLayout>
 
           <AutoLayout
-            direction={"vertical"}
+            direction="vertical"
             padding={16}
             cornerRadius={12}
-            fill={"#28A745"}
-            stroke={"#1E7E34"}
+            fill="#28A745"
+            stroke="#1E7E34"
             strokeWidth={1}
-            width={"fill-parent"}
-            verticalAlignItems={"center"}
-            horizontalAlignItems={"center"}
+            width="fill-parent"
+            verticalAlignItems="center"
+            horizontalAlignItems="center"
             height={50}
             effect={{
               type: "drop-shadow",
@@ -177,7 +177,7 @@ function Widget() {
           >
             <Text
               fontSize={16}
-              fill={"#FFFFFF"}
+              fill="#FFFFFF"
               fontWeight={600}
               tooltip={`Response Body Example:
 {
