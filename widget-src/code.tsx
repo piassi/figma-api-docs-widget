@@ -1,9 +1,9 @@
 const { widget } = figma;
-const { useSyncedState, usePropertyMenu, AutoLayout, Input } = widget;
+const { useSyncedState, usePropertyMenu, AutoLayout } = widget;
 
 import { Popup } from "./components/Popup";
-import { HttpMethodBadge } from "./components/HttpMethodBadge";
 import { Button } from "./components/Button";
+import { EndpointBar } from "./components/EndpointBar";
 
 function Widget() {
   const [count, setCount] = useSyncedState("count", 0);
@@ -97,33 +97,12 @@ function Widget() {
         stroke="#E6E6E6"
         width={500}
       >
-        <AutoLayout
-          direction="horizontal"
-          spacing={14}
-          padding={{ horizontal: 16, vertical: 12 }}
-          cornerRadius={16}
-          fill="#F0F0F0"
-          verticalAlignItems="center"
-          width="fill-parent"
-          horizontalAlignItems="center"
-        >
-          <HttpMethodBadge method={httpMethod} />
-          <Input
-            value={endpointPath}
-            onTextEditEnd={(e) => {
-              setEndpointPath(e.characters);
-            }}
-            fontSize={16}
-            fill="#333333"
-            fontWeight={600}
-            placeholder="/api/endpoint/path"
-            width="fill-parent"
-            inputFrameProps={{
-              fill: "#00000000",
-              stroke: "#00000000",
-            }}
-          />
-        </AutoLayout>
+        <EndpointBar
+          httpMethod={httpMethod}
+          endpointPath={endpointPath}
+          onEndpointPathChange={setEndpointPath}
+          placeholder="/api/endpoint/path"
+        />
 
         <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
           <Button
