@@ -110,23 +110,34 @@ function Widget() {
       >
         <AutoLayout
           direction={"horizontal"}
-          spacing={8}
-          padding={{ horizontal: 24, vertical: 12 }}
-          cornerRadius={25}
-          fill={getMethodColor(httpMethod)}
+          spacing={14}
+          padding={{ horizontal: 16, vertical: 12 }}
+          cornerRadius={16}
+          fill={"#F0F0F0"}
           verticalAlignItems={"center"}
           width={"fill-parent"}
+          horizontalAlignItems="center"
         >
-          <Text fontSize={16} fill={"#FFFFFF"} fontWeight={600}>
-            {httpMethod}
-          </Text>
+          <AutoLayout
+            padding={{ horizontal: 16, vertical: 8 }}
+            cornerRadius={10}
+            fill={getMethodColor(httpMethod)}
+            width={85}
+            horizontalAlignItems="center"
+            verticalAlignItems="center"
+          >
+            <Text fontSize={16} fill={"#FFFFFF"} fontWeight={600}>
+              {httpMethod}
+            </Text>
+          </AutoLayout>
+
           <Input
             value={endpointPath}
             onTextEditEnd={(e) => {
               setEndpointPath(e.characters);
             }}
             fontSize={16}
-            fill={"#FFFFFF"}
+            fill={"#333333"}
             fontWeight={600}
             placeholder="/api/endpoint/path"
             width={"fill-parent"}
