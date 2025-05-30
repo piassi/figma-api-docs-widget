@@ -1,7 +1,14 @@
 // This is an API endpoint documentation widget
 
 const { widget } = figma;
-const { useSyncedState, usePropertyMenu, AutoLayout, Text, Input } = widget;
+const {
+  useSyncedState,
+  usePropertyMenu,
+  AutoLayout,
+  Text,
+  Input,
+  useWidgetNodeId,
+} = widget;
 
 function Widget() {
   const [count, setCount] = useSyncedState("count", 0);
@@ -14,6 +21,7 @@ function Widget() {
     "isRequestPopupOpen",
     false
   );
+  const widgetNodeId = useWidgetNodeId();
 
   // Property menu for HTTP method selection
   usePropertyMenu(
@@ -146,7 +154,7 @@ function Widget() {
     "field2": 123
   }
 }`}
-            onClick={() => {
+            onClick={async () => {
               // If popup is already open, close it
               if (isRequestPopupOpen) {
                 figma.closePlugin();
@@ -156,6 +164,14 @@ function Widget() {
 
               // Otherwise, open the popup
               setIsRequestPopupOpen(true);
+
+              // Get widget position to place popup below it
+              const widgetNode = (await figma.getNodeByIdAsync(
+                widgetNodeId
+              )) as WidgetNode;
+              const popupX = widgetNode.x;
+              const popupY = widgetNode.y + widgetNode.height + 10;
+
               return new Promise((resolve) => {
                 figma.showUI(
                   `
@@ -176,7 +192,14 @@ function Widget() {
                     </pre>
                   </div>
                 `,
-                  { width: 400, height: 300 }
+                  {
+                    width: 400,
+                    height: 300,
+                    position: {
+                      x: popupX,
+                      y: popupY,
+                    },
+                  }
                 );
 
                 figma.ui.onmessage = (msg) => {
