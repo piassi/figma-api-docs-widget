@@ -18,6 +18,23 @@ function Widget() {
     "requestContent",
     `{}`
   );
+  const [showResponsePopup, setShowResponsePopup] = useSyncedState(
+    "showResponsePopup",
+    false
+  );
+  const [responseContent, setResponseContent] = useSyncedState(
+    "responseContent",
+    `{
+  "success": true,
+  "data": {
+    "id": "12345",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  "message": "Operation completed successfully"
+}`
+  );
 
   usePropertyMenu(
     [
@@ -165,7 +182,25 @@ function Widget() {
             horizontalAlignItems={"center"}
             height={40}
           >
-            <Text fontSize={18} fill={"#333333"} fontWeight={500}>
+            <Text
+              fontSize={18}
+              fill={"#333333"}
+              fontWeight={500}
+              tooltip={`Response Body Example:
+{
+  "success": true,
+  "data": {
+    "id": "12345",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  "message": "Operation completed successfully"
+}`}
+              onClick={() => {
+                setShowResponsePopup(!showResponsePopup);
+              }}
+            >
               Response
             </Text>
           </AutoLayout>
@@ -179,6 +214,15 @@ function Widget() {
         content={requestContent}
         editable={true}
         onContentChange={setRequestContent}
+      />
+
+      <Popup
+        isVisible={showResponsePopup}
+        onClose={() => setShowResponsePopup(false)}
+        title="Expected Response Body"
+        content={responseContent}
+        editable={true}
+        onContentChange={setResponseContent}
       />
     </AutoLayout>
   );
