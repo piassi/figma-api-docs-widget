@@ -134,6 +134,9 @@ function Widget() {
               offset: { x: 0, y: 2 },
               blur: 4,
             }}
+            onClick={() => {
+              setShowRequestPopup(!showRequestPopup);
+            }}
           >
             <Text
               fontSize={16}
@@ -149,9 +152,6 @@ function Widget() {
     "field2": 123
   }
 }`}
-              onClick={() => {
-                setShowRequestPopup(!showRequestPopup);
-              }}
             >
               Request
             </Text>
@@ -174,6 +174,9 @@ function Widget() {
               offset: { x: 0, y: 2 },
               blur: 4,
             }}
+            onClick={() => {
+              setShowResponsePopup(!showResponsePopup);
+            }}
           >
             <Text
               fontSize={16}
@@ -190,9 +193,6 @@ function Widget() {
   },
   "message": "Operation completed successfully"
 }`}
-              onClick={() => {
-                setShowResponsePopup(!showResponsePopup);
-              }}
             >
               Response
             </Text>
