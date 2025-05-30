@@ -18,7 +18,6 @@ export function isValidHttpMethod(method: string): method is HttpMethod {
 }
 
 const STATE_KEYS = {
-  COUNT: "count",
   HTTP_METHOD: "httpMethod",
   ENDPOINT_PATH: "endpointPath",
   SHOW_REQUEST_POPUP: "showRequestPopup",
@@ -30,7 +29,6 @@ const STATE_KEYS = {
 } as const;
 
 const DEFAULT_VALUES = {
-  COUNT: 0,
   HTTP_METHOD: "GET" as HttpMethod,
   ENDPOINT_PATH: "",
   SHOW_REQUEST_POPUP: false,
@@ -50,10 +48,7 @@ const DEFAULT_VALUES = {
   IS_RESPONSE_EDITING: false,
 } as const;
 
-// Return type for the hook
 export type APIWidgetState = {
-  // State values
-  count: number;
   httpMethod: HttpMethod;
   endpointPath: string;
   showRequestPopup: boolean;
@@ -62,9 +57,6 @@ export type APIWidgetState = {
   showResponsePopup: boolean;
   responseContent: string;
   isResponseEditing: boolean;
-
-  // State setters
-  setCount: (count: number) => void;
   setHttpMethod: (method: HttpMethod) => void;
   setEndpointPath: (path: string) => void;
   setShowRequestPopup: (show: boolean) => void;
@@ -73,20 +65,13 @@ export type APIWidgetState = {
   setShowResponsePopup: (show: boolean) => void;
   setResponseContent: (content: string) => void;
   setIsResponseEditing: (editing: boolean) => void;
-
-  // Convenience actions
   toggleRequestPopup: () => void;
   toggleResponsePopup: () => void;
   toggleRequestEditing: () => void;
   toggleResponseEditing: () => void;
-  resetCount: () => void;
 };
 
 export function useAPIWidgetState(): APIWidgetState {
-  const [count, setCount] = useSyncedState<number>(
-    STATE_KEYS.COUNT,
-    DEFAULT_VALUES.COUNT
-  );
   const [httpMethod, setHttpMethod] = useSyncedState<HttpMethod>(
     STATE_KEYS.HTTP_METHOD,
     DEFAULT_VALUES.HTTP_METHOD
@@ -121,8 +106,6 @@ export function useAPIWidgetState(): APIWidgetState {
   );
 
   return {
-    // State values
-    count,
     httpMethod,
     endpointPath,
     showRequestPopup,
@@ -131,9 +114,6 @@ export function useAPIWidgetState(): APIWidgetState {
     showResponsePopup,
     responseContent,
     isResponseEditing,
-
-    // State setters
-    setCount,
     setHttpMethod,
     setEndpointPath,
     setShowRequestPopup,
@@ -142,12 +122,9 @@ export function useAPIWidgetState(): APIWidgetState {
     setShowResponsePopup,
     setResponseContent,
     setIsResponseEditing,
-
-    // Convenience actions
     toggleRequestPopup: () => setShowRequestPopup(!showRequestPopup),
     toggleResponsePopup: () => setShowResponsePopup(!showResponsePopup),
     toggleRequestEditing: () => setIsRequestEditing(!isRequestEditing),
     toggleResponseEditing: () => setIsResponseEditing(!isResponseEditing),
-    resetCount: () => setCount(0),
   };
 }

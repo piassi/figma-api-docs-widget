@@ -13,8 +13,6 @@ function Widget() {
   useAPIPropertyMenu({
     httpMethod: state.httpMethod,
     onHttpMethodChange: state.setHttpMethod,
-    count: state.count,
-    onReset: state.resetCount,
   });
 
   return (
