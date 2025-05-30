@@ -8,10 +8,7 @@ import { EndpointBar } from "./components/EndpointBar";
 function Widget() {
   const [count, setCount] = useSyncedState("count", 0);
   const [httpMethod, setHttpMethod] = useSyncedState("httpMethod", "GET");
-  const [endpointPath, setEndpointPath] = useSyncedState(
-    "endpointPath",
-    "/my_api_endpoint/path"
-  );
+  const [endpointPath, setEndpointPath] = useSyncedState("endpointPath", "");
   const [showRequestPopup, setShowRequestPopup] = useSyncedState(
     "showRequestPopup",
     false
