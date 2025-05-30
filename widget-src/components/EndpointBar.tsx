@@ -1,10 +1,11 @@
 const { widget } = figma;
 const { AutoLayout, Input } = widget;
 
+import { HttpMethod } from "../hooks/useAPIWidgetState";
 import { HttpMethodBadge } from "./HttpMethodBadge";
 
 type EndpointBarProps = {
-  httpMethod: string;
+  httpMethod: HttpMethod;
   endpointPath: string;
   onEndpointPathChange: (path: string) => void;
   placeholder?: string;

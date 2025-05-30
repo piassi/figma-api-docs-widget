@@ -1,54 +1,20 @@
 const { widget } = figma;
-const { useSyncedState, AutoLayout } = widget;
+const { AutoLayout } = widget;
 
 import { Popup } from "./components/Popup";
 import { Button } from "./components/Button";
 import { EndpointBar } from "./components/EndpointBar";
 import { useAPIPropertyMenu } from "./hooks/useAPIPropertyMenu";
+import { useAPIWidgetState } from "./hooks/useAPIWidgetState";
 
 function Widget() {
-  const [count, setCount] = useSyncedState("count", 0);
-  const [httpMethod, setHttpMethod] = useSyncedState("httpMethod", "GET");
-  const [endpointPath, setEndpointPath] = useSyncedState("endpointPath", "");
-  const [showRequestPopup, setShowRequestPopup] = useSyncedState(
-    "showRequestPopup",
-    false
-  );
-  const [requestContent, setRequestContent] = useSyncedState(
-    "requestContent",
-    `{}`
-  );
-  const [isRequestEditing, setIsRequestEditing] = useSyncedState(
-    "isRequestEditing",
-    false
-  );
-  const [showResponsePopup, setShowResponsePopup] = useSyncedState(
-    "showResponsePopup",
-    false
-  );
-  const [responseContent, setResponseContent] = useSyncedState(
-    "responseContent",
-    `{
-  "success": true,
-  "data": {
-    "id": "12345",
-    "name": "John Doe",
-    "email": "john.doe@example.com",
-    "created_at": "2024-01-01T00:00:00Z"
-  },
-  "message": "Operation completed successfully"
-}`
-  );
-  const [isResponseEditing, setIsResponseEditing] = useSyncedState(
-    "isResponseEditing",
-    false
-  );
+  const state = useAPIWidgetState();
 
   useAPIPropertyMenu({
-    httpMethod,
-    onHttpMethodChange: setHttpMethod,
-    count,
-    onReset: () => setCount(0),
+    httpMethod: state.httpMethod,
+    onHttpMethodChange: state.setHttpMethod,
+    count: state.count,
+    onReset: state.resetCount,
   });
 
   return (
@@ -63,68 +29,47 @@ function Widget() {
         width={500}
       >
         <EndpointBar
-          httpMethod={httpMethod}
-          endpointPath={endpointPath}
-          onEndpointPathChange={setEndpointPath}
+          httpMethod={state.httpMethod}
+          endpointPath={state.endpointPath}
+          onEndpointPathChange={state.setEndpointPath}
           placeholder="/api/endpoint/path"
         />
 
         <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
           <Button
             label="Request"
-            onClick={() => setShowRequestPopup(!showRequestPopup)}
+            onClick={state.toggleRequestPopup}
             backgroundColor="#4A90E2"
             strokeColor="#3A7BC8"
-            tooltip={`Request Body Example:
-{
-  "id": "string",
-  "name": "string", 
-  "email": "user@example.com",
-  "data": {
-    "field1": "value1",
-    "field2": 123
-  }
-}`}
           />
 
           <Button
             label="Response"
-            onClick={() => setShowResponsePopup(!showResponsePopup)}
+            onClick={state.toggleResponsePopup}
             backgroundColor="#28A745"
             strokeColor="#1E7E34"
-            tooltip={`Response Body Example:
-{
-  "success": true,
-  "data": {
-    "id": "12345",
-    "name": "John Doe",
-    "email": "john.doe@example.com",
-    "created_at": "2024-01-01T00:00:00Z"
-  },
-  "message": "Operation completed successfully"
-}`}
           />
         </AutoLayout>
       </AutoLayout>
 
       <Popup
-        isVisible={showRequestPopup}
-        onClose={() => setShowRequestPopup(false)}
+        isVisible={state.showRequestPopup}
+        onClose={() => state.setShowRequestPopup(false)}
         title="Expected Request Body"
-        content={requestContent}
-        editable={isRequestEditing}
-        onContentChange={setRequestContent}
-        onToggleEdit={() => setIsRequestEditing(!isRequestEditing)}
+        content={state.requestContent}
+        editable={state.isRequestEditing}
+        onContentChange={state.setRequestContent}
+        onToggleEdit={state.toggleRequestEditing}
       />
 
       <Popup
-        isVisible={showResponsePopup}
-        onClose={() => setShowResponsePopup(false)}
+        isVisible={state.showResponsePopup}
+        onClose={() => state.setShowResponsePopup(false)}
         title="Expected Response Body"
-        content={responseContent}
-        editable={isResponseEditing}
-        onContentChange={setResponseContent}
-        onToggleEdit={() => setIsResponseEditing(!isResponseEditing)}
+        content={state.responseContent}
+        editable={state.isResponseEditing}
+        onContentChange={state.setResponseContent}
+        onToggleEdit={state.toggleResponseEditing}
       />
     </AutoLayout>
   );

@@ -1,9 +1,15 @@
 const { widget } = figma;
 const { usePropertyMenu } = widget;
 
+import {
+  HttpMethod,
+  HTTP_METHODS,
+  isValidHttpMethod,
+} from "./useAPIWidgetState";
+
 type UseAPIPropertyMenuProps = {
-  httpMethod: string;
-  onHttpMethodChange: (method: string) => void;
+  httpMethod: HttpMethod;
+  onHttpMethodChange: (method: HttpMethod) => void;
   count: number;
   onReset: () => void;
 };
@@ -21,15 +27,10 @@ export function useAPIPropertyMenu({
         propertyName: "httpMethod",
         tooltip: "HTTP Method",
         selectedOption: httpMethod,
-        options: [
-          { option: "GET", label: "GET" },
-          { option: "POST", label: "POST" },
-          { option: "PUT", label: "PUT" },
-          { option: "PATCH", label: "PATCH" },
-          { option: "DELETE", label: "DELETE" },
-          { option: "HEAD", label: "HEAD" },
-          { option: "OPTIONS", label: "OPTIONS" },
-        ],
+        options: HTTP_METHODS.map((method) => ({
+          option: method,
+          label: method,
+        })),
       },
       ...(count !== 0
         ? [
@@ -46,7 +47,11 @@ export function useAPIPropertyMenu({
         : []),
     ],
     ({ propertyName, propertyValue }) => {
-      if (propertyName === "httpMethod" && propertyValue) {
+      if (
+        propertyName === "httpMethod" &&
+        propertyValue &&
+        isValidHttpMethod(propertyValue)
+      ) {
         onHttpMethodChange(propertyValue);
       } else if (propertyName === "reset") {
         onReset();

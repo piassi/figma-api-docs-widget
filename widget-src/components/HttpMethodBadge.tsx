@@ -1,37 +1,29 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
+import { HttpMethod } from "../hooks/useAPIWidgetState";
+
 type HttpMethodBadgeProps = {
-  method: string;
+  method: HttpMethod;
+};
+
+// Type-safe color mapping for HTTP methods
+const METHOD_COLORS: Record<HttpMethod, string> = {
+  GET: "#4CAF50",
+  POST: "#2196F3",
+  PUT: "#FF9800",
+  PATCH: "#9C27B0",
+  DELETE: "#F44336",
+  HEAD: "#607D8B",
+  OPTIONS: "#795748",
 };
 
 export function HttpMethodBadge({ method }: HttpMethodBadgeProps) {
-  const getMethodColor = (method: string) => {
-    switch (method) {
-      case "GET":
-        return "#4CAF50";
-      case "POST":
-        return "#2196F3";
-      case "PUT":
-        return "#FF9800";
-      case "PATCH":
-        return "#9C27B0";
-      case "DELETE":
-        return "#F44336";
-      case "HEAD":
-        return "#607D8B";
-      case "OPTIONS":
-        return "#795748";
-      default:
-        return "#4CAF50";
-    }
-  };
-
   return (
     <AutoLayout
       padding={{ horizontal: 16, vertical: 8 }}
       cornerRadius={10}
-      fill={getMethodColor(method)}
+      fill={METHOD_COLORS[method]}
       width={85}
       horizontalAlignItems="center"
       verticalAlignItems="center"
