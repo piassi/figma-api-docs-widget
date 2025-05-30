@@ -13,6 +13,10 @@ function Widget() {
   useAPIPropertyMenu({
     httpMethod: state.httpMethod,
     onHttpMethodChange: state.setHttpMethod,
+    hasResponse: state.hasResponse,
+    onAddResponse: state.addResponse,
+    hasRequest: state.hasRequest,
+    onAddRequest: state.addRequest,
   });
 
   return (
@@ -33,32 +37,42 @@ function Widget() {
           placeholder="/api/endpoint/path"
         />
 
-        <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
-          <Button label="Request" onClick={state.toggleRequestPopup} />
+        {(state.hasRequest || state.hasResponse) && (
+          <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
+            {state.hasRequest && (
+              <Button label="Request" onClick={state.toggleRequestPopup} />
+            )}
 
-          <Button label="Response" onClick={state.toggleResponsePopup} />
-        </AutoLayout>
+            {state.hasResponse && (
+              <Button label="Response" onClick={state.toggleResponsePopup} />
+            )}
+          </AutoLayout>
+        )}
       </AutoLayout>
 
-      <Popup
-        isVisible={state.showRequestPopup}
-        onClose={() => state.setShowRequestPopup(false)}
-        title="Expected Request Body"
-        content={state.requestContent}
-        editable={state.isRequestEditing}
-        onContentChange={state.setRequestContent}
-        onToggleEdit={state.toggleRequestEditing}
-      />
+      {state.hasRequest && (
+        <Popup
+          isVisible={state.showRequestPopup}
+          onClose={() => state.setShowRequestPopup(false)}
+          title="Expected Request Body"
+          content={state.requestContent}
+          editable={state.isRequestEditing}
+          onContentChange={state.setRequestContent}
+          onToggleEdit={state.toggleRequestEditing}
+        />
+      )}
 
-      <Popup
-        isVisible={state.showResponsePopup}
-        onClose={() => state.setShowResponsePopup(false)}
-        title="Expected Response Body"
-        content={state.responseContent}
-        editable={state.isResponseEditing}
-        onContentChange={state.setResponseContent}
-        onToggleEdit={state.toggleResponseEditing}
-      />
+      {state.hasResponse && (
+        <Popup
+          isVisible={state.showResponsePopup}
+          onClose={() => state.setShowResponsePopup(false)}
+          title="Expected Response Body"
+          content={state.responseContent}
+          editable={state.isResponseEditing}
+          onContentChange={state.setResponseContent}
+          onToggleEdit={state.toggleResponseEditing}
+        />
+      )}
     </AutoLayout>
   );
 }

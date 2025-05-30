@@ -26,6 +26,8 @@ const STATE_KEYS = {
   SHOW_RESPONSE_POPUP: "showResponsePopup",
   RESPONSE_CONTENT: "responseContent",
   IS_RESPONSE_EDITING: "isResponseEditing",
+  HAS_RESPONSE: "hasResponse",
+  HAS_REQUEST: "hasRequest",
 } as const;
 
 const DEFAULT_VALUES = {
@@ -46,6 +48,8 @@ const DEFAULT_VALUES = {
   "message": "Operation completed successfully"
 }`,
   IS_RESPONSE_EDITING: false,
+  HAS_RESPONSE: false,
+  HAS_REQUEST: false,
 } as const;
 
 export type APIWidgetState = {
@@ -57,6 +61,8 @@ export type APIWidgetState = {
   showResponsePopup: boolean;
   responseContent: string;
   isResponseEditing: boolean;
+  hasResponse: boolean;
+  hasRequest: boolean;
   setHttpMethod: (method: HttpMethod) => void;
   setEndpointPath: (path: string) => void;
   setShowRequestPopup: (show: boolean) => void;
@@ -65,10 +71,16 @@ export type APIWidgetState = {
   setShowResponsePopup: (show: boolean) => void;
   setResponseContent: (content: string) => void;
   setIsResponseEditing: (editing: boolean) => void;
+  setHasResponse: (hasResponse: boolean) => void;
+  setHasRequest: (hasRequest: boolean) => void;
   toggleRequestPopup: () => void;
   toggleResponsePopup: () => void;
   toggleRequestEditing: () => void;
   toggleResponseEditing: () => void;
+  addResponse: () => void;
+  removeResponse: () => void;
+  addRequest: () => void;
+  removeRequest: () => void;
 };
 
 export function useAPIWidgetState(): APIWidgetState {
@@ -104,6 +116,14 @@ export function useAPIWidgetState(): APIWidgetState {
     STATE_KEYS.IS_RESPONSE_EDITING,
     DEFAULT_VALUES.IS_RESPONSE_EDITING
   );
+  const [hasResponse, setHasResponse] = useSyncedState<boolean>(
+    STATE_KEYS.HAS_RESPONSE,
+    DEFAULT_VALUES.HAS_RESPONSE
+  );
+  const [hasRequest, setHasRequest] = useSyncedState<boolean>(
+    STATE_KEYS.HAS_REQUEST,
+    DEFAULT_VALUES.HAS_REQUEST
+  );
 
   return {
     httpMethod,
@@ -114,6 +134,8 @@ export function useAPIWidgetState(): APIWidgetState {
     showResponsePopup,
     responseContent,
     isResponseEditing,
+    hasResponse,
+    hasRequest,
     setHttpMethod,
     setEndpointPath,
     setShowRequestPopup,
@@ -122,9 +144,15 @@ export function useAPIWidgetState(): APIWidgetState {
     setShowResponsePopup,
     setResponseContent,
     setIsResponseEditing,
+    setHasResponse,
+    setHasRequest,
     toggleRequestPopup: () => setShowRequestPopup(!showRequestPopup),
     toggleResponsePopup: () => setShowResponsePopup(!showResponsePopup),
     toggleRequestEditing: () => setIsRequestEditing(!isRequestEditing),
     toggleResponseEditing: () => setIsResponseEditing(!isResponseEditing),
+    addResponse: () => setHasResponse(true),
+    removeResponse: () => setHasResponse(false),
+    addRequest: () => setHasRequest(true),
+    removeRequest: () => setHasRequest(false),
   };
 }
