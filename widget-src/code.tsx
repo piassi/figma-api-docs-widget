@@ -14,6 +14,10 @@ function Widget() {
     "showRequestPopup",
     false
   );
+  const [requestContent, setRequestContent] = useSyncedState(
+    "requestContent",
+    `{}`
+  );
 
   usePropertyMenu(
     [
@@ -172,17 +176,9 @@ function Widget() {
         isVisible={showRequestPopup}
         onClose={() => setShowRequestPopup(false)}
         title="Expected Request Body"
-        content={`{
-  "id": "string",
-  "name": "string", 
-  "email": "user@exstuample.com",
-  "data": {
-    "field1": "value1",
-    "field2": 123,
-    "optional_field": "string"
-  },
-  "timestamp": "2024-01-01T00:00:00Z"
-}`}
+        content={requestContent}
+        editable={true}
+        onContentChange={setRequestContent}
       />
     </AutoLayout>
   );

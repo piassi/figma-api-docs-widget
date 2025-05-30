@@ -1,17 +1,23 @@
 const { widget } = figma;
-const { AutoLayout, Text } = widget;
+const { AutoLayout, Text, Input } = widget;
+
+type PopupProps = {
+  isVisible: boolean;
+  onClose: () => void;
+  title: string;
+  content: string;
+  editable?: boolean;
+  onContentChange?: (content: string) => void;
+};
 
 export function Popup({
   isVisible,
   onClose,
   title,
   content,
-}: {
-  isVisible: boolean;
-  onClose: () => void;
-  title: string;
-  content: string;
-}) {
+  editable = false,
+  onContentChange,
+}: PopupProps) {
   if (!isVisible) return null;
 
   return (
@@ -57,14 +63,36 @@ export function Popup({
         fill={"#F8F8F8"}
         width={"fill-parent"}
       >
-        <Text
-          fontSize={12}
-          fill={"#333333"}
-          fontFamily={"Monaco"}
-          width={"fill-parent"}
-        >
-          {content}
-        </Text>
+        {editable && onContentChange ? (
+          <Input
+            value={content}
+            onTextEditEnd={(e) => {
+              onContentChange(e.characters);
+            }}
+            fontSize={12}
+            fill={"#333333"}
+            fontFamily={"Monaco"}
+            width={"fill-parent"}
+            placeholder="Enter JSON content..."
+            inputBehavior="multiline"
+            inputFrameProps={{
+              fill: "#F8F8F8",
+              stroke: "#E0E0E0",
+              strokeWidth: 1,
+              cornerRadius: 4,
+              padding: 8,
+            }}
+          />
+        ) : (
+          <Text
+            fontSize={12}
+            fill={"#333333"}
+            fontFamily={"Monaco"}
+            width={"fill-parent"}
+          >
+            {content}
+          </Text>
+        )}
       </AutoLayout>
     </AutoLayout>
   );
