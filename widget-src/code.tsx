@@ -1,8 +1,9 @@
 const { widget } = figma;
-const { useSyncedState, usePropertyMenu, AutoLayout, Text, Input } = widget;
+const { useSyncedState, usePropertyMenu, AutoLayout, Input } = widget;
 
 import { Popup } from "./components/Popup";
 import { HttpMethodBadge } from "./components/HttpMethodBadge";
+import { Button } from "./components/Button";
 
 function Widget() {
   const [count, setCount] = useSyncedState("count", 0);
@@ -117,32 +118,12 @@ function Widget() {
         </AutoLayout>
 
         <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
-          <AutoLayout
-            direction="vertical"
-            padding={16}
-            cornerRadius={12}
-            fill="#4A90E2"
-            stroke="#3A7BC8"
-            strokeWidth={1}
-            width="fill-parent"
-            verticalAlignItems="center"
-            horizontalAlignItems="center"
-            height={50}
-            effect={{
-              type: "drop-shadow",
-              color: "#00000020",
-              offset: { x: 0, y: 2 },
-              blur: 4,
-            }}
-            onClick={() => {
-              setShowRequestPopup(!showRequestPopup);
-            }}
-          >
-            <Text
-              fontSize={16}
-              fill="#FFFFFF"
-              fontWeight={600}
-              tooltip={`Request Body Example:
+          <Button
+            label="Request"
+            onClick={() => setShowRequestPopup(!showRequestPopup)}
+            backgroundColor="#4A90E2"
+            strokeColor="#3A7BC8"
+            tooltip={`Request Body Example:
 {
   "id": "string",
   "name": "string", 
@@ -152,37 +133,14 @@ function Widget() {
     "field2": 123
   }
 }`}
-            >
-              Request
-            </Text>
-          </AutoLayout>
+          />
 
-          <AutoLayout
-            direction="vertical"
-            padding={16}
-            cornerRadius={12}
-            fill="#28A745"
-            stroke="#1E7E34"
-            strokeWidth={1}
-            width="fill-parent"
-            verticalAlignItems="center"
-            horizontalAlignItems="center"
-            height={50}
-            effect={{
-              type: "drop-shadow",
-              color: "#00000020",
-              offset: { x: 0, y: 2 },
-              blur: 4,
-            }}
-            onClick={() => {
-              setShowResponsePopup(!showResponsePopup);
-            }}
-          >
-            <Text
-              fontSize={16}
-              fill="#FFFFFF"
-              fontWeight={600}
-              tooltip={`Response Body Example:
+          <Button
+            label="Response"
+            onClick={() => setShowResponsePopup(!showResponsePopup)}
+            backgroundColor="#28A745"
+            strokeColor="#1E7E34"
+            tooltip={`Response Body Example:
 {
   "success": true,
   "data": {
@@ -193,10 +151,7 @@ function Widget() {
   },
   "message": "Operation completed successfully"
 }`}
-            >
-              Response
-            </Text>
-          </AutoLayout>
+          />
         </AutoLayout>
       </AutoLayout>
 
