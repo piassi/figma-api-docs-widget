@@ -8,7 +8,7 @@ type DescriptionFieldProps = {
 };
 
 export function DescriptionField({ description }: DescriptionFieldProps) {
-  if (!description.state.hasDescription) return null;
+  if (!description.state.isDescriptionEnabled) return null;
 
   return (
     <AutoLayout direction="vertical" spacing={8} width="fill-parent">

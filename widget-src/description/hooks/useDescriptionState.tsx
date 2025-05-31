@@ -5,19 +5,19 @@ const { useSyncedState } = widget;
 
 const DESCRIPTION_STATE_KEYS = {
   DESCRIPTION_CONTENT: "descriptionContent",
-  HAS_DESCRIPTION: "hasDescription",
+  IS_DESCRIPTION_ENABLED: "isDescriptionEnabled",
 } as const;
 
 const DESCRIPTION_DEFAULT_VALUES = {
   DESCRIPTION_CONTENT: "",
-  HAS_DESCRIPTION: false,
+  IS_DESCRIPTION_ENABLED: false,
 } as const;
 
 export type DescriptionState = {
   descriptionContent: string;
   setDescriptionContent: (content: string) => void;
-  hasDescription: boolean;
-  setHasDescription: (hasDescription: boolean) => void;
+  isDescriptionEnabled: boolean;
+  setIsDescriptionEnabled: (enabled: boolean) => void;
   enableDescription: () => void;
   disableDescription: () => void;
 };
@@ -29,8 +29,8 @@ export function useDescriptionState(): DescriptionState {
   ) as [string, (content: string) => void];
 
   const feature = useToggleableFeature(
-    DESCRIPTION_STATE_KEYS.HAS_DESCRIPTION,
-    DESCRIPTION_DEFAULT_VALUES.HAS_DESCRIPTION
+    DESCRIPTION_STATE_KEYS.IS_DESCRIPTION_ENABLED,
+    DESCRIPTION_DEFAULT_VALUES.IS_DESCRIPTION_ENABLED
   );
 
   const enableDescription = () => {
@@ -44,8 +44,8 @@ export function useDescriptionState(): DescriptionState {
   return {
     descriptionContent,
     setDescriptionContent,
-    hasDescription: feature.enabled,
-    setHasDescription: feature.setEnabled,
+    isDescriptionEnabled: feature.enabled,
+    setIsDescriptionEnabled: feature.setEnabled,
     enableDescription,
     disableDescription,
   };

@@ -16,9 +16,9 @@ export function useDescriptionFeature(): DescriptionFeature {
         itemType: "toggle",
         propertyName: "toggleDescription",
         tooltip: "Description",
-        isToggled: state.hasDescription,
+        isToggled: state.isDescriptionEnabled,
         handler: () => {
-          if (state.hasDescription) {
+          if (state.isDescriptionEnabled) {
             state.disableDescription();
           } else {
             state.enableDescription();
