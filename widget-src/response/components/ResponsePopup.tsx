@@ -2,7 +2,7 @@ const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
 import { HighlightedText } from "../../components/HighlightedText";
-import { EditIcon, CloseIcon } from "../../components/icons/index";
+import { EditIcon, CloseIcon, DeleteIcon } from "../../components/icons/index";
 import { AddIcon } from "../../components/icons/AddIcon";
 import { ResponseFeature } from "../hooks/useResponseFeature";
 import { JSON_EDITOR_HTML } from "../../utils/htmlLoader";
@@ -100,6 +100,20 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
               >
                 Response {index + 1}
               </Text>
+              {response.state.responses.length > 1 && (
+                <AutoLayout
+                  onClick={() => response.state.removeResponse(responseItem.id)}
+                  tooltip="Delete response"
+                  padding={4}
+                  cornerRadius={4}
+                  fill="#00000000"
+                  horizontalAlignItems="center"
+                  verticalAlignItems="center"
+                >
+                  <DeleteIcon size={14} />
+                </AutoLayout>
+              )}
+
               <AutoLayout
                 onClick={() =>
                   openEditor(responseItem.id, responseItem.content)

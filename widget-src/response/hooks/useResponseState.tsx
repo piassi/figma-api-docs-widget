@@ -26,6 +26,7 @@ export type ResponseState = {
   setResponses: (responses: ResponseItem[]) => void;
   addResponse: () => void;
   updateResponse: (id: string, content: string) => void;
+  removeResponse: (id: string) => void;
   showResponsesPopup: boolean;
   setShowResponsesPopup: (show: boolean) => void;
   toggleResponsesPopup: () => void;
@@ -89,11 +90,17 @@ export function useResponseState(): ResponseState {
     setShowResponsesPopup(false);
   };
 
+  const removeResponse = (id: string) => {
+    const updatedResponses = responses.filter((response) => response.id !== id);
+    setResponses(updatedResponses);
+  };
+
   return {
     responses,
     setResponses,
     addResponse,
     updateResponse,
+    removeResponse,
     showResponsesPopup,
     setShowResponsesPopup,
     toggleResponsesPopup,
