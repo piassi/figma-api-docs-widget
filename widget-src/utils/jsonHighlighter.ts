@@ -4,101 +4,169 @@ export type JsonToken = {
   color: string;
 };
 
+// Pre-defined color constants to avoid repeated object property access
+const COLORS = {
+  string: '#22863A',     // Green for strings
+  number: '#005CC5',     // Blue for numbers
+  boolean: '#D73A49',    // Red for booleans
+  null: '#6F42C1',       // Purple for null
+  key: '#E36209',        // Orange for object keys
+  punctuation: '#24292E', // Dark gray for punctuation
+  whitespace: '#24292E'   // Dark gray for whitespace
+} as const;
+
+// Fast character type checking functions using character codes
+const isWhitespace = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+  return code === 32 || code === 9 || code === 10 || code === 13; // space, tab, newline, carriage return
+};
+
+const isDigit = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+  return code >= 48 && code <= 57; // '0' to '9'
+};
+
+const isLowercase = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+  return code >= 97 && code <= 122; // 'a' to 'z'
+};
+
+const isNumberChar = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+  return (code >= 48 && code <= 57) || // '0' to '9'
+         code === 45 || code === 46 || // '-' or '.'
+         code === 101 || code === 69 || // 'e' or 'E'
+         code === 43; // '+'
+};
+
 export function tokenizeJson(jsonString: string): JsonToken[] {
   const tokens: JsonToken[] = [];
+  const len = jsonString.length;
   let i = 0;
   
-  const colors = {
-    string: '#22863A',     // Green for strings
-    number: '#005CC5',     // Blue for numbers
-    boolean: '#D73A49',    // Red for booleans
-    null: '#6F42C1',       // Purple for null
-    key: '#E36209',        // Orange for object keys
-    punctuation: '#24292E', // Dark gray for punctuation
-    whitespace: '#24292E'   // Dark gray for whitespace
-  };
+  // Context tracking to optimize key detection
+  const contextStack: ('object' | 'array')[] = [];
+  let expectingKey = false;
 
-  while (i < jsonString.length) {
+  while (i < len) {
     const char = jsonString[i];
     
-    // Handle whitespace
-    if (/\s/.test(char)) {
-      let whitespace = '';
-      while (i < jsonString.length && /\s/.test(jsonString[i])) {
-        whitespace += jsonString[i];
+    // Handle whitespace using optimized character checking
+    if (isWhitespace(char)) {
+      const start = i;
+      while (i < len && isWhitespace(jsonString[i])) {
         i++;
       }
-      tokens.push({ type: 'whitespace', value: whitespace, color: colors.whitespace });
+      tokens.push({ 
+        type: 'whitespace', 
+        value: jsonString.slice(start, i), 
+        color: COLORS.whitespace 
+      });
       continue;
     }
     
-    // Handle strings (and object keys)
+    // Handle strings (and object keys) with optimized parsing
     if (char === '"') {
-      let str = '"';
+      const start = i;
       i++; // Skip opening quote
       
-      while (i < jsonString.length && jsonString[i] !== '"') {
+      // Fast scan to find closing quote, handling escapes
+      while (i < len && jsonString[i] !== '"') {
         if (jsonString[i] === '\\') {
-          str += jsonString[i] + (jsonString[i + 1] || '');
-          i += 2;
+          i += 2; // Skip escape sequence
         } else {
-          str += jsonString[i];
           i++;
         }
       }
       
-      if (i < jsonString.length) {
-        str += '"'; // Add closing quote
-        i++;
+      if (i < len) {
+        i++; // Include closing quote
       }
       
-      // Check if this is a key (followed by colon after whitespace)
+      const str = jsonString.slice(start, i);
+      
+      // Improved key detection using context
+      const inObject = contextStack.length > 0 && contextStack[contextStack.length - 1] === 'object';
       let isKey = false;
-      let j = i;
-      while (j < jsonString.length && /\s/.test(jsonString[j])) j++;
-      if (j < jsonString.length && jsonString[j] === ':') {
-        isKey = true;
+      
+      if (inObject && expectingKey) {
+        // Look ahead for colon after whitespace
+        let j = i;
+        while (j < len && isWhitespace(jsonString[j])) j++;
+        if (j < len && jsonString[j] === ':') {
+          isKey = true;
+        }
       }
       
       tokens.push({
         type: isKey ? 'key' : 'string',
         value: str,
-        color: isKey ? colors.key : colors.string
+        color: isKey ? COLORS.key : COLORS.string
+      });
+      
+      // Update expectation after processing a key
+      if (isKey) {
+        expectingKey = false;
+      }
+      
+      continue;
+    }
+    
+    // Handle numbers with optimized character checking
+    if (isDigit(char) || char === '-') {
+      const start = i;
+      while (i < len && isNumberChar(jsonString[i])) {
+        i++;
+      }
+      tokens.push({ 
+        type: 'number', 
+        value: jsonString.slice(start, i), 
+        color: COLORS.number 
       });
       continue;
     }
     
-    // Handle numbers
-    if (/[-\d]/.test(char)) {
-      let num = '';
-      while (i < jsonString.length && /[-\d.eE+]/.test(jsonString[i])) {
-        num += jsonString[i];
-        i++;
-      }
-      tokens.push({ type: 'number', value: num, color: colors.number });
-      continue;
-    }
-    
-    // Handle booleans and null
-    if (/[a-z]/.test(char)) {
-      let word = '';
-      while (i < jsonString.length && /[a-z]/.test(jsonString[i])) {
-        word += jsonString[i];
+    // Handle booleans and null with optimized parsing
+    if (isLowercase(char)) {
+      const start = i;
+      while (i < len && isLowercase(jsonString[i])) {
         i++;
       }
       
+      const word = jsonString.slice(start, i);
+      
       if (word === 'true' || word === 'false') {
-        tokens.push({ type: 'boolean', value: word, color: colors.boolean });
+        tokens.push({ type: 'boolean', value: word, color: COLORS.boolean });
       } else if (word === 'null') {
-        tokens.push({ type: 'null', value: word, color: colors.null });
+        tokens.push({ type: 'null', value: word, color: COLORS.null });
       } else {
-        tokens.push({ type: 'punctuation', value: word, color: colors.punctuation });
+        tokens.push({ type: 'punctuation', value: word, color: COLORS.punctuation });
       }
       continue;
     }
     
-    // Handle punctuation
-    tokens.push({ type: 'punctuation', value: char, color: colors.punctuation });
+    // Handle punctuation and update context
+    if (char === '{') {
+      contextStack.push('object');
+      expectingKey = true;
+    } else if (char === '}') {
+      contextStack.pop();
+      expectingKey = false;
+    } else if (char === '[') {
+      contextStack.push('array');
+      expectingKey = false;
+    } else if (char === ']') {
+      contextStack.pop();
+      expectingKey = false;
+    } else if (char === ':') {
+      expectingKey = false;
+    } else if (char === ',') {
+      // After a comma, we expect a key if we're in an object
+      const inObject = contextStack.length > 0 && contextStack[contextStack.length - 1] === 'object';
+      expectingKey = inObject;
+    }
+    
+    tokens.push({ type: 'punctuation', value: char, color: COLORS.punctuation });
     i++;
   }
   
