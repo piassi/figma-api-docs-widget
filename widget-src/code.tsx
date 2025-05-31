@@ -8,6 +8,7 @@ import { useRequestFeature } from "./request/hooks/useRequestFeature";
 import { useResponseFeature } from "./response/hooks/useResponseFeature";
 import { useColorFeature } from "./color/hooks/useColorFeature";
 import { useDescriptionFeature } from "./description/hooks/useDescriptionFeature";
+import { useLayoutFeature } from "./layout/hooks/useLayoutFeature";
 import { RequestPopup } from "./request/components/RequestPopup";
 import { ResponsePopUp } from "./response/components/ResponsePopup";
 import { ResponseButton } from "./response/components/ResponseButton";
@@ -21,8 +22,9 @@ function Widget() {
     const response = useResponseFeature();
     const color = useColorFeature();
     const description = useDescriptionFeature();
+    const layout = useLayoutFeature();
 
-    useWidgetMenu([color, endpoint, request, response, description]);
+    useWidgetMenu([color, layout, endpoint, request, response, description]);
 
     return (
       <AutoLayout direction="vertical" spacing={16} padding={0}>
