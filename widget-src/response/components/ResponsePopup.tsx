@@ -88,7 +88,7 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
           >
             <AutoLayout
               direction="horizontal"
-              spacing={8}
+              spacing={4}
               width="fill-parent"
               verticalAlignItems="center"
             >
