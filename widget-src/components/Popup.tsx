@@ -76,7 +76,7 @@ export function Popup({
             }}
             fontSize={12}
             fill="#333333"
-            fontFamily="Monaco"
+            fontFamily="Fira Code"
             width="fill-parent"
             placeholder="Enter JSON content..."
             inputBehavior="multiline"
@@ -89,12 +89,7 @@ export function Popup({
             }}
           />
         ) : (
-          <HighlightedText
-            content={content}
-            fontSize={12}
-            fontFamily="Monaco"
-            width="fill-parent"
-          />
+          <HighlightedText content={content} />
         )}
       </AutoLayout>
     </AutoLayout>

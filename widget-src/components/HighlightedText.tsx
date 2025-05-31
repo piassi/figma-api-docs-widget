@@ -5,28 +5,23 @@ import { tokenizeJson, JsonToken } from "../utils/jsonHighlighter";
 
 type HighlightedTextProps = {
   content: string;
-  fontSize?: number;
-  fontFamily?: string;
-  width?: "fill-parent" | number;
 };
 
-export function HighlightedText({
-  content,
-  fontSize = 12,
-  fontFamily = "Monaco",
-  width = "fill-parent",
-}: HighlightedTextProps) {
+const FONT_SIZE = 12;
+const FONT_FAMILY = "Fira Code";
+const WIDTH = "fill-parent";
+
+export function HighlightedText({ content }: HighlightedTextProps) {
   try {
     const tokens = tokenizeJson(content);
 
     if (tokens.length === 0) {
-      // Fallback to plain text if no tokens
       return (
         <Text
-          fontSize={fontSize}
+          fontSize={FONT_SIZE}
           fill="#333333"
-          fontFamily={fontFamily}
-          width={width}
+          fontFamily={FONT_FAMILY}
+          width={WIDTH}
         >
           {content}
         </Text>
@@ -34,8 +29,8 @@ export function HighlightedText({
     }
 
     return (
-      <AutoLayout direction="vertical" spacing={0} width={width}>
-        {renderTokensAsLines(tokens, fontSize, fontFamily)}
+      <AutoLayout direction="vertical" spacing={0} width="fill-parent">
+        {renderTokensAsLines(tokens)}
       </AutoLayout>
     );
   } catch (error) {
@@ -43,10 +38,10 @@ export function HighlightedText({
     // Fallback to plain text on error
     return (
       <Text
-        fontSize={fontSize}
+        fontSize={FONT_SIZE}
         fill="#333333"
-        fontFamily={fontFamily}
-        width={width}
+        fontFamily={FONT_FAMILY}
+        width={WIDTH}
       >
         {content}
       </Text>
@@ -54,11 +49,7 @@ export function HighlightedText({
   }
 }
 
-function renderTokensAsLines(
-  tokens: JsonToken[],
-  fontSize: number,
-  fontFamily: string
-) {
+function renderTokensAsLines(tokens: JsonToken[]) {
   const lines: JsonToken[][] = [];
   let currentLine: JsonToken[] = [];
 
@@ -93,9 +84,9 @@ function renderTokensAsLines(
       {lineTokens.map((token, tokenIndex) => (
         <Text
           key={`${lineIndex}-${tokenIndex}`}
-          fontSize={fontSize}
+          fontSize={FONT_SIZE}
           fill={token.color}
-          fontFamily={fontFamily}
+          fontFamily={FONT_FAMILY}
         >
           {token.value}
         </Text>
