@@ -5,12 +5,16 @@ import { Popup } from "./components/Popup";
 import { Button } from "./components/Button";
 import { EndpointBar } from "./components/EndpointBar";
 import { useWidgetMenu } from "./hooks/useWidgetMenu";
-import { useWidgetState } from "./hooks/useWidgetState";
+import { useEndpointFeature } from "./hooks/useEndpointFeature";
+import { useRequestFeature } from "./hooks/useRequestFeature";
+import { useResponseFeature } from "./hooks/useResponseFeature";
 
 function Widget() {
-  const state = useWidgetState();
+  const endpoint = useEndpointFeature();
+  const request = useRequestFeature();
+  const response = useResponseFeature();
 
-  useWidgetMenu({ state });
+  useWidgetMenu([endpoint, request, response]);
 
   return (
     <AutoLayout direction="vertical" spacing={16} padding={0}>
@@ -24,46 +28,52 @@ function Widget() {
         width={500}
       >
         <EndpointBar
-          httpMethod={state.httpMethod}
-          endpointPath={state.endpointPath}
-          onEndpointPathChange={state.setEndpointPath}
+          httpMethod={endpoint.state.httpMethod}
+          endpointPath={endpoint.state.endpointPath}
+          onEndpointPathChange={endpoint.state.setEndpointPath}
           placeholder="/api/endpoint/path"
         />
 
-        {(state.hasRequest || state.hasResponse) && (
+        {(request.state.hasRequest || response.state.hasResponse) && (
           <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
-            {state.hasRequest && (
-              <Button label="Request" onClick={state.toggleRequestPopup} />
+            {request.state.hasRequest && (
+              <Button
+                label="Request"
+                onClick={request.state.toggleRequestPopup}
+              />
             )}
 
-            {state.hasResponse && (
-              <Button label="Response" onClick={state.toggleResponsePopup} />
+            {response.state.hasResponse && (
+              <Button
+                label="Response"
+                onClick={response.state.toggleResponsePopup}
+              />
             )}
           </AutoLayout>
         )}
       </AutoLayout>
 
-      {state.hasRequest && (
+      {request.state.hasRequest && (
         <Popup
-          isVisible={state.showRequestPopup}
-          onClose={() => state.setShowRequestPopup(false)}
+          isVisible={request.state.showRequestPopup}
+          onClose={() => request.state.setShowRequestPopup(false)}
           title="Expected Request Body"
-          content={state.requestContent}
-          editable={state.isRequestEditing}
-          onContentChange={state.setRequestContent}
-          onToggleEdit={state.toggleRequestEditing}
+          content={request.state.requestContent}
+          editable={request.state.isRequestEditing}
+          onContentChange={request.state.setRequestContent}
+          onToggleEdit={request.state.toggleRequestEditing}
         />
       )}
 
-      {state.hasResponse && (
+      {response.state.hasResponse && (
         <Popup
-          isVisible={state.showResponsePopup}
-          onClose={() => state.setShowResponsePopup(false)}
+          isVisible={response.state.showResponsePopup}
+          onClose={() => response.state.setShowResponsePopup(false)}
           title="Expected Response Body"
-          content={state.responseContent}
-          editable={state.isResponseEditing}
-          onContentChange={state.setResponseContent}
-          onToggleEdit={state.toggleResponseEditing}
+          content={response.state.responseContent}
+          editable={response.state.isResponseEditing}
+          onContentChange={response.state.setResponseContent}
+          onToggleEdit={response.state.toggleResponseEditing}
         />
       )}
     </AutoLayout>
