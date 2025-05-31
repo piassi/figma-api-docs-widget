@@ -42,6 +42,16 @@ export function useRequestState(): RequestState {
     REQUEST_DEFAULT_VALUES.HAS_REQUEST
   );
 
+  const enableRequest = () => {
+    feature.enable();
+    popup.setShow(true);
+  };
+
+  const disableRequest = () => {
+    feature.disable();
+    popup.setShow(false);
+  };
+
   return {
     showRequestPopup: popup.show,
     setShowRequestPopup: popup.setShow,
@@ -52,7 +62,7 @@ export function useRequestState(): RequestState {
 
     hasRequest: feature.enabled,
     setHasRequest: feature.setEnabled,
-    enableRequest: feature.enable,
-    disableRequest: feature.disable,
+    enableRequest,
+    disableRequest,
   };
 }
