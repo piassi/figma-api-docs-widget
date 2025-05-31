@@ -1,19 +1,14 @@
 const { widget } = figma;
 const { usePropertyMenu } = widget;
 
-import { HttpMethod, HTTP_METHODS, isValidHttpMethod } from "./useWidgetState";
+import { HTTP_METHODS, isValidHttpMethod, WidgetState } from "./useWidgetState";
 
 const MENU_OPTIONS_NAMES = ["httpMethod", "addRequest", "addResponse"] as const;
 
 type MenuOptionName = (typeof MENU_OPTIONS_NAMES)[number];
 
 type UseWidgetMenuProps = {
-  httpMethod: HttpMethod;
-  onHttpMethodChange: (method: HttpMethod) => void;
-  hasResponse: boolean;
-  onAddResponse: () => void;
-  hasRequest: boolean;
-  onAddRequest: () => void;
+  state: WidgetState;
 };
 
 type MenuOptionDropdown = {
@@ -34,22 +29,15 @@ type MenuOption = MenuOptionDropdown | MenuOptionActionButton;
 
 type MenuOptionHandler = (propertyValue?: string) => void;
 
-export function useWidgetMenu({
-  httpMethod,
-  onHttpMethodChange,
-  hasResponse,
-  onAddResponse,
-  hasRequest,
-  onAddRequest,
-}: UseWidgetMenuProps) {
+export function useWidgetMenu({ state }: UseWidgetMenuProps) {
   const menuOptionHandlers: Record<MenuOptionName, MenuOptionHandler> = {
     httpMethod: (propertyValue) => {
       if (propertyValue && isValidHttpMethod(propertyValue)) {
-        onHttpMethodChange(propertyValue);
+        state.setHttpMethod(propertyValue);
       }
     },
-    addRequest: onAddRequest,
-    addResponse: onAddResponse,
+    addRequest: state.addRequest,
+    addResponse: state.addResponse,
   };
 
   const menuItems: MenuOption[] = [
@@ -57,13 +45,13 @@ export function useWidgetMenu({
       itemType: "dropdown",
       propertyName: "httpMethod",
       tooltip: "HTTP Method",
-      selectedOption: httpMethod,
+      selectedOption: state.httpMethod,
       options: HTTP_METHODS.map((method) => ({
         option: method,
         label: method,
       })),
     },
-    ...(!hasRequest
+    ...(!state.hasRequest
       ? [
           {
             itemType: "action" as const,
@@ -72,7 +60,7 @@ export function useWidgetMenu({
           },
         ]
       : []),
-    ...(!hasResponse
+    ...(!state.hasResponse
       ? [
           {
             itemType: "action" as const,

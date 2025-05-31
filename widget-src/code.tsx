@@ -10,14 +10,7 @@ import { useWidgetState } from "./hooks/useWidgetState";
 function Widget() {
   const state = useWidgetState();
 
-  useWidgetMenu({
-    httpMethod: state.httpMethod,
-    onHttpMethodChange: state.setHttpMethod,
-    hasResponse: state.hasResponse,
-    onAddResponse: state.addResponse,
-    hasRequest: state.hasRequest,
-    onAddRequest: state.addRequest,
-  });
+  useWidgetMenu({ state });
 
   return (
     <AutoLayout direction="vertical" spacing={16} padding={0}>
