@@ -1,12 +1,12 @@
-import { Popup } from "../../components/Popup";
 import { RequestFeature } from "../hooks/useRequestFeature";
+import { Popup } from "../../components/Popup";
 
 type RequestPopupProps = {
   request: RequestFeature;
 };
 
 export const RequestPopup = ({ request }: RequestPopupProps) => {
-  if (!request.state.hasRequest) return null;
+  if (!request.state.isRequestEnabled) return null;
 
   return (
     <Popup

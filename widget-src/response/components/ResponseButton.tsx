@@ -7,7 +7,7 @@ type ResponseButtonProps = {
 };
 
 export const ResponseButton = ({ response }: ResponseButtonProps) => {
-  if (!response.state.hasResponse) return null;
+  if (!response.state.isResponseEnabled) return null;
 
   return (
     <Button

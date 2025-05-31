@@ -7,13 +7,13 @@ const { useSyncedState } = widget;
 const REQUEST_STATE_KEYS = {
   SHOW_REQUEST_POPUP: "showRequestPopup",
   REQUEST_CONTENT: "requestContent",
-  HAS_REQUEST: "hasRequest",
+  IS_REQUEST_ENABLED: "isRequestEnabled",
 } as const;
 
 const REQUEST_DEFAULT_VALUES = {
   SHOW_REQUEST_POPUP: false,
   REQUEST_CONTENT: "",
-  HAS_REQUEST: false,
+  IS_REQUEST_ENABLED: false,
 } as const;
 
 export type RequestState = {
@@ -22,8 +22,8 @@ export type RequestState = {
   toggleRequestPopup: () => void;
   requestContent: string;
   setRequestContent: (content: string) => void;
-  hasRequest: boolean;
-  setHasRequest: (hasRequest: boolean) => void;
+  isRequestEnabled: boolean;
+  setIsRequestEnabled: (enabled: boolean) => void;
   enableRequest: () => void;
   disableRequest: () => void;
 };
@@ -38,8 +38,8 @@ export function useRequestState(): RequestState {
     REQUEST_DEFAULT_VALUES.REQUEST_CONTENT
   ) as [string, (content: string) => void];
   const feature = useToggleableFeature(
-    REQUEST_STATE_KEYS.HAS_REQUEST,
-    REQUEST_DEFAULT_VALUES.HAS_REQUEST
+    REQUEST_STATE_KEYS.IS_REQUEST_ENABLED,
+    REQUEST_DEFAULT_VALUES.IS_REQUEST_ENABLED
   );
 
   const enableRequest = () => {
@@ -60,8 +60,8 @@ export function useRequestState(): RequestState {
     requestContent,
     setRequestContent,
 
-    hasRequest: feature.enabled,
-    setHasRequest: feature.setEnabled,
+    isRequestEnabled: feature.enabled,
+    setIsRequestEnabled: feature.setEnabled,
     enableRequest,
     disableRequest,
   };

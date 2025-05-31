@@ -13,9 +13,9 @@ export function useResponseFeature(): ResponseFeature {
         itemType: "toggle",
         propertyName: "toggleResponse",
         tooltip: "Response",
-        isToggled: state.hasResponse,
+        isToggled: state.isResponseEnabled,
         handler: () => {
-          if (state.hasResponse) {
+          if (state.isResponseEnabled) {
             state.disableResponse();
           } else {
             state.enableResponse();

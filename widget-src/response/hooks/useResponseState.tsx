@@ -7,7 +7,7 @@ const { useSyncedState } = widget;
 
 const RESPONSE_STATE_KEYS = {
   RESPONSES: "responses",
-  HAS_RESPONSE: "hasResponse",
+  IS_RESPONSE_ENABLED: "isResponseEnabled",
   SHOW_RESPONSES_POPUP: "showResponsesPopup",
 } as const;
 
@@ -19,7 +19,7 @@ export type ResponseItem = {
 
 const RESPONSE_DEFAULT_VALUES = {
   RESPONSES: [] as ResponseItem[],
-  HAS_RESPONSE: false,
+  IS_RESPONSE_ENABLED: false,
   SHOW_RESPONSES_POPUP: false,
 } as const;
 
@@ -33,8 +33,8 @@ export type ResponseState = {
   showResponsesPopup: boolean;
   setShowResponsesPopup: (show: boolean) => void;
   toggleResponsesPopup: () => void;
-  hasResponse: boolean;
-  setHasResponse: (hasResponse: boolean) => void;
+  isResponseEnabled: boolean;
+  setIsResponseEnabled: (enabled: boolean) => void;
   enableResponse: () => void;
   disableResponse: () => void;
 };
@@ -51,8 +51,8 @@ export function useResponseState(): ResponseState {
   ) as [boolean, (show: boolean) => void];
 
   const feature = useToggleableFeature(
-    RESPONSE_STATE_KEYS.HAS_RESPONSE,
-    RESPONSE_DEFAULT_VALUES.HAS_RESPONSE
+    RESPONSE_STATE_KEYS.IS_RESPONSE_ENABLED,
+    RESPONSE_DEFAULT_VALUES.IS_RESPONSE_ENABLED
   );
 
   const addResponse = () => {
@@ -119,8 +119,8 @@ export function useResponseState(): ResponseState {
     setShowResponsesPopup,
     toggleResponsesPopup,
 
-    hasResponse: feature.enabled,
-    setHasResponse: feature.setEnabled,
+    isResponseEnabled: feature.enabled,
+    setIsResponseEnabled: feature.setEnabled,
     enableResponse,
     disableResponse,
   };

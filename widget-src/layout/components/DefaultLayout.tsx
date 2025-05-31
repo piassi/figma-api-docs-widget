@@ -49,7 +49,8 @@ export function DefaultLayout({
 
         <DescriptionField description={description} />
 
-        {(request.state.hasRequest || response.state.hasResponse) && (
+        {(request.state.isRequestEnabled ||
+          response.state.isResponseEnabled) && (
           <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
             <RequestButton request={request} />
             <ResponseButton response={response} />

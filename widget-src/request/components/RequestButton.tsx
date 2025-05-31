@@ -7,7 +7,7 @@ type RequestButtonProps = {
 };
 
 export const RequestButton = ({ request }: RequestButtonProps) => {
-  if (!request.state.hasRequest) return null;
+  if (!request.state.isRequestEnabled) return null;
 
   return (
     <Button

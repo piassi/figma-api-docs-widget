@@ -13,9 +13,9 @@ export function useRequestFeature(): RequestFeature {
         itemType: "toggle",
         propertyName: "toggleRequest",
         tooltip: "Request",
-        isToggled: state.hasRequest,
+        isToggled: state.isRequestEnabled,
         handler: () => {
-          if (state.hasRequest) {
+          if (state.isRequestEnabled) {
             state.disableRequest();
           } else {
             state.enableRequest();

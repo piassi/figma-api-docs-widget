@@ -14,7 +14,7 @@ type ResponsePopUpProps = {
 };
 
 export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
-  if (!response.state.hasResponse || !response.state.showResponsesPopup)
+  if (!response.state.isResponseEnabled || !response.state.showResponsesPopup)
     return null;
 
   const openEditor = (responseId: string, content: string) => {
