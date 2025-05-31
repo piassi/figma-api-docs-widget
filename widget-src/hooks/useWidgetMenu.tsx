@@ -1,15 +1,13 @@
 const { widget } = figma;
 const { usePropertyMenu } = widget;
 
-import {
-  HttpMethod,
-  HTTP_METHODS,
-  isValidHttpMethod,
-} from "./useAPIWidgetState";
+import { HttpMethod, HTTP_METHODS, isValidHttpMethod } from "./useWidgetState";
 
-type PropertyName = "httpMethod" | "addRequest" | "addResponse";
+const MENU_OPTIONS_NAMES = ["httpMethod", "addRequest", "addResponse"] as const;
 
-type UseAPIPropertyMenuProps = {
+type MenuOptionName = (typeof MENU_OPTIONS_NAMES)[number];
+
+type UseWidgetMenuProps = {
   httpMethod: HttpMethod;
   onHttpMethodChange: (method: HttpMethod) => void;
   hasResponse: boolean;
@@ -18,43 +16,43 @@ type UseAPIPropertyMenuProps = {
   onAddRequest: () => void;
 };
 
-type WidgetPropertyDropdown = {
+type MenuOptionDropdown = {
   itemType: "dropdown";
-  propertyName: PropertyName;
+  propertyName: MenuOptionName;
   tooltip: string;
   selectedOption: string;
   options: Array<{ option: string; label: string }>;
 };
 
-type WidgetPropertyAction = {
+type MenuOptionActionButton = {
   itemType: "action";
-  propertyName: PropertyName;
+  propertyName: MenuOptionName;
   tooltip: string;
 };
 
-type WidgetPropertyMenuItem = WidgetPropertyDropdown | WidgetPropertyAction;
+type MenuOption = MenuOptionDropdown | MenuOptionActionButton;
 
-type PropertyHandler = (propertyValue?: string) => void;
+type MenuOptionHandler = (propertyValue?: string) => void;
 
-export function useAPIPropertyMenu({
+export function useWidgetMenu({
   httpMethod,
   onHttpMethodChange,
   hasResponse,
   onAddResponse,
   hasRequest,
   onAddRequest,
-}: UseAPIPropertyMenuProps) {
-  const propertyHandlers: Record<PropertyName, PropertyHandler> = {
+}: UseWidgetMenuProps) {
+  const menuOptionHandlers: Record<MenuOptionName, MenuOptionHandler> = {
     httpMethod: (propertyValue) => {
       if (propertyValue && isValidHttpMethod(propertyValue)) {
         onHttpMethodChange(propertyValue);
       }
     },
-    addRequest: () => onAddRequest(),
-    addResponse: () => onAddResponse(),
+    addRequest: onAddRequest,
+    addResponse: onAddResponse,
   };
 
-  const menuItems: WidgetPropertyMenuItem[] = [
+  const menuItems: MenuOption[] = [
     {
       itemType: "dropdown",
       propertyName: "httpMethod",
@@ -86,16 +84,14 @@ export function useAPIPropertyMenu({
   ];
 
   usePropertyMenu(menuItems, ({ propertyName, propertyValue }) => {
-    if (!isValidPropertyName(propertyName)) {
+    if (!isValidMenuOptionName(propertyName)) {
       return;
     }
 
-    propertyHandlers[propertyName](propertyValue);
+    menuOptionHandlers[propertyName](propertyValue);
   });
 }
 
-function isValidPropertyName(name: string): name is PropertyName {
-  return (
-    name === "httpMethod" || name === "addRequest" || name === "addResponse"
-  );
+function isValidMenuOptionName(name: string): name is MenuOptionName {
+  return MENU_OPTIONS_NAMES.includes(name as MenuOptionName);
 }

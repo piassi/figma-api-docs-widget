@@ -4,13 +4,13 @@ const { AutoLayout } = widget;
 import { Popup } from "./components/Popup";
 import { Button } from "./components/Button";
 import { EndpointBar } from "./components/EndpointBar";
-import { useAPIPropertyMenu } from "./hooks/useAPIPropertyMenu";
-import { useAPIWidgetState } from "./hooks/useAPIWidgetState";
+import { useWidgetMenu } from "./hooks/useWidgetMenu";
+import { useWidgetState } from "./hooks/useWidgetState";
 
 function Widget() {
-  const state = useAPIWidgetState();
+  const state = useWidgetState();
 
-  useAPIPropertyMenu({
+  useWidgetMenu({
     httpMethod: state.httpMethod,
     onHttpMethodChange: state.setHttpMethod,
     hasResponse: state.hasResponse,

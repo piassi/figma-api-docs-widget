@@ -52,7 +52,7 @@ const DEFAULT_VALUES = {
   HAS_REQUEST: false,
 } as const;
 
-export type APIWidgetState = {
+export type WidgetState = {
   httpMethod: HttpMethod;
   endpointPath: string;
   showRequestPopup: boolean;
@@ -83,7 +83,7 @@ export type APIWidgetState = {
   removeRequest: () => void;
 };
 
-export function useAPIWidgetState(): APIWidgetState {
+export function useWidgetState(): WidgetState {
   const [httpMethod, setHttpMethod] = useSyncedState<HttpMethod>(
     STATE_KEYS.HTTP_METHOD,
     DEFAULT_VALUES.HTTP_METHOD

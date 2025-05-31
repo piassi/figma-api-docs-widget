@@ -1,13 +1,12 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { HttpMethod } from "../hooks/useAPIWidgetState";
+import { HttpMethod } from "../hooks/useWidgetState";
 
 type HttpMethodBadgeProps = {
   method: HttpMethod;
 };
 
-// Type-safe color mapping for HTTP methods
 const METHOD_COLORS: Record<HttpMethod, string> = {
   GET: "#4CAF50",
   POST: "#2196F3",

@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { AutoLayout, Input } = widget;
 
-import { HttpMethod } from "../hooks/useAPIWidgetState";
+import { HttpMethod } from "../hooks/useWidgetState";
 import { HttpMethodBadge } from "./HttpMethodBadge";
 
 type EndpointBarProps = {
