@@ -7,6 +7,8 @@ import {
   isValidHttpMethod,
 } from "./useAPIWidgetState";
 
+type PropertyName = "httpMethod" | "addRequest" | "addResponse";
+
 type UseAPIPropertyMenuProps = {
   httpMethod: HttpMethod;
   onHttpMethodChange: (method: HttpMethod) => void;
@@ -16,19 +18,21 @@ type UseAPIPropertyMenuProps = {
   onAddRequest: () => void;
 };
 
-type WidgetPropertyMenuItem =
-  | {
-      itemType: "dropdown";
-      propertyName: string;
-      tooltip: string;
-      selectedOption: string;
-      options: Array<{ option: string; label: string }>;
-    }
-  | {
-      itemType: "action";
-      propertyName: string;
-      tooltip: string;
-    };
+type WidgetPropertyDropdown = {
+  itemType: "dropdown";
+  propertyName: PropertyName;
+  tooltip: string;
+  selectedOption: string;
+  options: Array<{ option: string; label: string }>;
+};
+
+type WidgetPropertyAction = {
+  itemType: "action";
+  propertyName: PropertyName;
+  tooltip: string;
+};
+
+type WidgetPropertyMenuItem = WidgetPropertyDropdown | WidgetPropertyAction;
 
 export function useAPIPropertyMenu({
   httpMethod,
@@ -53,7 +57,7 @@ export function useAPIPropertyMenu({
       ? [
           {
             itemType: "action" as const,
-            propertyName: "addRequest",
+            propertyName: "addRequest" as const,
             tooltip: "Add Request",
           },
         ]
@@ -62,7 +66,7 @@ export function useAPIPropertyMenu({
       ? [
           {
             itemType: "action" as const,
-            propertyName: "addResponse",
+            propertyName: "addResponse" as const,
             tooltip: "Add Response",
           },
         ]
@@ -70,16 +74,32 @@ export function useAPIPropertyMenu({
   ];
 
   usePropertyMenu(menuItems, ({ propertyName, propertyValue }) => {
-    if (
-      propertyName === "httpMethod" &&
-      propertyValue &&
-      isValidHttpMethod(propertyValue)
-    ) {
-      onHttpMethodChange(propertyValue);
-    } else if (propertyName === "addResponse") {
-      onAddResponse();
-    } else if (propertyName === "addRequest") {
-      onAddRequest();
+    if (!isValidPropertyName(propertyName)) {
+      return;
+    }
+
+    switch (propertyName) {
+      case "httpMethod": {
+        if (propertyValue && isValidHttpMethod(propertyValue)) {
+          onHttpMethodChange(propertyValue);
+        }
+        break;
+      }
+      case "addRequest": {
+        onAddRequest();
+        break;
+      }
+      case "addResponse": {
+        onAddResponse();
+        break;
+      }
     }
   });
+}
+
+// Type guard function to check if a string is a valid PropertyName
+function isValidPropertyName(name: string): name is PropertyName {
+  return (
+    name === "httpMethod" || name === "addRequest" || name === "addResponse"
+  );
 }
