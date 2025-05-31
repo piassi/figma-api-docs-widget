@@ -52,43 +52,82 @@ const DEFAULT_VALUES = {
   HAS_REQUEST: false,
 } as const;
 
-type WidgetStateValues = {
+function usePopupState(key: string, defaultValue: boolean = false) {
+  const [show, setShow] = useSyncedState(key, defaultValue);
+  return {
+    show,
+    setShow,
+    toggle: () => setShow(!show),
+  };
+}
+
+function useEditableContent(
+  contentKey: string,
+  editingKey: string,
+  defaultContent: string
+) {
+  const [content, setContent] = useSyncedState(contentKey, defaultContent);
+  const [isEditing, setIsEditing] = useSyncedState(editingKey, false);
+
+  return {
+    content,
+    setContent,
+    isEditing,
+    setIsEditing,
+    toggleEditing: () => setIsEditing(!isEditing),
+  };
+}
+
+function useToggleableFeature(key: string, defaultValue: boolean = false) {
+  const [enabled, setEnabled] = useSyncedState(key, defaultValue);
+  return {
+    enabled,
+    setEnabled,
+    enable: () => setEnabled(true),
+    disable: () => setEnabled(false),
+  };
+}
+
+type EndpointState = {
   httpMethod: HttpMethod;
+  setHttpMethod: (method: HttpMethod) => void;
   endpointPath: string;
-  showRequestPopup: boolean;
-  requestContent: string;
-  isRequestEditing: boolean;
-  showResponsePopup: boolean;
-  responseContent: string;
-  isResponseEditing: boolean;
-  hasResponse: boolean;
-  hasRequest: boolean;
+  setEndpointPath: (path: string) => void;
 };
 
-type WidgetStateActions = {
-  setHttpMethod: (method: HttpMethod) => void;
-  setEndpointPath: (path: string) => void;
+type RequestState = {
+  showRequestPopup: boolean;
   setShowRequestPopup: (show: boolean) => void;
-  setRequestContent: (content: string) => void;
-  setIsRequestEditing: (editing: boolean) => void;
-  setShowResponsePopup: (show: boolean) => void;
-  setResponseContent: (content: string) => void;
-  setIsResponseEditing: (editing: boolean) => void;
-  setHasResponse: (hasResponse: boolean) => void;
-  setHasRequest: (hasRequest: boolean) => void;
   toggleRequestPopup: () => void;
-  toggleResponsePopup: () => void;
+  requestContent: string;
+  setRequestContent: (content: string) => void;
+  isRequestEditing: boolean;
+  setIsRequestEditing: (editing: boolean) => void;
   toggleRequestEditing: () => void;
-  toggleResponseEditing: () => void;
-  addResponse: () => void;
-  removeResponse: () => void;
+  hasRequest: boolean;
+  setHasRequest: (hasRequest: boolean) => void;
   addRequest: () => void;
   removeRequest: () => void;
 };
 
-export type WidgetState = WidgetStateValues & WidgetStateActions;
+type ResponseState = {
+  showResponsePopup: boolean;
+  setShowResponsePopup: (show: boolean) => void;
+  toggleResponsePopup: () => void;
+  responseContent: string;
+  setResponseContent: (content: string) => void;
+  isResponseEditing: boolean;
+  setIsResponseEditing: (editing: boolean) => void;
+  toggleResponseEditing: () => void;
+  hasResponse: boolean;
+  setHasResponse: (hasResponse: boolean) => void;
+  addResponse: () => void;
+  removeResponse: () => void;
+};
 
-export function useWidgetState(): WidgetState {
+export type WidgetState = EndpointState & RequestState & ResponseState;
+
+function useEndpointState() {
   const [httpMethod, setHttpMethod] = useSyncedState<HttpMethod>(
     STATE_KEYS.HTTP_METHOD,
     DEFAULT_VALUES.HTTP_METHOD
@@ -97,67 +136,85 @@ export function useWidgetState(): WidgetState {
     STATE_KEYS.ENDPOINT_PATH,
     DEFAULT_VALUES.ENDPOINT_PATH
   );
-  const [showRequestPopup, setShowRequestPopup] = useSyncedState<boolean>(
+
+  return {
+    httpMethod,
+    setHttpMethod,
+    endpointPath,
+    setEndpointPath,
+  };
+}
+
+function useRequestState(): RequestState {
+  const popup = usePopupState(
     STATE_KEYS.SHOW_REQUEST_POPUP,
     DEFAULT_VALUES.SHOW_REQUEST_POPUP
   );
-  const [requestContent, setRequestContent] = useSyncedState<string>(
+  const content = useEditableContent(
     STATE_KEYS.REQUEST_CONTENT,
+    STATE_KEYS.IS_REQUEST_EDITING,
     DEFAULT_VALUES.REQUEST_CONTENT
   );
-  const [isRequestEditing, setIsRequestEditing] = useSyncedState<boolean>(
-    STATE_KEYS.IS_REQUEST_EDITING,
-    DEFAULT_VALUES.IS_REQUEST_EDITING
-  );
-  const [showResponsePopup, setShowResponsePopup] = useSyncedState<boolean>(
-    STATE_KEYS.SHOW_RESPONSE_POPUP,
-    DEFAULT_VALUES.SHOW_RESPONSE_POPUP
-  );
-  const [responseContent, setResponseContent] = useSyncedState<string>(
-    STATE_KEYS.RESPONSE_CONTENT,
-    DEFAULT_VALUES.RESPONSE_CONTENT
-  );
-  const [isResponseEditing, setIsResponseEditing] = useSyncedState<boolean>(
-    STATE_KEYS.IS_RESPONSE_EDITING,
-    DEFAULT_VALUES.IS_RESPONSE_EDITING
-  );
-  const [hasResponse, setHasResponse] = useSyncedState<boolean>(
-    STATE_KEYS.HAS_RESPONSE,
-    DEFAULT_VALUES.HAS_RESPONSE
-  );
-  const [hasRequest, setHasRequest] = useSyncedState<boolean>(
+  const feature = useToggleableFeature(
     STATE_KEYS.HAS_REQUEST,
     DEFAULT_VALUES.HAS_REQUEST
   );
 
   return {
-    httpMethod,
-    endpointPath,
-    showRequestPopup,
-    requestContent,
-    isRequestEditing,
-    showResponsePopup,
-    responseContent,
-    isResponseEditing,
-    hasResponse,
-    hasRequest,
-    setHttpMethod,
-    setEndpointPath,
-    setShowRequestPopup,
-    setRequestContent,
-    setIsRequestEditing,
-    setShowResponsePopup,
-    setResponseContent,
-    setIsResponseEditing,
-    setHasResponse,
-    setHasRequest,
-    toggleRequestPopup: () => setShowRequestPopup(!showRequestPopup),
-    toggleResponsePopup: () => setShowResponsePopup(!showResponsePopup),
-    toggleRequestEditing: () => setIsRequestEditing(!isRequestEditing),
-    toggleResponseEditing: () => setIsResponseEditing(!isResponseEditing),
-    addResponse: () => setHasResponse(true),
-    removeResponse: () => setHasResponse(false),
-    addRequest: () => setHasRequest(true),
-    removeRequest: () => setHasRequest(false),
+    showRequestPopup: popup.show,
+    setShowRequestPopup: popup.setShow,
+    toggleRequestPopup: popup.toggle,
+    requestContent: content.content,
+    setRequestContent: content.setContent,
+    isRequestEditing: content.isEditing,
+    setIsRequestEditing: content.setIsEditing,
+    toggleRequestEditing: content.toggleEditing,
+    hasRequest: feature.enabled,
+    setHasRequest: feature.setEnabled,
+    addRequest: feature.enable,
+    removeRequest: feature.disable,
+  };
+}
+
+function useResponseState(): ResponseState {
+  const popup = usePopupState(
+    STATE_KEYS.SHOW_RESPONSE_POPUP,
+    DEFAULT_VALUES.SHOW_RESPONSE_POPUP
+  );
+  const content = useEditableContent(
+    STATE_KEYS.RESPONSE_CONTENT,
+    STATE_KEYS.IS_RESPONSE_EDITING,
+    DEFAULT_VALUES.RESPONSE_CONTENT
+  );
+  const feature = useToggleableFeature(
+    STATE_KEYS.HAS_RESPONSE,
+    DEFAULT_VALUES.HAS_RESPONSE
+  );
+
+  return {
+    showResponsePopup: popup.show,
+    setShowResponsePopup: popup.setShow,
+    toggleResponsePopup: popup.toggle,
+    responseContent: content.content,
+    setResponseContent: content.setContent,
+    isResponseEditing: content.isEditing,
+    setIsResponseEditing: content.setIsEditing,
+    toggleResponseEditing: content.toggleEditing,
+    hasResponse: feature.enabled,
+    setHasResponse: feature.setEnabled,
+    addResponse: feature.enable,
+    removeResponse: feature.disable,
+  };
+}
+
+export function useWidgetState(): WidgetState {
+  const endpoint = useEndpointState();
+  const request = useRequestState();
+  const response = useResponseState();
+
+  return {
+    ...endpoint,
+    ...request,
+    ...response,
   };
 }
