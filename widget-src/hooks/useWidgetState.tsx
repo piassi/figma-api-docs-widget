@@ -52,7 +52,7 @@ const DEFAULT_VALUES = {
   HAS_REQUEST: false,
 } as const;
 
-export type WidgetState = {
+type WidgetStateValues = {
   httpMethod: HttpMethod;
   endpointPath: string;
   showRequestPopup: boolean;
@@ -63,6 +63,9 @@ export type WidgetState = {
   isResponseEditing: boolean;
   hasResponse: boolean;
   hasRequest: boolean;
+};
+
+type WidgetStateActions = {
   setHttpMethod: (method: HttpMethod) => void;
   setEndpointPath: (path: string) => void;
   setShowRequestPopup: (show: boolean) => void;
@@ -82,6 +85,8 @@ export type WidgetState = {
   addRequest: () => void;
   removeRequest: () => void;
 };
+
+export type WidgetState = WidgetStateValues & WidgetStateActions;
 
 export function useWidgetState(): WidgetState {
   const [httpMethod, setHttpMethod] = useSyncedState<HttpMethod>(
