@@ -1,17 +1,16 @@
 const { widget } = figma;
-const { AutoLayout, Text, Input } = widget;
+const { AutoLayout, Text } = widget;
 
 import { HighlightedText } from "./HighlightedText";
-import { EditIcon, JsonIcon, CloseIcon } from "./icons/index";
+import { EditIcon, CloseIcon } from "./icons/index";
+import { JSON_EDITOR_HTML } from "../utils/htmlLoader";
 
 type PopupProps = {
   isVisible: boolean;
   onClose: () => void;
   title: string;
   content: string;
-  editable?: boolean;
   onContentChange?: (content: string) => void;
-  onToggleEdit?: () => void;
 };
 
 export function Popup({
@@ -19,11 +18,37 @@ export function Popup({
   onClose,
   title,
   content,
-  editable = false,
   onContentChange,
-  onToggleEdit,
 }: PopupProps) {
-  if (!isVisible) return null;
+  if (!isVisible) {
+    return null;
+  }
+
+  const openEditor = () => {
+    return new Promise<void>((resolve) => {
+      figma.showUI(JSON_EDITOR_HTML, {
+        width: 550,
+        height: 500,
+        title: "JSON Editor",
+      });
+
+      figma.ui.onmessage = (message) => {
+        if (message.type === "request-content") {
+          figma.ui.postMessage({
+            type: "init-content",
+            content: content,
+          });
+        } else if (message.type === "save-content") {
+          onContentChange && onContentChange(message.content);
+          figma.closePlugin();
+          resolve();
+        } else if (message.type === "cancel") {
+          figma.closePlugin();
+          resolve();
+        }
+      };
+    });
+  };
 
   return (
     <AutoLayout
@@ -45,17 +70,17 @@ export function Popup({
         <Text fontSize={16} fill="#333333" fontWeight={600} width="fill-parent">
           {title}
         </Text>
-        {onToggleEdit && (
+        {onContentChange && (
           <AutoLayout
-            onClick={onToggleEdit}
-            tooltip={editable ? "Switch to view mode" : "Switch to edit mode"}
+            onClick={openEditor}
+            tooltip="Edit JSON"
             padding={4}
             cornerRadius={4}
             fill="#00000000"
             horizontalAlignItems="center"
             verticalAlignItems="center"
           >
-            {editable ? <JsonIcon /> : <EditIcon />}
+            <EditIcon />
           </AutoLayout>
         )}
         <CloseIcon onClick={onClose} tooltip="Close" />
@@ -68,29 +93,7 @@ export function Popup({
         fill="#F8F8F8"
         width="fill-parent"
       >
-        {editable && onContentChange ? (
-          <Input
-            value={content}
-            onTextEditEnd={(e) => {
-              onContentChange(e.characters);
-            }}
-            fontSize={12}
-            fill="#333333"
-            fontFamily="Fira Code"
-            width="fill-parent"
-            placeholder="Enter JSON content..."
-            inputBehavior="multiline"
-            inputFrameProps={{
-              fill: "#F8F8F8",
-              stroke: "#E0E0E0",
-              strokeWidth: 1,
-              cornerRadius: 4,
-              padding: 8,
-            }}
-          />
-        ) : (
-          <HighlightedText content={content} />
-        )}
+        <HighlightedText content={content} />
       </AutoLayout>
     </AutoLayout>
   );

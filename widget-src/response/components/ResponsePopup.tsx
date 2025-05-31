@@ -14,9 +14,7 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
       onClose={() => response.state.setShowResponsePopup(false)}
       title="Expected Response Body"
       content={response.state.responseContent}
-      editable={response.state.isResponseEditing}
       onContentChange={response.state.setResponseContent}
-      onToggleEdit={response.state.toggleResponseEditing}
     />
   );
 };

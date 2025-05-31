@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "Your Figma widget",
   "scripts": {
-    "build": "esbuild widget-src/code.tsx --bundle --outfile=dist/code.js --target=es6",
-    "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
-    "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
-    "tsc": "tsc --noEmit -p widget-src",
-    "watch": "npm run build -- --watch"
+    "prebuild": "node scripts/embed-html.js",
+    "build": "npm run prebuild && esbuild widget-src/code.tsx --bundle --outfile=dist/code.js --target=es6",
+    "watch": "npm run build -- --watch",
+    "embed-html": "node scripts/embed-html.js",
+    "lint": "eslint --ext .ts,.tsx .",
+    "lint:fix": "eslint --ext .ts,.tsx --fix .",
+    "tsc": "tsc --noEmit -p widget-src"
   },
   "author": "",
   "license": "",

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>JSON Editor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Fira Code', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+    }
+    
+    .toolbar {
+      padding: 12px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e1e5e9;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    .editor {
+      flex: 1;
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 16px;
+      font-family: 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: none;
+      background: #ffffff;
+      color: #24292f;
+      tab-size: 2;
+    }
+    
+    .editor:focus {
+      outline: none;
+    }
+    
+    .btn {
+      padding: 6px 12px;
+      min-width: 80px;
+      border: 1px solid #d0d7de;
+      background: #ffffff;
+      color: #24292f;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 35px;
+    }
+    
+    .btn:hover {
+      background: #f3f4f6;
+      border-color: #afb8c1;
+    }
+    
+    .btn:active {
+      background: #e5e7ea;
+      transform: translateY(1px);
+    }
+    
+    .btn-primary {
+      background: #0969da;
+      color: #ffffff;
+      border-color: #0969da;
+    }
+    
+    .btn-primary:hover {
+      background: #0860ca;
+      border-color: #0860ca;
+    }
+    
+    .btn-primary:active {
+      background: #0757ba;
+    }
+    
+    .status {
+      margin-left: auto;
+      font-size: 11px;
+      color: #656d76;
+      font-weight: 500;
+    }
+    
+    .status.valid {
+      color: #1a7f37;
+    }
+    
+    .status.invalid {
+      color: #d1242f;
+    }
+    
+    .error-display {
+      background: #fff8f8;
+      border: 1px solid #f1aeb5;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 8px 16px 16px;
+      color: #d1242f;
+      font-size: 12px;
+      font-family: 'SF Mono', Monaco, monospace;
+      white-space: pre-wrap;
+      display: none;
+    }
+    
+    .line-numbers {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      color: #656d76;
+      font-family: 'Fira Code', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: right;
+      padding: 16px 8px;
+      border-right: 1px solid #e1e5e9;
+      background: #f8f9fa;
+      user-select: none;
+      pointer-events: none;
+      overflow: hidden;
+      white-space: pre;
+    }
+    
+    .editor-with-numbers {
+      padding-left: 66px;
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button class="btn" onclick="formatJSON()" title="Format JSON (Ctrl+Shift+F)">
+      ✨ Format
+    </button>
+    <button class="btn" onclick="validateJSON()" title="Validate JSON (Ctrl+Shift+V)">
+      ✓ Validate
+    </button>
+    <button class="btn btn-primary" onclick="saveAndClose()" title="Save and close (Ctrl+S)">
+      💾 Save & Close
+    </button>
+    <button class="btn" onclick="cancel()" title="Cancel (Escape)">
+      ✕ Cancel
+    </button>
+    <div class="status" id="status">Ready</div>
+  </div>
+  
+  <div class="editor-container">
+    <div class="line-numbers" id="lineNumbers"></div>
+    <textarea 
+      class="editor editor-with-numbers" 
+      id="editor" 
+      placeholder="Enter your JSON here..."
+      spellcheck="false"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+    ></textarea>
+  </div>
+  
+  <div class="error-display" id="errorDisplay"></div>
+  
+  <script>
+    let editor = document.getElementById('editor');
+    let status = document.getElementById('status');
+    let errorDisplay = document.getElementById('errorDisplay');
+    let lineNumbers = document.getElementById('lineNumbers');
+    let initialContent = '';
+    
+    // Initialize editor content
+    window.addEventListener('message', function(event) {
+      if (event.data.pluginMessage && event.data.pluginMessage.type === 'init-content') {
+        initialContent = event.data.pluginMessage.content || '';
+        editor.value = initialContent;
+        updateLineNumbers();
+        validateJSON();
+        editor.focus();
+      }
+    });
+    
+    // Request initial content
+    parent.postMessage({
+      pluginMessage: { type: 'request-content' }
+    }, '*');
+    
+    // Update line numbers
+    function updateLineNumbers() {
+      const lines = editor.value.split('\n');
+      const numbers = [];
+      for (let i = 1; i <= lines.length; i++) {
+        numbers.push(i.toString());
+      }
+      lineNumbers.textContent = numbers.join('\n');
+    }
+    
+    // Auto-update line numbers and validation
+    editor.addEventListener('input', function() {
+      updateLineNumbers();
+      validateJSON();
+    });
+    
+    editor.addEventListener('scroll', function() {
+      lineNumbers.scrollTop = editor.scrollTop;
+    });
+    
+    // Format JSON
+    function formatJSON() {
+      try {
+        const content = editor.value.trim();
+        if (!content) {
+          showStatus('Nothing to format', 'invalid');
+          return;
+        }
+        
+        const parsed = JSON.parse(content);
+        const formatted = JSON.stringify(parsed, null, 2);
+        editor.value = formatted;
+        updateLineNumbers();
+        showStatus('Formatted successfully', 'valid');
+        hideError();
+      } catch (error) {
+        showStatus('Invalid JSON - cannot format', 'invalid');
+        showError('Format Error: ' + error.message);
+      }
+    }
+    
+    // Validate JSON
+    function validateJSON() {
+      const content = editor.value.trim();
+      
+      if (!content) {
+        showStatus('Empty', 'invalid');
+        hideError();
+        return false;
+      }
+      
+      try {
+        JSON.parse(content);
+        showStatus('Valid JSON ✓', 'valid');
+        hideError();
+        return true;
+      } catch (error) {
+        showStatus('Invalid JSON ✗', 'invalid');
+        showError('Parse Error: ' + error.message);
+        return false;
+      }
+    }
+    
+    // Show status
+    function showStatus(message, type) {
+      status.textContent = message;
+      status.className = 'status ' + (type || '');
+    }
+    
+    // Show error
+    function showError(message) {
+      errorDisplay.textContent = message;
+      errorDisplay.style.display = 'block';
+    }
+    
+    // Hide error
+    function hideError() {
+      errorDisplay.style.display = 'none';
+    }
+    
+    // Save and close
+    function saveAndClose() {
+      const content = editor.value;
+      if (content.trim() && !validateJSON()) {
+        if (!confirm('JSON is invalid. Save anyway?')) {
+          return;
+        }
+      }
+      
+      parent.postMessage({
+        pluginMessage: {
+          type: 'save-content',
+          content: content
+        }
+      }, '*');
+    }
+    
+    // Cancel
+    function cancel() {
+      if (editor.value !== initialContent) {
+        if (!confirm('You have unsaved changes. Close anyway?')) {
+          return;
+        }
+      }
+      
+      parent.postMessage({
+        pluginMessage: { type: 'cancel' }
+      }, '*');
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key) {
+          case 's':
+            e.preventDefault();
+            saveAndClose();
+            break;
+          case 'f':
+            if (e.shiftKey) {
+              e.preventDefault();
+              formatJSON();
+            }
+            break;
+          case 'v':
+            if (e.shiftKey) {
+              e.preventDefault();
+              validateJSON();
+            }
+            break;
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancel();
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        
+        // Insert 2 spaces for tab
+        editor.value = editor.value.substring(0, start) + '  ' + editor.value.substring(end);
+        editor.selectionStart = editor.selectionEnd = start + 2;
+        
+        updateLineNumbers();
+        validateJSON();
+      }
+    });
+    
+    // Auto-resize editor
+    function resizeEditor() {
+      const toolbar = document.querySelector('.toolbar');
+      const error = document.querySelector('.error-display');
+      const toolbarHeight = toolbar.offsetHeight;
+      const errorHeight = error.style.display === 'none' ? 0 : error.offsetHeight;
+      const availableHeight = window.innerHeight - toolbarHeight - errorHeight;
+      
+      document.querySelector('.editor-container').style.height = availableHeight + 'px';
+    }
+    
+    window.addEventListener('resize', resizeEditor);
+    window.addEventListener('load', resizeEditor);
+    
+    // Initialize
+    setTimeout(resizeEditor, 100);
+  </script>
+</body>
+</html> 

@@ -1,0 +1,8 @@
+# Build scripts
+scripts/
+
+# Generated files  
+widget-src/utils/htmlLoader.ts
+
+# Dependencies
+node_modules/ 

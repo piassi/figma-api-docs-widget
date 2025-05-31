@@ -14,9 +14,7 @@ export const RequestPopup = ({ request }: RequestPopupProps) => {
       onClose={() => request.state.setShowRequestPopup(false)}
       title="Expected Request Body"
       content={request.state.requestContent}
-      editable={request.state.isRequestEditing}
       onContentChange={request.state.setRequestContent}
-      onToggleEdit={request.state.toggleRequestEditing}
     />
   );
 };

@@ -15,6 +15,19 @@ const COLORS = {
   whitespace: '#24292E'   // Dark gray for whitespace
 } as const;
 
+// Fallback color in case of any issues
+const DEFAULT_COLOR = '#333333';
+
+// Helper function to ensure valid colors
+const getValidColor = (colorKey: keyof typeof COLORS): string => {
+  const color = COLORS[colorKey];
+  // Basic validation - ensure it's a string and starts with #
+  if (typeof color === 'string' && color.startsWith('#') && color.length === 7) {
+    return color;
+  }
+  return DEFAULT_COLOR;
+};
+
 // Fast character type checking functions using character codes
 const isWhitespace = (char: string): boolean => {
   const code = char.charCodeAt(0);
@@ -58,9 +71,9 @@ export function tokenizeJson(jsonString: string): JsonToken[] {
         i++;
       }
       tokens.push({ 
-        type: 'whitespace', 
+        type: 'whitespace' as const, 
         value: jsonString.slice(start, i), 
-        color: COLORS.whitespace 
+        color: getValidColor('whitespace') 
       });
       continue;
     }
@@ -101,7 +114,7 @@ export function tokenizeJson(jsonString: string): JsonToken[] {
       tokens.push({
         type: isKey ? 'key' : 'string',
         value: str,
-        color: isKey ? COLORS.key : COLORS.string
+        color: isKey ? getValidColor('key') : getValidColor('string')
       });
       
       // Update expectation after processing a key
@@ -121,7 +134,7 @@ export function tokenizeJson(jsonString: string): JsonToken[] {
       tokens.push({ 
         type: 'number', 
         value: jsonString.slice(start, i), 
-        color: COLORS.number 
+        color: getValidColor('number') 
       });
       continue;
     }
@@ -136,11 +149,11 @@ export function tokenizeJson(jsonString: string): JsonToken[] {
       const word = jsonString.slice(start, i);
       
       if (word === 'true' || word === 'false') {
-        tokens.push({ type: 'boolean', value: word, color: COLORS.boolean });
+        tokens.push({ type: 'boolean', value: word, color: getValidColor('boolean') });
       } else if (word === 'null') {
-        tokens.push({ type: 'null', value: word, color: COLORS.null });
+        tokens.push({ type: 'null', value: word, color: getValidColor('null') });
       } else {
-        tokens.push({ type: 'punctuation', value: word, color: COLORS.punctuation });
+        tokens.push({ type: 'punctuation', value: word, color: getValidColor('punctuation') });
       }
       continue;
     }
@@ -166,7 +179,7 @@ export function tokenizeJson(jsonString: string): JsonToken[] {
       expectingKey = inObject;
     }
     
-    tokens.push({ type: 'punctuation', value: char, color: COLORS.punctuation });
+    tokens.push({ type: 'punctuation', value: char, color: getValidColor('punctuation') });
     i++;
   }
   
