@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { HttpMethod } from "../hooks/useWidgetState";
+import { HttpMethod } from "../constants/httpMethods";
 
 type HttpMethodBadgeProps = {
   method: HttpMethod;
@@ -15,6 +15,7 @@ const METHOD_COLORS: Record<HttpMethod, string> = {
   DELETE: "#F44336",
   HEAD: "#607D8B",
   OPTIONS: "#795748",
+  ANY: "#9E9E9E",
 };
 
 export function HttpMethodBadge({ method }: HttpMethodBadgeProps) {

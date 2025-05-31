@@ -1,7 +1,8 @@
 const { widget } = figma;
 const { usePropertyMenu } = widget;
 
-import { HTTP_METHODS, isValidHttpMethod, WidgetState } from "./useWidgetState";
+import { WidgetState } from "./useWidgetState";
+import { HTTP_METHODS, isValidHttpMethod } from "../constants/httpMethods";
 
 const MENU_OPTIONS_NAMES = ["httpMethod", "addRequest", "addResponse"] as const;
 
