@@ -8,22 +8,20 @@ export function useRequestFeature(): RequestFeature {
 
   return {
     state,
-    menuOptions: state.hasRequest
-      ? [
-          {
-            itemType: "action",
-            propertyName: "disableRequest",
-            tooltip: "Disable Request",
-            handler: state.disableRequest,
-          },
-        ]
-      : [
-          {
-            itemType: "action",
-            propertyName: "enableRequest",
-            tooltip: "Enable Request",
-            handler: state.enableRequest,
-          },
-        ],
+    menuOptions: [
+      {
+        itemType: "toggle",
+        propertyName: "toggleRequest",
+        tooltip: "Request",
+        isToggled: state.hasRequest,
+        handler: () => {
+          if (state.hasRequest) {
+            state.disableRequest();
+          } else {
+            state.enableRequest();
+          }
+        },
+      },
+    ],
   };
 }

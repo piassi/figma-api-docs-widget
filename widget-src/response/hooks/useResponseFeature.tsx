@@ -8,22 +8,20 @@ export function useResponseFeature(): ResponseFeature {
 
   return {
     state,
-    menuOptions: state.hasResponse
-      ? [
-          {
-            itemType: "action",
-            propertyName: "disableResponse",
-            tooltip: "Disable Response",
-            handler: state.disableResponse,
-          },
-        ]
-      : [
-          {
-            itemType: "action",
-            propertyName: "enableResponse",
-            tooltip: "Enable Response",
-            handler: state.enableResponse,
-          },
-        ],
+    menuOptions: [
+      {
+        itemType: "toggle",
+        propertyName: "toggleResponse",
+        tooltip: "Response",
+        isToggled: state.hasResponse,
+        handler: () => {
+          if (state.hasResponse) {
+            state.disableResponse();
+          } else {
+            state.enableResponse();
+          }
+        },
+      },
+    ],
   };
 }
