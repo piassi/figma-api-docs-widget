@@ -1,26 +1,26 @@
+import { DescriptionFeature } from "../hooks/useDescriptionFeature";
+
 const { widget } = figma;
 const { AutoLayout, Input, Text } = widget;
 
 type DescriptionFieldProps = {
-  descriptionContent: string;
-  onDescriptionChange: (content: string) => void;
-  placeholder?: string;
+  description: DescriptionFeature;
 };
 
-export function DescriptionField({
-  descriptionContent,
-  onDescriptionChange,
-  placeholder = "Add a description for this endpoint...",
-}: DescriptionFieldProps) {
+export function DescriptionField({ description }: DescriptionFieldProps) {
+  if (!description.state.hasDescription) return null;
+
   return (
     <AutoLayout direction="vertical" spacing={8} width="fill-parent">
       <Text fontSize={12} fill="#666666" fontWeight={500}>
         Description
       </Text>
       <Input
-        value={descriptionContent}
-        placeholder={placeholder}
-        onTextEditEnd={(e) => onDescriptionChange(e.characters)}
+        value={description.state.descriptionContent}
+        placeholder="Add a description for this endpoint..."
+        onTextEditEnd={(e) =>
+          description.state.setDescriptionContent(e.characters)
+        }
         fontSize={14}
         fill="#333333"
         width="fill-parent"

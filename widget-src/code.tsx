@@ -42,12 +42,7 @@ function Widget() {
             placeholder="/api/endpoint/path"
           />
 
-          {description.state.hasDescription && (
-            <DescriptionField
-              descriptionContent={description.state.descriptionContent}
-              onDescriptionChange={description.state.setDescriptionContent}
-            />
-          )}
+          <DescriptionField description={description} />
 
           {(request.state.hasRequest || response.state.hasResponse) && (
             <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
