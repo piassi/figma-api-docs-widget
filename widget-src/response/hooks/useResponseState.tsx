@@ -1,5 +1,6 @@
 import { useToggleableFeature } from "../../hooks/useToggleableFeature";
 import { v4 as uuid } from "@lukeed/uuid";
+import { HttpStatus } from "../../constants/httpStatuses";
 
 const { widget } = figma;
 const { useSyncedState } = widget;
@@ -13,6 +14,7 @@ const RESPONSE_STATE_KEYS = {
 export type ResponseItem = {
   id: string;
   content: string;
+  statusCode: HttpStatus;
 };
 
 const RESPONSE_DEFAULT_VALUES = {
@@ -26,6 +28,7 @@ export type ResponseState = {
   setResponses: (responses: ResponseItem[]) => void;
   addResponse: () => void;
   updateResponse: (id: string, content: string) => void;
+  updateResponseStatus: (id: string, statusCode: HttpStatus) => void;
   removeResponse: (id: string) => void;
   showResponsesPopup: boolean;
   setShowResponsesPopup: (show: boolean) => void;
@@ -56,6 +59,7 @@ export function useResponseState(): ResponseState {
     const newResponse: ResponseItem = {
       id: uuid(),
       content: "{}",
+      statusCode: 200,
     };
     setResponses([...responses, newResponse]);
   };
@@ -64,6 +68,14 @@ export function useResponseState(): ResponseState {
     setResponses(
       responses.map((response) =>
         response.id === id ? { ...response, content } : response
+      )
+    );
+  };
+
+  const updateResponseStatus = (id: string, statusCode: HttpStatus) => {
+    setResponses(
+      responses.map((response) =>
+        response.id === id ? { ...response, statusCode } : response
       )
     );
   };
@@ -80,6 +92,7 @@ export function useResponseState(): ResponseState {
       const defaultResponse: ResponseItem = {
         id: uuid(),
         content: "{}",
+        statusCode: 200,
       };
       setResponses([defaultResponse]);
     }
@@ -100,6 +113,7 @@ export function useResponseState(): ResponseState {
     setResponses,
     addResponse,
     updateResponse,
+    updateResponseStatus,
     removeResponse,
     showResponsesPopup,
     setShowResponsesPopup,

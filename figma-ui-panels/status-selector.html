@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>HTTP Status Selector</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .container {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333333;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #666666;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+    }
+    
+    .close-btn:hover {
+      background: #f0f0f0;
+      color: #333333;
+    }
+    
+    .category {
+      margin-bottom: 24px;
+    }
+    
+    .category-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666666;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+    }
+    
+    .status-button {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-height: 65px;
+      justify-content: center;
+    }
+    
+    .status-button:hover {
+      background: #f8f9fa;
+      border-color: #007AFF;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-button.current {
+      border-color: transparent;
+      color: white;
+      font-weight: 600;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .status-button.current:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .status-code {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-message {
+      font-size: 11px;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+    
+    /* Success colors */
+    .status-2xx {
+      background: #4CAF50;
+      border-color: #4CAF50;
+    }
+    
+    /* Redirection colors */
+    .status-3xx {
+      background: #FF9800;
+      border-color: #FF9800;
+    }
+    
+    /* Client error colors */
+    .status-4xx {
+      background: #F44336;
+      border-color: #F44336;
+    }
+    
+    /* Server error colors */
+    .status-5xx {
+      background: #9C27B0;
+      border-color: #9C27B0;
+    }
+    
+    @media (max-width: 400px) {
+      .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">Select Status Code</div>
+      <button class="close-btn" onclick="closeSelector()" title="Close">×</button>
+    </div>
+    
+    <div class="category">
+      <div class="category-title">2xx Success</div>
+      <div class="status-grid">
+        <button class="status-button" data-status="200" data-class="status-2xx">
+          <div class="status-code">200</div>
+          <div class="status-message">OK</div>
+        </button>
+        <button class="status-button" data-status="201" data-class="status-2xx">
+          <div class="status-code">201</div>
+          <div class="status-message">Created</div>
+        </button>
+        <button class="status-button" data-status="202" data-class="status-2xx">
+          <div class="status-code">202</div>
+          <div class="status-message">Accepted</div>
+        </button>
+        <button class="status-button" data-status="204" data-class="status-2xx">
+          <div class="status-code">204</div>
+          <div class="status-message">No Content</div>
+        </button>
+      </div>
+    </div>
+    
+    <div class="category">
+      <div class="category-title">3xx Redirection</div>
+      <div class="status-grid">
+        <button class="status-button" data-status="301" data-class="status-3xx">
+          <div class="status-code">301</div>
+          <div class="status-message">Moved Permanently</div>
+        </button>
+        <button class="status-button" data-status="302" data-class="status-3xx">
+          <div class="status-code">302</div>
+          <div class="status-message">Found</div>
+        </button>
+        <button class="status-button" data-status="304" data-class="status-3xx">
+          <div class="status-code">304</div>
+          <div class="status-message">Not Modified</div>
+        </button>
+      </div>
+    </div>
+    
+    <div class="category">
+      <div class="category-title">4xx Client Error</div>
+      <div class="status-grid">
+        <button class="status-button" data-status="400" data-class="status-4xx">
+          <div class="status-code">400</div>
+          <div class="status-message">Bad Request</div>
+        </button>
+        <button class="status-button" data-status="401" data-class="status-4xx">
+          <div class="status-code">401</div>
+          <div class="status-message">Unauthorized</div>
+        </button>
+        <button class="status-button" data-status="403" data-class="status-4xx">
+          <div class="status-code">403</div>
+          <div class="status-message">Forbidden</div>
+        </button>
+        <button class="status-button" data-status="404" data-class="status-4xx">
+          <div class="status-code">404</div>
+          <div class="status-message">Not Found</div>
+        </button>
+        <button class="status-button" data-status="405" data-class="status-4xx">
+          <div class="status-code">405</div>
+          <div class="status-message">Method Not Allowed</div>
+        </button>
+        <button class="status-button" data-status="409" data-class="status-4xx">
+          <div class="status-code">409</div>
+          <div class="status-message">Conflict</div>
+        </button>
+        <button class="status-button" data-status="422" data-class="status-4xx">
+          <div class="status-code">422</div>
+          <div class="status-message">Unprocessable Entity</div>
+        </button>
+        <button class="status-button" data-status="429" data-class="status-4xx">
+          <div class="status-code">429</div>
+          <div class="status-message">Too Many Requests</div>
+        </button>
+      </div>
+    </div>
+    
+    <div class="category">
+      <div class="category-title">5xx Server Error</div>
+      <div class="status-grid">
+        <button class="status-button" data-status="500" data-class="status-5xx">
+          <div class="status-code">500</div>
+          <div class="status-message">Internal Server Error</div>
+        </button>
+        <button class="status-button" data-status="501" data-class="status-5xx">
+          <div class="status-code">501</div>
+          <div class="status-message">Not Implemented</div>
+        </button>
+        <button class="status-button" data-status="502" data-class="status-5xx">
+          <div class="status-code">502</div>
+          <div class="status-message">Bad Gateway</div>
+        </button>
+        <button class="status-button" data-status="503" data-class="status-5xx">
+          <div class="status-code">503</div>
+          <div class="status-message">Service Unavailable</div>
+        </button>
+        <button class="status-button" data-status="504" data-class="status-5xx">
+          <div class="status-code">504</div>
+          <div class="status-message">Gateway Timeout</div>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let currentStatus = 200;
+    
+    // Initialize the selector
+    window.addEventListener('message', function(event) {
+      if (event.data.pluginMessage && event.data.pluginMessage.type === 'init-status-selector') {
+        currentStatus = event.data.pluginMessage.currentStatus || 200;
+        highlightCurrentStatus();
+      }
+    });
+    
+    // Request initial data when loaded
+    parent.postMessage({
+      pluginMessage: { type: 'request-current-status' }
+    }, '*');
+    
+    // Highlight the current status
+    function highlightCurrentStatus() {
+      const buttons = document.querySelectorAll('.status-button');
+      buttons.forEach(button => {
+        const status = parseInt(button.dataset.status);
+        const statusClass = button.dataset.class;
+        
+        if (status === currentStatus) {
+          button.classList.add('current', statusClass);
+        } else {
+          button.classList.remove('current', statusClass);
+        }
+      });
+    }
+    
+    // Handle status selection
+    document.addEventListener('click', function(event) {
+      if (event.target.closest('.status-button')) {
+        const button = event.target.closest('.status-button');
+        const status = parseInt(button.dataset.status);
+        
+        // Send the selected status back to the widget
+        parent.postMessage({
+          pluginMessage: {
+            type: 'status-selected',
+            status: status
+          }
+        }, '*');
+      }
+    });
+    
+    // Handle close button
+    function closeSelector() {
+      parent.postMessage({
+        pluginMessage: { type: 'status-selector-closed' }
+      }, '*');
+    }
+    
+    // Handle keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeSelector();
+      }
+    });
+  </script>
+</body>
+</html> 

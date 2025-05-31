@@ -4,8 +4,10 @@ const { AutoLayout, Text } = widget;
 import { HighlightedText } from "../../components/HighlightedText";
 import { EditIcon, CloseIcon, DeleteIcon } from "../../components/icons/index";
 import { AddIcon } from "../../components/icons/AddIcon";
+import { StatusBadge } from "./StatusBadge";
 import { ResponseFeature } from "../hooks/useResponseFeature";
-import { JSON_EDITOR_HTML } from "../../utils/htmlLoader";
+import { JSON_EDITOR_HTML, STATUS_SELECTOR_HTML } from "../../utils/htmlLoader";
+import { HttpStatus } from "../../constants/httpStatuses";
 
 type ResponsePopUpProps = {
   response: ResponseFeature;
@@ -26,14 +28,47 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
       figma.ui.onmessage = (message) => {
         if (message.type === "request-content") {
           figma.ui.postMessage({
-            type: "init-content",
-            content: content,
+            pluginMessage: {
+              type: "init-content",
+              content: content,
+            },
           });
         } else if (message.type === "save-content") {
           response.state.updateResponse(responseId, message.content);
           figma.closePlugin();
           resolve();
         } else if (message.type === "cancel") {
+          figma.closePlugin();
+          resolve();
+        }
+      };
+    });
+  };
+
+  const openStatusSelector = (
+    responseId: string,
+    currentStatus: HttpStatus
+  ) => {
+    return new Promise<void>((resolve) => {
+      figma.showUI(STATUS_SELECTOR_HTML, {
+        width: 460,
+        height: 600,
+        title: "Select Status Code",
+      });
+
+      figma.ui.onmessage = (message) => {
+        if (message.type === "request-current-status") {
+          figma.ui.postMessage({
+            pluginMessage: {
+              type: "init-status-selector",
+              currentStatus: currentStatus,
+            },
+          });
+        } else if (message.type === "status-selected") {
+          response.state.updateResponseStatus(responseId, message.status);
+          figma.closePlugin();
+          resolve();
+        } else if (message.type === "status-selector-closed") {
           figma.closePlugin();
           resolve();
         }
@@ -79,7 +114,7 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
       </AutoLayout>
 
       <AutoLayout direction="vertical" spacing={16} width="fill-parent">
-        {response.state.responses.map((responseItem, index) => (
+        {response.state.responses.map((responseItem) => (
           <AutoLayout
             key={responseItem.id}
             direction="vertical"
@@ -92,14 +127,16 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
               width="fill-parent"
               verticalAlignItems="center"
             >
-              <Text
-                fontSize={14}
-                fill="#666666"
-                fontWeight={500}
-                width="fill-parent"
-              >
-                Response {index + 1}
-              </Text>
+              <StatusBadge
+                status={responseItem.statusCode}
+                onClick={() =>
+                  openStatusSelector(responseItem.id, responseItem.statusCode)
+                }
+                tooltip="Click to change status code"
+              />
+
+              <AutoLayout height={1} width="fill-parent" />
+
               {response.state.responses.length > 1 && (
                 <AutoLayout
                   onClick={() => response.state.removeResponse(responseItem.id)}
