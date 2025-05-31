@@ -15,11 +15,9 @@ export function useResponseFeature(): ResponseFeature {
         tooltip: "Response",
         isToggled: state.isResponseEnabled,
         handler: () => {
-          if (state.isResponseEnabled) {
-            state.disableResponse();
-          } else {
-            state.enableResponse();
-          }
+          state.isResponseEnabled
+            ? state.disableResponse()
+            : state.enableResponse();
         },
       },
     ],

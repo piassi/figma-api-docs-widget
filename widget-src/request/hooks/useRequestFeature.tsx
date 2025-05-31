@@ -15,11 +15,9 @@ export function useRequestFeature(): RequestFeature {
         tooltip: "Request",
         isToggled: state.isRequestEnabled,
         handler: () => {
-          if (state.isRequestEnabled) {
-            state.disableRequest();
-          } else {
-            state.enableRequest();
-          }
+          state.isRequestEnabled
+            ? state.disableRequest()
+            : state.enableRequest();
         },
       },
     ],
