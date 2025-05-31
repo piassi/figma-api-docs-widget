@@ -34,6 +34,8 @@ type WidgetPropertyAction = {
 
 type WidgetPropertyMenuItem = WidgetPropertyDropdown | WidgetPropertyAction;
 
+type PropertyHandler = (propertyValue?: string) => void;
+
 export function useAPIPropertyMenu({
   httpMethod,
   onHttpMethodChange,
@@ -42,6 +44,16 @@ export function useAPIPropertyMenu({
   hasRequest,
   onAddRequest,
 }: UseAPIPropertyMenuProps) {
+  const propertyHandlers: Record<PropertyName, PropertyHandler> = {
+    httpMethod: (propertyValue) => {
+      if (propertyValue && isValidHttpMethod(propertyValue)) {
+        onHttpMethodChange(propertyValue);
+      }
+    },
+    addRequest: () => onAddRequest(),
+    addResponse: () => onAddResponse(),
+  };
+
   const menuItems: WidgetPropertyMenuItem[] = [
     {
       itemType: "dropdown",
@@ -78,26 +90,10 @@ export function useAPIPropertyMenu({
       return;
     }
 
-    switch (propertyName) {
-      case "httpMethod": {
-        if (propertyValue && isValidHttpMethod(propertyValue)) {
-          onHttpMethodChange(propertyValue);
-        }
-        break;
-      }
-      case "addRequest": {
-        onAddRequest();
-        break;
-      }
-      case "addResponse": {
-        onAddResponse();
-        break;
-      }
-    }
+    propertyHandlers[propertyName](propertyValue);
   });
 }
 
-// Type guard function to check if a string is a valid PropertyName
 function isValidPropertyName(name: string): name is PropertyName {
   return (
     name === "httpMethod" || name === "addRequest" || name === "addResponse"
