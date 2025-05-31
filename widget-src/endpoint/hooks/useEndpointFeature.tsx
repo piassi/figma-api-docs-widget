@@ -1,6 +1,6 @@
-import { HTTP_METHODS, isValidHttpMethod } from "../constants/httpMethods";
+import { HTTP_METHODS, isValidHttpMethod } from "../../constants/httpMethods";
 import { useEndpointState, type EndpointState } from "./useEndpointState";
-import type { Feature } from "../types";
+import type { Feature } from "../../types";
 
 export function useEndpointFeature(): Feature<EndpointState> {
   const state = useEndpointState();

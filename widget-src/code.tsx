@@ -1,13 +1,15 @@
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-import { Popup } from "./components/Popup";
-import { Button } from "./components/Button";
-import { EndpointBar } from "./components/EndpointBar";
+import { EndpointBar } from "./endpoint/components/EndpointBar";
 import { useWidgetMenu } from "./hooks/useWidgetMenu";
-import { useEndpointFeature } from "./hooks/useEndpointFeature";
-import { useRequestFeature } from "./hooks/useRequestFeature";
-import { useResponseFeature } from "./hooks/useResponseFeature";
+import { useEndpointFeature } from "./endpoint/hooks/useEndpointFeature";
+import { useRequestFeature } from "./request/hooks/useRequestFeature";
+import { useResponseFeature } from "./response/hooks/useResponseFeature";
+import { RequestPopup } from "./request/components/RequestPopup";
+import { ResponsePopUp } from "./response/components/ResponsePopUp";
+import { ResponseButton } from "./response/components/ResponseButton";
+import { RequestButton } from "./request/components/RequestButton";
 
 function Widget() {
   const endpoint = useEndpointFeature();
@@ -36,46 +38,14 @@ function Widget() {
 
         {(request.state.hasRequest || response.state.hasResponse) && (
           <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
-            {request.state.hasRequest && (
-              <Button
-                label="Request"
-                onClick={request.state.toggleRequestPopup}
-              />
-            )}
-
-            {response.state.hasResponse && (
-              <Button
-                label="Response"
-                onClick={response.state.toggleResponsePopup}
-              />
-            )}
+            <RequestButton request={request} />
+            <ResponseButton response={response} />
           </AutoLayout>
         )}
       </AutoLayout>
 
-      {request.state.hasRequest && (
-        <Popup
-          isVisible={request.state.showRequestPopup}
-          onClose={() => request.state.setShowRequestPopup(false)}
-          title="Expected Request Body"
-          content={request.state.requestContent}
-          editable={request.state.isRequestEditing}
-          onContentChange={request.state.setRequestContent}
-          onToggleEdit={request.state.toggleRequestEditing}
-        />
-      )}
-
-      {response.state.hasResponse && (
-        <Popup
-          isVisible={response.state.showResponsePopup}
-          onClose={() => response.state.setShowResponsePopup(false)}
-          title="Expected Response Body"
-          content={response.state.responseContent}
-          editable={response.state.isResponseEditing}
-          onContentChange={response.state.setResponseContent}
-          onToggleEdit={response.state.toggleResponseEditing}
-        />
-      )}
+      <RequestPopup request={request} />
+      <ResponsePopUp response={response} />
     </AutoLayout>
   );
 }

@@ -1,6 +1,6 @@
-import { usePopupState } from "./usePopupState";
-import { useEditableContent } from "./useEditableContent";
-import { useToggleableFeature } from "./useToggleableFeature";
+import { usePopupState } from "../../hooks/usePopupState";
+import { useEditableContent } from "../../hooks/useEditableContent";
+import { useToggleableFeature } from "../../hooks/useToggleableFeature";
 
 const REQUEST_STATE_KEYS = {
   SHOW_REQUEST_POPUP: "showRequestPopup",

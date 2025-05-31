@@ -1,6 +1,15 @@
-import { useEndpointState, type EndpointState } from "./useEndpointState";
-import { useRequestState, type RequestState } from "./useRequestState";
-import { useResponseState, type ResponseState } from "./useResponseState";
+import {
+  useEndpointState,
+  type EndpointState,
+} from "../endpoint/hooks/useEndpointState";
+import {
+  useRequestState,
+  type RequestState,
+} from "../request/hooks/useRequestState";
+import {
+  useResponseState,
+  type ResponseState,
+} from "../response/hooks/useResponseState";
 
 export type WidgetState = EndpointState & RequestState & ResponseState;
 

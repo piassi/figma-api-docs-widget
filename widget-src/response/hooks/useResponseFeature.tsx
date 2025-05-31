@@ -1,7 +1,9 @@
 import { useResponseState, type ResponseState } from "./useResponseState";
-import type { Feature } from "../types";
+import type { Feature } from "../../types";
 
-export function useResponseFeature(): Feature<ResponseState> {
+export type ResponseFeature = Feature<ResponseState>;
+
+export function useResponseFeature(): ResponseFeature {
   const state = useResponseState();
 
   return {

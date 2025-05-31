@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { useSyncedState } = widget;
 
-import { type HttpMethod } from "../constants/httpMethods";
+import { type HttpMethod } from "../../constants/httpMethods";
 
 const ENDPOINT_STATE_KEYS = {
   HTTP_METHOD: "httpMethod",

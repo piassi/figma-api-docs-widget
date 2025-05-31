@@ -1,7 +1,9 @@
 import { useRequestState, type RequestState } from "./useRequestState";
-import type { Feature } from "../types";
+import type { Feature } from "../../types";
 
-export function useRequestFeature(): Feature<RequestState> {
+export type RequestFeature = Feature<RequestState>;
+
+export function useRequestFeature(): RequestFeature {
   const state = useRequestState();
 
   return {
