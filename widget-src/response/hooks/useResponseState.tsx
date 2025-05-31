@@ -58,7 +58,7 @@ export function useResponseState(): ResponseState {
   const addResponse = () => {
     const newResponse: ResponseItem = {
       id: uuid(),
-      content: "{}",
+      content: "",
       statusCode: 200,
     };
     setResponses([...responses, newResponse]);
@@ -91,7 +91,7 @@ export function useResponseState(): ResponseState {
     if (responses.length === 0) {
       const defaultResponse: ResponseItem = {
         id: uuid(),
-        content: "{}",
+        content: "",
         statusCode: 200,
       };
       setResponses([defaultResponse]);

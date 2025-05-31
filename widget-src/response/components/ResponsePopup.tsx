@@ -178,7 +178,13 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
               stroke="#E6E6E6"
               strokeWidth={1}
             >
-              <HighlightedText content={responseItem.content} />
+              {responseItem.content.trim() === "" ? (
+                <Text fontSize={12} fill="#999999">
+                  Empty response body
+                </Text>
+              ) : (
+                <HighlightedText content={responseItem.content} />
+              )}
             </AutoLayout>
           </AutoLayout>
         ))}
