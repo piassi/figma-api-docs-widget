@@ -7,10 +7,12 @@ import { useEndpointFeature } from "./endpoint/hooks/useEndpointFeature";
 import { useRequestFeature } from "./request/hooks/useRequestFeature";
 import { useResponseFeature } from "./response/hooks/useResponseFeature";
 import { useColorFeature } from "./color/hooks/useColorFeature";
+import { useDescriptionFeature } from "./description/hooks/useDescriptionFeature";
 import { RequestPopup } from "./request/components/RequestPopup";
 import { ResponsePopUp } from "./response/components/ResponsePopup";
 import { ResponseButton } from "./response/components/ResponseButton";
 import { RequestButton } from "./request/components/RequestButton";
+import { DescriptionField } from "./description/components/DescriptionField";
 
 function Widget() {
   try {
@@ -18,8 +20,9 @@ function Widget() {
     const request = useRequestFeature();
     const response = useResponseFeature();
     const color = useColorFeature();
+    const description = useDescriptionFeature();
 
-    useWidgetMenu([endpoint, request, response, color]);
+    useWidgetMenu([color, endpoint, request, response, description]);
 
     return (
       <AutoLayout direction="vertical" spacing={16} padding={0}>
@@ -38,6 +41,13 @@ function Widget() {
             onEndpointPathChange={endpoint.state.setEndpointPath}
             placeholder="/api/endpoint/path"
           />
+
+          {description.state.hasDescription && (
+            <DescriptionField
+              descriptionContent={description.state.descriptionContent}
+              onDescriptionChange={description.state.setDescriptionContent}
+            />
+          )}
 
           {(request.state.hasRequest || response.state.hasResponse) && (
             <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
