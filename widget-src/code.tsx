@@ -6,6 +6,7 @@ import { useWidgetMenu } from "./hooks/useWidgetMenu";
 import { useEndpointFeature } from "./endpoint/hooks/useEndpointFeature";
 import { useRequestFeature } from "./request/hooks/useRequestFeature";
 import { useResponseFeature } from "./response/hooks/useResponseFeature";
+import { useColorFeature } from "./color/hooks/useColorFeature";
 import { RequestPopup } from "./request/components/RequestPopup";
 import { ResponsePopUp } from "./response/components/ResponsePopup";
 import { ResponseButton } from "./response/components/ResponseButton";
@@ -16,8 +17,9 @@ function Widget() {
     const endpoint = useEndpointFeature();
     const request = useRequestFeature();
     const response = useResponseFeature();
+    const color = useColorFeature();
 
-    useWidgetMenu([endpoint, request, response]);
+    useWidgetMenu([endpoint, request, response, color]);
 
     return (
       <AutoLayout direction="vertical" spacing={16} padding={0}>
@@ -26,7 +28,7 @@ function Widget() {
           spacing={16}
           padding={20}
           cornerRadius={12}
-          fill="#FFFFFF"
+          fill={color.state.widgetColor}
           stroke="#E6E6E6"
           width={500}
         >
