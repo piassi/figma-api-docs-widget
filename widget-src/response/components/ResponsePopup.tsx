@@ -2,7 +2,7 @@ const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
 import { HighlightedText } from "../../components/HighlightedText";
-import { EditIcon, CloseIcon, DeleteIcon } from "../../components/icons/index";
+import { EditIcon, DeleteIcon } from "../../components/icons/index";
 import { AddIcon } from "../../components/icons/AddIcon";
 import { StatusBadge } from "./StatusBadge";
 import { ResponseFeature } from "../hooks/useResponseFeature";
@@ -110,10 +110,6 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
         >
           <AddIcon size={16} color="#666666" />
         </AutoLayout>
-        <CloseIcon
-          onClick={() => response.state.setShowResponsesPopup(false)}
-          tooltip="Close"
-        />
       </AutoLayout>
 
       <AutoLayout direction="vertical" spacing={16} width="fill-parent">

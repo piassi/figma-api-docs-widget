@@ -2,12 +2,11 @@ const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
 import { HighlightedText } from "./HighlightedText";
-import { EditIcon, CloseIcon } from "./icons/index";
+import { EditIcon } from "./icons/index";
 import { JSON_EDITOR_HTML } from "../utils/htmlLoader";
 
 type PopupProps = {
   isVisible: boolean;
-  onClose: () => void;
   title: string;
   content: string;
   onContentChange?: (content: string) => void;
@@ -15,7 +14,6 @@ type PopupProps = {
 
 export function Popup({
   isVisible,
-  onClose,
   title,
   content,
   onContentChange,
@@ -83,7 +81,6 @@ export function Popup({
             <EditIcon />
           </AutoLayout>
         )}
-        <CloseIcon onClick={onClose} tooltip="Close" />
       </AutoLayout>
 
       <AutoLayout

@@ -7,6 +7,7 @@ type ButtonProps = {
   backgroundColor?: string;
   strokeColor?: string;
   tooltip?: string;
+  icon?: FigmaDeclarativeNode;
 };
 
 export function Button({
@@ -15,6 +16,7 @@ export function Button({
   backgroundColor = "#000000",
   strokeColor = "#000000",
   tooltip,
+  icon,
 }: ButtonProps) {
   return (
     <AutoLayout
@@ -36,9 +38,24 @@ export function Button({
       }}
       onClick={onClick}
     >
-      <Text fontSize={16} fill="#FFFFFF" fontWeight={600} tooltip={tooltip}>
-        {label}
-      </Text>
+      <AutoLayout
+        direction="horizontal"
+        spacing={8}
+        verticalAlignItems="center"
+        horizontalAlignItems={icon ? "start" : "center"}
+        width="fill-parent"
+      >
+        <Text
+          fontSize={16}
+          fill="#FFFFFF"
+          fontWeight={600}
+          tooltip={tooltip}
+          width={icon ? "fill-parent" : undefined}
+        >
+          {label}
+        </Text>
+        {icon}
+      </AutoLayout>
     </AutoLayout>
   );
 }
