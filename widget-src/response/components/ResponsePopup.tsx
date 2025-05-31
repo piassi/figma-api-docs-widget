@@ -26,18 +26,20 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
       });
 
       figma.ui.onmessage = (message) => {
-        if (message.type === "request-content") {
+        const messageType = message.pluginMessage?.type || message.type;
+
+        if (messageType === "request-content") {
           figma.ui.postMessage({
-            pluginMessage: {
-              type: "init-content",
-              content: content,
-            },
+            type: "init-content",
+            content: content,
           });
-        } else if (message.type === "save-content") {
-          response.state.updateResponse(responseId, message.content);
+        } else if (messageType === "save-content") {
+          const messageContent =
+            message.pluginMessage?.content || message.content;
+          response.state.updateResponse(responseId, messageContent);
           figma.closePlugin();
           resolve();
-        } else if (message.type === "cancel") {
+        } else if (messageType === "cancel") {
           figma.closePlugin();
           resolve();
         }
@@ -57,18 +59,19 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
       });
 
       figma.ui.onmessage = (message) => {
-        if (message.type === "request-current-status") {
+        const messageType = message.pluginMessage?.type || message.type;
+
+        if (messageType === "request-current-status") {
           figma.ui.postMessage({
-            pluginMessage: {
-              type: "init-status-selector",
-              currentStatus: currentStatus,
-            },
+            type: "init-status-selector",
+            currentStatus: currentStatus,
           });
-        } else if (message.type === "status-selected") {
-          response.state.updateResponseStatus(responseId, message.status);
+        } else if (messageType === "status-selected") {
+          const messageStatus = message.pluginMessage?.status || message.status;
+          response.state.updateResponseStatus(responseId, messageStatus);
           figma.closePlugin();
           resolve();
-        } else if (message.type === "status-selector-closed") {
+        } else if (messageType === "status-selector-closed") {
           figma.closePlugin();
           resolve();
         }
