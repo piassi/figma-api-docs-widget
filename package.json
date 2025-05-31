@@ -1,5 +1,5 @@
 {
-  "name": "Endpoints",
+  "name": "figpoints-widget",
   "version": "1.0.0",
   "description": "Your Figma widget",
   "scripts": {
@@ -44,5 +44,8 @@
         }
       ]
     }
+  },
+  "dependencies": {
+    "@lukeed/uuid": "^2.0.1"
   }
 }

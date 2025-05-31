@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { HttpMethod } from "../constants/httpMethods";
+import { HttpMethod } from "../../constants/httpMethods";
 
 type HttpMethodBadgeProps = {
   method: HttpMethod;

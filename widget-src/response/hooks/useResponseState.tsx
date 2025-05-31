@@ -1,27 +1,34 @@
-import { usePopupState } from "../../hooks/usePopupState";
 import { useToggleableFeature } from "../../hooks/useToggleableFeature";
+import { v4 as uuid } from "@lukeed/uuid";
 
 const { widget } = figma;
 const { useSyncedState } = widget;
 
 const RESPONSE_STATE_KEYS = {
-  SHOW_RESPONSE_POPUP: "showResponsePopup",
-  RESPONSE_CONTENT: "responseContent",
+  RESPONSES: "responses",
   HAS_RESPONSE: "hasResponse",
+  SHOW_RESPONSES_POPUP: "showResponsesPopup",
 } as const;
 
+export type ResponseItem = {
+  id: string;
+  content: string;
+};
+
 const RESPONSE_DEFAULT_VALUES = {
-  SHOW_RESPONSE_POPUP: false,
-  RESPONSE_CONTENT: "{}",
+  RESPONSES: [] as ResponseItem[],
   HAS_RESPONSE: false,
+  SHOW_RESPONSES_POPUP: false,
 } as const;
 
 export type ResponseState = {
-  showResponsePopup: boolean;
-  setShowResponsePopup: (show: boolean) => void;
-  toggleResponsePopup: () => void;
-  responseContent: string;
-  setResponseContent: (content: string) => void;
+  responses: ResponseItem[];
+  setResponses: (responses: ResponseItem[]) => void;
+  addResponse: () => void;
+  updateResponse: (id: string, content: string) => void;
+  showResponsesPopup: boolean;
+  setShowResponsesPopup: (show: boolean) => void;
+  toggleResponsesPopup: () => void;
   hasResponse: boolean;
   setHasResponse: (hasResponse: boolean) => void;
   enableResponse: () => void;
@@ -29,30 +36,71 @@ export type ResponseState = {
 };
 
 export function useResponseState(): ResponseState {
-  const popup = usePopupState(
-    RESPONSE_STATE_KEYS.SHOW_RESPONSE_POPUP,
-    RESPONSE_DEFAULT_VALUES.SHOW_RESPONSE_POPUP
-  );
-  const [responseContent, setResponseContent] = useSyncedState(
-    RESPONSE_STATE_KEYS.RESPONSE_CONTENT,
-    RESPONSE_DEFAULT_VALUES.RESPONSE_CONTENT
-  ) as [string, (content: string) => void];
+  const [responses, setResponses] = useSyncedState(
+    RESPONSE_STATE_KEYS.RESPONSES,
+    RESPONSE_DEFAULT_VALUES.RESPONSES
+  ) as [ResponseItem[], (responses: ResponseItem[]) => void];
+
+  const [showResponsesPopup, setShowResponsesPopup] = useSyncedState(
+    RESPONSE_STATE_KEYS.SHOW_RESPONSES_POPUP,
+    RESPONSE_DEFAULT_VALUES.SHOW_RESPONSES_POPUP
+  ) as [boolean, (show: boolean) => void];
+
   const feature = useToggleableFeature(
     RESPONSE_STATE_KEYS.HAS_RESPONSE,
     RESPONSE_DEFAULT_VALUES.HAS_RESPONSE
   );
 
-  return {
-    showResponsePopup: popup.show,
-    setShowResponsePopup: popup.setShow,
-    toggleResponsePopup: popup.toggle,
+  const addResponse = () => {
+    const newResponse: ResponseItem = {
+      id: uuid(),
+      content: "{}",
+    };
+    setResponses([...responses, newResponse]);
+  };
 
-    responseContent,
-    setResponseContent,
+  const updateResponse = (id: string, content: string) => {
+    setResponses(
+      responses.map((response) =>
+        response.id === id ? { ...response, content } : response
+      )
+    );
+  };
+
+  const toggleResponsesPopup = () => {
+    setShowResponsesPopup(!showResponsesPopup);
+  };
+
+  const enableResponse = () => {
+    feature.enable();
+    setShowResponsesPopup(true);
+
+    if (responses.length === 0) {
+      const defaultResponse: ResponseItem = {
+        id: uuid(),
+        content: "{}",
+      };
+      setResponses([defaultResponse]);
+    }
+  };
+
+  const disableResponse = () => {
+    feature.disable();
+    setShowResponsesPopup(false);
+  };
+
+  return {
+    responses,
+    setResponses,
+    addResponse,
+    updateResponse,
+    showResponsesPopup,
+    setShowResponsesPopup,
+    toggleResponsesPopup,
 
     hasResponse: feature.enabled,
     setHasResponse: feature.setEnabled,
-    enableResponse: feature.enable,
-    disableResponse: feature.disable,
+    enableResponse,
+    disableResponse,
   };
 }
