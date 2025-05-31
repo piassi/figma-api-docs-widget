@@ -12,7 +12,7 @@ const REQUEST_STATE_KEYS = {
 
 const REQUEST_DEFAULT_VALUES = {
   SHOW_REQUEST_POPUP: false,
-  REQUEST_CONTENT: "{}",
+  REQUEST_CONTENT: "",
   HAS_REQUEST: false,
 } as const;
 

@@ -90,7 +90,13 @@ export function Popup({
         fill="#F8F8F8"
         width="fill-parent"
       >
-        <HighlightedText content={content} />
+        {content.trim() === "" ? (
+          <Text fontSize={12} fill="#999999">
+            Empty request body
+          </Text>
+        ) : (
+          <HighlightedText content={content} />
+        )}
       </AutoLayout>
     </AutoLayout>
   );
