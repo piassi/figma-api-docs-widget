@@ -24,8 +24,8 @@ export type ResponseState = {
   setResponseContent: (content: string) => void;
   hasResponse: boolean;
   setHasResponse: (hasResponse: boolean) => void;
-  addResponse: () => void;
-  removeResponse: () => void;
+  enableResponse: () => void;
+  disableResponse: () => void;
 };
 
 export function useResponseState(): ResponseState {
@@ -52,7 +52,7 @@ export function useResponseState(): ResponseState {
 
     hasResponse: feature.enabled,
     setHasResponse: feature.setEnabled,
-    addResponse: feature.enable,
-    removeResponse: feature.disable,
+    enableResponse: feature.enable,
+    disableResponse: feature.disable,
   };
 }

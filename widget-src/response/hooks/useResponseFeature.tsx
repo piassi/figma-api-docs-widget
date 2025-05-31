@@ -9,13 +9,20 @@ export function useResponseFeature(): ResponseFeature {
   return {
     state,
     menuOptions: state.hasResponse
-      ? []
+      ? [
+          {
+            itemType: "action",
+            propertyName: "disableResponse",
+            tooltip: "Disable Response",
+            handler: state.disableResponse,
+          },
+        ]
       : [
           {
             itemType: "action",
-            propertyName: "addResponse",
-            tooltip: "Add Response",
-            handler: () => state.addResponse(),
+            propertyName: "enableResponse",
+            tooltip: "Enable Response",
+            handler: state.enableResponse,
           },
         ],
   };

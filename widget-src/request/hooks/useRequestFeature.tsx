@@ -9,13 +9,20 @@ export function useRequestFeature(): RequestFeature {
   return {
     state,
     menuOptions: state.hasRequest
-      ? []
+      ? [
+          {
+            itemType: "action",
+            propertyName: "disableRequest",
+            tooltip: "Disable Request",
+            handler: state.disableRequest,
+          },
+        ]
       : [
           {
             itemType: "action",
-            propertyName: "addRequest",
-            tooltip: "Add Request",
-            handler: () => state.addRequest(),
+            propertyName: "enableRequest",
+            tooltip: "Enable Request",
+            handler: state.enableRequest,
           },
         ],
   };

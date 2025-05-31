@@ -24,8 +24,8 @@ export type RequestState = {
   setRequestContent: (content: string) => void;
   hasRequest: boolean;
   setHasRequest: (hasRequest: boolean) => void;
-  addRequest: () => void;
-  removeRequest: () => void;
+  enableRequest: () => void;
+  disableRequest: () => void;
 };
 
 export function useRequestState(): RequestState {
@@ -52,7 +52,7 @@ export function useRequestState(): RequestState {
 
     hasRequest: feature.enabled,
     setHasRequest: feature.setEnabled,
-    addRequest: feature.enable,
-    removeRequest: feature.disable,
+    enableRequest: feature.enable,
+    disableRequest: feature.disable,
   };
 }
