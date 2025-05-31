@@ -17,25 +17,38 @@ export function isValidHttpMethod(method: string): method is HttpMethod {
   return HTTP_METHODS.includes(method as HttpMethod);
 }
 
-const STATE_KEYS = {
+const ENDPOINT_STATE_KEYS = {
   HTTP_METHOD: "httpMethod",
   ENDPOINT_PATH: "endpointPath",
+} as const;
+
+const REQUEST_STATE_KEYS = {
   SHOW_REQUEST_POPUP: "showRequestPopup",
   REQUEST_CONTENT: "requestContent",
   IS_REQUEST_EDITING: "isRequestEditing",
+  HAS_REQUEST: "hasRequest",
+} as const;
+
+const RESPONSE_STATE_KEYS = {
   SHOW_RESPONSE_POPUP: "showResponsePopup",
   RESPONSE_CONTENT: "responseContent",
   IS_RESPONSE_EDITING: "isResponseEditing",
   HAS_RESPONSE: "hasResponse",
-  HAS_REQUEST: "hasRequest",
 } as const;
 
-const DEFAULT_VALUES = {
+const ENDPOINT_DEFAULT_VALUES = {
   HTTP_METHOD: "GET" as HttpMethod,
   ENDPOINT_PATH: "",
+} as const;
+
+const REQUEST_DEFAULT_VALUES = {
   SHOW_REQUEST_POPUP: false,
   REQUEST_CONTENT: "{}",
   IS_REQUEST_EDITING: false,
+  HAS_REQUEST: false,
+} as const;
+
+const RESPONSE_DEFAULT_VALUES = {
   SHOW_RESPONSE_POPUP: false,
   RESPONSE_CONTENT: `{
   "success": true,
@@ -49,7 +62,6 @@ const DEFAULT_VALUES = {
 }`,
   IS_RESPONSE_EDITING: false,
   HAS_RESPONSE: false,
-  HAS_REQUEST: false,
 } as const;
 
 function usePopupState(key: string, defaultValue: boolean = false) {
@@ -127,14 +139,14 @@ type ResponseState = {
 
 export type WidgetState = EndpointState & RequestState & ResponseState;
 
-function useEndpointState() {
+function useEndpointState(): EndpointState {
   const [httpMethod, setHttpMethod] = useSyncedState<HttpMethod>(
-    STATE_KEYS.HTTP_METHOD,
-    DEFAULT_VALUES.HTTP_METHOD
+    ENDPOINT_STATE_KEYS.HTTP_METHOD,
+    ENDPOINT_DEFAULT_VALUES.HTTP_METHOD
   );
   const [endpointPath, setEndpointPath] = useSyncedState<string>(
-    STATE_KEYS.ENDPOINT_PATH,
-    DEFAULT_VALUES.ENDPOINT_PATH
+    ENDPOINT_STATE_KEYS.ENDPOINT_PATH,
+    ENDPOINT_DEFAULT_VALUES.ENDPOINT_PATH
   );
 
   return {
@@ -147,17 +159,17 @@ function useEndpointState() {
 
 function useRequestState(): RequestState {
   const popup = usePopupState(
-    STATE_KEYS.SHOW_REQUEST_POPUP,
-    DEFAULT_VALUES.SHOW_REQUEST_POPUP
+    REQUEST_STATE_KEYS.SHOW_REQUEST_POPUP,
+    REQUEST_DEFAULT_VALUES.SHOW_REQUEST_POPUP
   );
   const content = useEditableContent(
-    STATE_KEYS.REQUEST_CONTENT,
-    STATE_KEYS.IS_REQUEST_EDITING,
-    DEFAULT_VALUES.REQUEST_CONTENT
+    REQUEST_STATE_KEYS.REQUEST_CONTENT,
+    REQUEST_STATE_KEYS.IS_REQUEST_EDITING,
+    REQUEST_DEFAULT_VALUES.REQUEST_CONTENT
   );
   const feature = useToggleableFeature(
-    STATE_KEYS.HAS_REQUEST,
-    DEFAULT_VALUES.HAS_REQUEST
+    REQUEST_STATE_KEYS.HAS_REQUEST,
+    REQUEST_DEFAULT_VALUES.HAS_REQUEST
   );
 
   return {
@@ -178,17 +190,17 @@ function useRequestState(): RequestState {
 
 function useResponseState(): ResponseState {
   const popup = usePopupState(
-    STATE_KEYS.SHOW_RESPONSE_POPUP,
-    DEFAULT_VALUES.SHOW_RESPONSE_POPUP
+    RESPONSE_STATE_KEYS.SHOW_RESPONSE_POPUP,
+    RESPONSE_DEFAULT_VALUES.SHOW_RESPONSE_POPUP
   );
   const content = useEditableContent(
-    STATE_KEYS.RESPONSE_CONTENT,
-    STATE_KEYS.IS_RESPONSE_EDITING,
-    DEFAULT_VALUES.RESPONSE_CONTENT
+    RESPONSE_STATE_KEYS.RESPONSE_CONTENT,
+    RESPONSE_STATE_KEYS.IS_RESPONSE_EDITING,
+    RESPONSE_DEFAULT_VALUES.RESPONSE_CONTENT
   );
   const feature = useToggleableFeature(
-    STATE_KEYS.HAS_RESPONSE,
-    DEFAULT_VALUES.HAS_RESPONSE
+    RESPONSE_STATE_KEYS.HAS_RESPONSE,
+    RESPONSE_DEFAULT_VALUES.HAS_RESPONSE
   );
 
   return {
