@@ -1,25 +1,25 @@
-import { usePopupState } from "../../hooks/usePopupState";
+import { usePanelState } from "../../hooks/usePanelState";
 import { useToggleableFeature } from "../../hooks/useToggleableFeature";
 
 const { widget } = figma;
 const { useSyncedState } = widget;
 
 const REQUEST_STATE_KEYS = {
-  SHOW_REQUEST_POPUP: "showRequestPopup",
+  SHOW_REQUEST_PANEL: "showRequestPanel",
   REQUEST_CONTENT: "requestContent",
   IS_REQUEST_ENABLED: "isRequestEnabled",
 } as const;
 
 const REQUEST_DEFAULT_VALUES = {
-  SHOW_REQUEST_POPUP: false,
+  SHOW_REQUEST_PANEL: false,
   REQUEST_CONTENT: "",
   IS_REQUEST_ENABLED: false,
 } as const;
 
 export type RequestState = {
-  showRequestPopup: boolean;
-  setShowRequestPopup: (show: boolean) => void;
-  toggleRequestPopup: () => void;
+  showRequestPanel: boolean;
+  setShowRequestPanel: (show: boolean) => void;
+  toggleRequestPanel: () => void;
   requestContent: string;
   setRequestContent: (content: string) => void;
   isRequestEnabled: boolean;
@@ -29,9 +29,9 @@ export type RequestState = {
 };
 
 export function useRequestState(): RequestState {
-  const popup = usePopupState(
-    REQUEST_STATE_KEYS.SHOW_REQUEST_POPUP,
-    REQUEST_DEFAULT_VALUES.SHOW_REQUEST_POPUP
+  const panel = usePanelState(
+    REQUEST_STATE_KEYS.SHOW_REQUEST_PANEL,
+    REQUEST_DEFAULT_VALUES.SHOW_REQUEST_PANEL
   );
   const [requestContent, setRequestContent] = useSyncedState(
     REQUEST_STATE_KEYS.REQUEST_CONTENT,
@@ -44,18 +44,18 @@ export function useRequestState(): RequestState {
 
   const enableRequest = () => {
     feature.enable();
-    popup.setShow(true);
+    panel.setShow(true);
   };
 
   const disableRequest = () => {
     feature.disable();
-    popup.setShow(false);
+    panel.setShow(false);
   };
 
   return {
-    showRequestPopup: popup.show,
-    setShowRequestPopup: popup.setShow,
-    toggleRequestPopup: popup.toggle,
+    showRequestPanel: panel.show,
+    setShowRequestPanel: panel.setShow,
+    toggleRequestPanel: panel.toggle,
 
     requestContent,
     setRequestContent,

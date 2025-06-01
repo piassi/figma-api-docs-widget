@@ -346,7 +346,7 @@ Best for: Triggering functions
 ## 🔧 Utility Hooks Available
 
 - `useToggleableFeature(key, defaultValue)` - For enable/disable functionality
-- `usePopupState(key, defaultValue)` - For popup/modal state management
+- `usePanelState(key, defaultValue)` - For panel state management
 - `useEditableContent(key, defaultValue)` - For editable text content
 
 ## 📋 Naming Conventions

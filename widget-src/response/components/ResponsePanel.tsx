@@ -2,20 +2,20 @@ const { widget } = figma;
 const { AutoLayout } = widget;
 
 import { AddIcon } from "../../components/icons/AddIcon";
-import { Popup } from "../../components/Popup";
+import { Panel } from "../../components/Panel";
 import { ResponseItem } from "./ResponseItem";
 import { ResponseFeature } from "../hooks/useResponseFeature";
 
-type ResponsePopUpProps = {
+type ResponsePanelProps = {
   response: ResponseFeature;
 };
 
-export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
-  if (!response.state.isResponseEnabled || !response.state.showResponsesPopup)
+export const ResponsePanel = ({ response }: ResponsePanelProps) => {
+  if (!response.state.isResponseEnabled || !response.state.showResponsesPanel)
     return null;
 
   return (
-    <Popup
+    <Panel
       isVisible={true}
       title={`Responses (${response.state.responses.length})`}
       headerActions={
@@ -44,6 +44,6 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
           />
         ))}
       </AutoLayout>
-    </Popup>
+    </Panel>
   );
 };

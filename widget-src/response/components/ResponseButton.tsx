@@ -12,11 +12,11 @@ export const ResponseButton = ({ response }: ResponseButtonProps) => {
   return (
     <Button
       label={`Responses (${response.state.responses.length})`}
-      onClick={response.state.toggleResponsesPopup}
+      onClick={response.state.toggleResponsesPanel}
       backgroundColor="#000000"
       strokeColor="#000000"
       icon={
-        response.state.showResponsesPopup ? (
+        response.state.showResponsesPanel ? (
           <ChevronUpIcon size={16} color="#FFFFFF" />
         ) : (
           <ChevronDownIcon size={16} color="#FFFFFF" />

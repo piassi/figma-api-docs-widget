@@ -12,9 +12,9 @@ export const RequestButton = ({ request }: RequestButtonProps) => {
   return (
     <Button
       label="Request"
-      onClick={request.state.toggleRequestPopup}
+      onClick={request.state.toggleRequestPanel}
       icon={
-        request.state.showRequestPopup ? (
+        request.state.showRequestPanel ? (
           <ChevronUpIcon size={16} color="#FFFFFF" />
         ) : (
           <ChevronDownIcon size={16} color="#FFFFFF" />

@@ -2,16 +2,16 @@ const { widget } = figma;
 const { AutoLayout } = widget;
 
 import { RequestFeature } from "../hooks/useRequestFeature";
-import { Popup } from "../../components/Popup";
+import { Panel } from "../../components/Panel";
 import { JsonContent } from "../../components/JsonContent";
 import { EditIcon } from "../../components/icons/index";
 import { useJsonEditor } from "../../hooks/useJsonEditor";
 
-type RequestPopupProps = {
+type RequestPanelProps = {
   request: RequestFeature;
 };
 
-export const RequestPopup = ({ request }: RequestPopupProps) => {
+export const RequestPanel = ({ request }: RequestPanelProps) => {
   if (!request.state.isRequestEnabled) return null;
 
   const { openEditor } = useJsonEditor();
@@ -38,8 +38,8 @@ export const RequestPopup = ({ request }: RequestPopupProps) => {
   );
 
   return (
-    <Popup
-      isVisible={request.state.showRequestPopup}
+    <Panel
+      isVisible={request.state.showRequestPanel}
       title="Expected Request Body"
       headerActions={headerActions}
     >
@@ -48,6 +48,6 @@ export const RequestPopup = ({ request }: RequestPopupProps) => {
         onContentChange={request.state.setRequestContent}
         emptyMessage="Empty request body"
       />
-    </Popup>
+    </Panel>
   );
 };

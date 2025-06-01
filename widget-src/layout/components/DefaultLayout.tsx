@@ -5,8 +5,8 @@ import { EndpointBar } from "../../endpoint/components/EndpointBar";
 import { DescriptionField } from "../../description/components/DescriptionField";
 import { RequestButton } from "../../request/components/RequestButton";
 import { ResponseButton } from "../../response/components/ResponseButton";
-import { RequestPopup } from "../../request/components/RequestPopup";
-import { ResponsePopUp } from "../../response/components/ResponsePopup";
+import { RequestPanel } from "../../request/components/RequestPanel";
+import { ResponsePanel } from "../../response/components/ResponsePanel";
 
 import type { EndpointFeature } from "../../endpoint/hooks/useEndpointFeature";
 import type { RequestFeature } from "../../request/hooks/useRequestFeature";
@@ -78,8 +78,8 @@ export function DefaultLayout({
         </AutoLayout>
       </AutoLayout>
 
-      <RequestPopup request={request} />
-      <ResponsePopUp response={response} />
+      <RequestPanel request={request} />
+      <ResponsePanel response={response} />
     </AutoLayout>
   );
 }

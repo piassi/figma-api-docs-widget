@@ -8,7 +8,7 @@ const { useSyncedState } = widget;
 const RESPONSE_STATE_KEYS = {
   RESPONSES: "responses",
   IS_RESPONSE_ENABLED: "isResponseEnabled",
-  SHOW_RESPONSES_POPUP: "showResponsesPopup",
+  SHOW_RESPONSES_PANEL: "showResponsesPanel",
 } as const;
 
 export type ResponseItem = {
@@ -20,7 +20,7 @@ export type ResponseItem = {
 const RESPONSE_DEFAULT_VALUES = {
   RESPONSES: [] as ResponseItem[],
   IS_RESPONSE_ENABLED: false,
-  SHOW_RESPONSES_POPUP: false,
+  SHOW_RESPONSES_PANEL: false,
 } as const;
 
 export type ResponseState = {
@@ -30,9 +30,9 @@ export type ResponseState = {
   updateResponse: (id: string, content: string) => void;
   updateResponseStatus: (id: string, statusCode: HttpStatus) => void;
   removeResponse: (id: string) => void;
-  showResponsesPopup: boolean;
-  setShowResponsesPopup: (show: boolean) => void;
-  toggleResponsesPopup: () => void;
+  showResponsesPanel: boolean;
+  setShowResponsesPanel: (show: boolean) => void;
+  toggleResponsesPanel: () => void;
   isResponseEnabled: boolean;
   setIsResponseEnabled: (enabled: boolean) => void;
   enableResponse: () => void;
@@ -45,9 +45,9 @@ export function useResponseState(): ResponseState {
     RESPONSE_DEFAULT_VALUES.RESPONSES
   ) as [ResponseItem[], (responses: ResponseItem[]) => void];
 
-  const [showResponsesPopup, setShowResponsesPopup] = useSyncedState(
-    RESPONSE_STATE_KEYS.SHOW_RESPONSES_POPUP,
-    RESPONSE_DEFAULT_VALUES.SHOW_RESPONSES_POPUP
+  const [showResponsesPanel, setShowResponsesPanel] = useSyncedState(
+    RESPONSE_STATE_KEYS.SHOW_RESPONSES_PANEL,
+    RESPONSE_DEFAULT_VALUES.SHOW_RESPONSES_PANEL
   ) as [boolean, (show: boolean) => void];
 
   const feature = useToggleableFeature(
@@ -80,13 +80,13 @@ export function useResponseState(): ResponseState {
     );
   };
 
-  const toggleResponsesPopup = () => {
-    setShowResponsesPopup(!showResponsesPopup);
+  const toggleResponsesPanel = () => {
+    setShowResponsesPanel(!showResponsesPanel);
   };
 
   const enableResponse = () => {
     feature.enable();
-    setShowResponsesPopup(true);
+    setShowResponsesPanel(true);
 
     if (responses.length === 0) {
       const defaultResponse: ResponseItem = {
@@ -100,7 +100,7 @@ export function useResponseState(): ResponseState {
 
   const disableResponse = () => {
     feature.disable();
-    setShowResponsesPopup(false);
+    setShowResponsesPanel(false);
   };
 
   const removeResponse = (id: string) => {
@@ -115,9 +115,9 @@ export function useResponseState(): ResponseState {
     updateResponse,
     updateResponseStatus,
     removeResponse,
-    showResponsesPopup,
-    setShowResponsesPopup,
-    toggleResponsesPopup,
+    showResponsesPanel,
+    setShowResponsesPanel,
+    toggleResponsesPanel,
 
     isResponseEnabled: feature.enabled,
     setIsResponseEnabled: feature.setEnabled,

@@ -3,19 +3,19 @@ const { AutoLayout, Text } = widget;
 
 import { DEFAULT_LAYOUT_WIDTH } from "../layout/constants";
 
-type PopupProps = {
+type PanelProps = {
   isVisible: boolean;
   title: string;
   children: FigmaDeclarativeNode;
   headerActions?: FigmaDeclarativeNode;
 };
 
-export function Popup({
+export function Panel({
   isVisible,
   title,
   children,
   headerActions,
-}: PopupProps) {
+}: PanelProps) {
   if (!isVisible) {
     return null;
   }
