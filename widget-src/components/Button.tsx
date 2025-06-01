@@ -21,7 +21,7 @@ export function Button({
   return (
     <AutoLayout
       direction="vertical"
-      padding={16}
+      padding={{ horizontal: 14, vertical: 8 }}
       cornerRadius={12}
       fill={backgroundColor}
       stroke={strokeColor}
@@ -29,7 +29,7 @@ export function Button({
       width="fill-parent"
       verticalAlignItems="center"
       horizontalAlignItems="center"
-      height={50}
+      height={40}
       effect={{
         type: "drop-shadow",
         color: "#00000020",
@@ -46,7 +46,7 @@ export function Button({
         width="fill-parent"
       >
         <Text
-          fontSize={16}
+          fontSize={14}
           fill="#FFFFFF"
           fontWeight={600}
           tooltip={tooltip}

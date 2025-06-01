@@ -13,6 +13,7 @@ import type { RequestFeature } from "../../request/hooks/useRequestFeature";
 import type { ResponseFeature } from "../../response/hooks/useResponseFeature";
 import type { ColorFeature } from "../../color/hooks/useColorFeature";
 import type { DescriptionFeature } from "../../description/hooks/useDescriptionFeature";
+import { DEFAULT_LAYOUT_WIDTH } from "../constants";
 
 type DefaultLayoutProps = {
   endpoint: EndpointFeature;
@@ -30,7 +31,7 @@ export function DefaultLayout({
   description,
 }: DefaultLayoutProps) {
   return (
-    <AutoLayout direction="vertical" spacing={16} padding={0}>
+    <AutoLayout direction="vertical" spacing={8} padding={0}>
       <AutoLayout
         direction="vertical"
         spacing={0}
@@ -38,7 +39,7 @@ export function DefaultLayout({
         cornerRadius={12}
         fill="#FFFFFF"
         stroke="#E6E6E6"
-        width={500}
+        width={DEFAULT_LAYOUT_WIDTH}
       >
         <AutoLayout
           width="fill-parent"
@@ -54,8 +55,8 @@ export function DefaultLayout({
 
         <AutoLayout
           direction="vertical"
-          spacing={16}
-          padding={20}
+          spacing={12}
+          padding={{ top: 11, left: 16, right: 16, bottom: 16 }}
           width="fill-parent"
         >
           <EndpointBar

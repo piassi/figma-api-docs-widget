@@ -1,0 +1,1 @@
+export const DEFAULT_LAYOUT_WIDTH = 450;

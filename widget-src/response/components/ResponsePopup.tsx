@@ -8,6 +8,7 @@ import { StatusBadge } from "./StatusBadge";
 import { ResponseFeature } from "../hooks/useResponseFeature";
 import { JSON_EDITOR_HTML, STATUS_SELECTOR_HTML } from "../../utils/htmlLoader";
 import { HttpStatus } from "../../constants/httpStatuses";
+import { DEFAULT_LAYOUT_WIDTH } from "../../layout/constants";
 
 type ResponsePopUpProps = {
   response: ResponseFeature;
@@ -83,12 +84,12 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
     <AutoLayout
       direction="vertical"
       spacing={12}
-      padding={20}
+      padding={16}
       cornerRadius={8}
       fill="#FFFFFF"
       stroke="#E0E0E0"
       strokeWidth={1}
-      width={500}
+      width={DEFAULT_LAYOUT_WIDTH}
     >
       <AutoLayout
         direction="horizontal"
@@ -99,6 +100,7 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
         <Text fontSize={16} fill="#333333" fontWeight={600} width="fill-parent">
           Responses ({response.state.responses.length})
         </Text>
+
         <AutoLayout
           onClick={response.state.addResponse}
           tooltip="Add new response"

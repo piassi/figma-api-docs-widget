@@ -4,6 +4,7 @@ const { AutoLayout, Text } = widget;
 import { HighlightedText } from "./HighlightedText";
 import { EditIcon } from "./icons/index";
 import { JSON_EDITOR_HTML } from "../utils/htmlLoader";
+import { DEFAULT_LAYOUT_WIDTH } from "../layout/constants";
 
 type PopupProps = {
   isVisible: boolean;
@@ -52,12 +53,12 @@ export function Popup({
     <AutoLayout
       direction="vertical"
       spacing={12}
-      padding={20}
+      padding={16}
       cornerRadius={8}
       fill="#FFFFFF"
       stroke="#E0E0E0"
       strokeWidth={1}
-      width={500}
+      width={DEFAULT_LAYOUT_WIDTH}
     >
       <AutoLayout
         direction="horizontal"
