@@ -1,5 +1,5 @@
+import type { Feature } from '@/types';
 import { useColorState, type ColorState } from "./useColorState";
-import type { Feature } from "../../../types";
 
 export type ColorFeature = Feature<ColorState>;
 

@@ -1,10 +1,10 @@
+import type { Feature } from '@/types';
 import {
   useLayoutState,
   type LayoutState,
   LAYOUT_OPTIONS,
   isValidLayoutType,
 } from "./useLayoutState";
-import type { Feature } from "../../../types";
 
 export type LayoutFeature = Feature<LayoutState>;
 

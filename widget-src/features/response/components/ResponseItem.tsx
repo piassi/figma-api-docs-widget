@@ -1,13 +1,13 @@
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-import { JsonContent } from "../../../shared/components/JsonContent";
-import { EditIcon, DeleteIcon } from "../../../shared/components/icons/index";
+import { JsonContent } from '@/shared/components/JsonContent';
+import { EditIcon, DeleteIcon } from '@/shared/components/icons/index';
+import { useJsonEditor } from '@/shared/hooks/useJsonEditor';
+import { useStatusSelector } from '@/shared/hooks/useStatusSelector';
+import { HttpStatus } from '@/shared/constants/httpStatuses';
+import { ResponseItem as ResponseItemType } from '@/features/response/hooks/useResponseState';
 import { StatusBadge } from "./StatusBadge";
-import { useJsonEditor } from "../../../shared/hooks/useJsonEditor";
-import { useStatusSelector } from "../../../shared/hooks/useStatusSelector";
-import { HttpStatus } from "../../../shared/constants/httpStatuses";
-import { ResponseItem as ResponseItemType } from "../hooks/useResponseState";
 
 type ResponseItemProps = {
   response: ResponseItemType;

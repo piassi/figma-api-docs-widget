@@ -1,6 +1,6 @@
-import { useToggleableFeature } from "../../../shared/hooks/useToggleableFeature";
 import { v4 as uuid } from "@lukeed/uuid";
-import { HttpStatus } from "../../../shared/constants/httpStatuses";
+import { useToggleableFeature } from '@/shared/hooks/useToggleableFeature';
+import { HttpStatus } from '@/shared/constants/httpStatuses';
 
 const { widget } = figma;
 const { useSyncedState } = widget;

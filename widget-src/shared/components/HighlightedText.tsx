@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { tokenizeJson, JsonToken } from "../utils/jsonHighlighter";
+import { tokenizeJson, JsonToken } from '@/shared/utils/jsonHighlighter';
 
 type HighlightedTextProps = {
   content: string;

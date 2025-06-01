@@ -1,9 +1,9 @@
 import {
   HTTP_METHODS,
   isValidHttpMethod,
-} from "../../../shared/constants/httpMethods";
+} from '@/shared/constants/httpMethods';
+import type { Feature } from '@/types';
 import { useEndpointState, type EndpointState } from "./useEndpointState";
-import type { Feature } from "../../../types";
 
 export type EndpointFeature = Feature<EndpointState>;
 

@@ -1,4 +1,4 @@
-import { useToggleableFeature } from "../../../shared/hooks/useToggleableFeature";
+import { useToggleableFeature } from '@/shared/hooks/useToggleableFeature';
 
 const { widget } = figma;
 const { useSyncedState } = widget;

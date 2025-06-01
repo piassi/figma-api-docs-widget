@@ -1,9 +1,9 @@
-import { Button } from "../../../shared/components/Button";
+import { Button } from '@/shared/components/Button';
 import {
   ChevronDownIcon,
   ChevronUpIcon,
-} from "../../../shared/components/icons/index";
-import { ResponseFeature } from "../hooks/useResponseFeature";
+} from '@/shared/components/icons/index';
+import { ResponseFeature } from '@/features/response/hooks/useResponseFeature';
 
 type ResponseButtonProps = {
   response: ResponseFeature;

@@ -1,5 +1,5 @@
+import type { Feature } from '@/types';
 import { useResponseState, type ResponseState } from "./useResponseState";
-import type { Feature } from "../../../types";
 
 export type ResponseFeature = Feature<ResponseState>;
 

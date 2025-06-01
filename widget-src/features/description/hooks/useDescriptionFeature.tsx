@@ -1,8 +1,8 @@
+import type { Feature } from '@/types';
 import {
   useDescriptionState,
   type DescriptionState,
 } from "./useDescriptionState";
-import type { Feature } from "../../../types";
 
 export type DescriptionFeature = Feature<DescriptionState>;
 

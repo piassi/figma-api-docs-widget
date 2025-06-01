@@ -1,5 +1,5 @@
-import { STATUS_SELECTOR_HTML } from "../utils/htmlLoader";
-import { HttpStatus } from "../constants/httpStatuses";
+import { STATUS_SELECTOR_HTML } from '@/shared/utils/htmlLoader';
+import { HttpStatus } from '@/shared/constants/httpStatuses';
 
 export const useStatusSelector = () => {
   const openStatusSelector = (

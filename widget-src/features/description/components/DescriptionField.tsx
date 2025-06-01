@@ -1,4 +1,4 @@
-import { DescriptionFeature } from "../hooks/useDescriptionFeature";
+import { DescriptionFeature } from '@/features/description/hooks/useDescriptionFeature';
 
 const { widget } = figma;
 const { AutoLayout, Input, Text } = widget;

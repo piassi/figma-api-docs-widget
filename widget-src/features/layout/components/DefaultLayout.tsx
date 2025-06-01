@@ -1,19 +1,19 @@
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-import { EndpointBar } from "../../endpoint/components/EndpointBar";
-import { DescriptionField } from "../../description/components/DescriptionField";
-import { RequestButton } from "../../request/components/RequestButton";
-import { ResponseButton } from "../../response/components/ResponseButton";
-import { RequestPanel } from "../../request/components/RequestPanel";
-import { ResponsePanel } from "../../response/components/ResponsePanel";
+import { EndpointBar } from "@/features/endpoint/components/EndpointBar";
+import { DescriptionField } from "@/features/description/components/DescriptionField";
+import { RequestButton } from "@/features/request/components/RequestButton";
+import { ResponseButton } from "@/features/response/components/ResponseButton";
+import { RequestPanel } from "@/features/request/components/RequestPanel";
+import { ResponsePanel } from "@/features/response/components/ResponsePanel";
 
-import type { EndpointFeature } from "../../endpoint/hooks/useEndpointFeature";
-import type { RequestFeature } from "../../request/hooks/useRequestFeature";
-import type { ResponseFeature } from "../../response/hooks/useResponseFeature";
-import type { ColorFeature } from "../../color/hooks/useColorFeature";
-import type { DescriptionFeature } from "../../description/hooks/useDescriptionFeature";
-import { DEFAULT_LAYOUT_WIDTH } from "../constants";
+import type { EndpointFeature } from "@/features/endpoint/hooks/useEndpointFeature";
+import type { RequestFeature } from "@/features/request/hooks/useRequestFeature";
+import type { ResponseFeature } from "@/features/response/hooks/useResponseFeature";
+import type { ColorFeature } from "@/features/color/hooks/useColorFeature";
+import type { DescriptionFeature } from "@/features/description/hooks/useDescriptionFeature";
+import { DEFAULT_LAYOUT_WIDTH } from "@/features/layout/constants";
 
 type DefaultLayoutProps = {
   endpoint: EndpointFeature;

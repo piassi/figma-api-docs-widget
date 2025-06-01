@@ -1,11 +1,11 @@
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-import { RequestFeature } from "../hooks/useRequestFeature";
-import { Panel } from "../../../shared/components/Panel";
-import { JsonContent } from "../../../shared/components/JsonContent";
-import { EditIcon } from "../../../shared/components/icons/index";
-import { useJsonEditor } from "../../../shared/hooks/useJsonEditor";
+import { RequestFeature } from '@/features/request/hooks/useRequestFeature';
+import { Panel } from '@/shared/components/Panel';
+import { JsonContent } from '@/shared/components/JsonContent';
+import { EditIcon } from '@/shared/components/icons/index';
+import { useJsonEditor } from '@/shared/hooks/useJsonEditor';
 
 type RequestPanelProps = {
   request: RequestFeature;

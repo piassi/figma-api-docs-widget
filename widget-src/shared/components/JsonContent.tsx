@@ -1,8 +1,8 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
+import { useJsonEditor } from '@/shared/hooks/useJsonEditor';
 import { HighlightedText } from "./HighlightedText";
-import { useJsonEditor } from "../hooks/useJsonEditor";
 
 type JsonContentProps = {
   content: string;

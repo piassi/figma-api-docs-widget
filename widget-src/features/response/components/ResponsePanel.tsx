@@ -1,10 +1,10 @@
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-import { AddIcon } from "../../../shared/components/icons/AddIcon";
-import { Panel } from "../../../shared/components/Panel";
+import { AddIcon } from '@/shared/components/icons/AddIcon';
+import { Panel } from '@/shared/components/Panel';
+import { ResponseFeature } from '@/features/response/hooks/useResponseFeature';
 import { ResponseItem } from "./ResponseItem";
-import { ResponseFeature } from "../hooks/useResponseFeature";
 
 type ResponsePanelProps = {
   response: ResponseFeature;

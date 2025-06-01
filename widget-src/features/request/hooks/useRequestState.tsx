@@ -1,5 +1,5 @@
-import { usePanelState } from "../../../shared/hooks/usePanelState";
-import { useToggleableFeature } from "../../../shared/hooks/useToggleableFeature";
+import { usePanelState } from '@/shared/hooks/usePanelState';
+import { useToggleableFeature } from '@/shared/hooks/useToggleableFeature';
 
 const { widget } = figma;
 const { useSyncedState } = widget;

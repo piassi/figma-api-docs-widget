@@ -1,4 +1,4 @@
-import { JSON_EDITOR_HTML } from "../utils/htmlLoader";
+import { JSON_EDITOR_HTML } from '@/shared/utils/htmlLoader';
 
 export const useJsonEditor = () => {
   const openEditor = (content: string, onSave: (content: string) => void) => {
