@@ -1,22 +1,11 @@
 const { widget } = figma;
-const { AutoLayout, Input } = widget;
-
-import { HttpMethod } from '@/shared/constants/httpMethods';
-import { HttpMethodBadge } from "./HttpMethodBadge";
+const { AutoLayout } = widget;
 
 type EndpointBarProps = {
-  httpMethod: HttpMethod;
-  endpointPath: string;
-  onEndpointPathChange: (path: string) => void;
-  placeholder?: string;
+  children: FigmaDeclarativeNode;
 };
 
-export function EndpointBar({
-  httpMethod,
-  endpointPath,
-  onEndpointPathChange,
-  placeholder = "/api/endpoint/path",
-}: EndpointBarProps) {
+export function EndpointBar({ children }: EndpointBarProps) {
   return (
     <AutoLayout
       direction="horizontal"
@@ -28,22 +17,7 @@ export function EndpointBar({
       width="fill-parent"
       horizontalAlignItems="center"
     >
-      <HttpMethodBadge method={httpMethod} />
-      <Input
-        value={endpointPath}
-        onTextEditEnd={(e) => {
-          onEndpointPathChange(e.characters);
-        }}
-        fontSize={16}
-        fill="#333333"
-        fontWeight={600}
-        placeholder={placeholder}
-        width="fill-parent"
-        inputFrameProps={{
-          fill: "#00000000",
-          stroke: "#00000000",
-        }}
-      />
+      {children}
     </AutoLayout>
   );
 }

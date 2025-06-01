@@ -1,3 +1,5 @@
+import { useLayoutTheme } from "@/features/layout/hooks/useLayoutTheme";
+
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
@@ -14,6 +16,8 @@ export function Panel({
   children,
   headerActions,
 }: PanelProps) {
+  const { theme } = useLayoutTheme();
+
   if (!isVisible) {
     return null;
   }
@@ -35,7 +39,12 @@ export function Panel({
         width="fill-parent"
         verticalAlignItems="center"
       >
-        <Text fontSize={16} fill="#333333" fontWeight={600} width="fill-parent">
+        <Text
+          fontSize={theme.text.body}
+          fill="#333333"
+          fontWeight={600}
+          width="fill-parent"
+        >
           {title}
         </Text>
 

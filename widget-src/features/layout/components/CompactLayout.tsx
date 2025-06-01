@@ -1,7 +1,6 @@
 const { widget } = figma;
 const { AutoLayout, Input } = widget;
 
-import { EndpointBar } from "@/features/endpoint/components/EndpointBar";
 import { DescriptionField } from "@/features/description/components/DescriptionField";
 import { RequestButton } from "@/features/request/components/RequestButton";
 import { ResponseButton } from "@/features/response/components/ResponseButton";
@@ -13,10 +12,11 @@ import type { RequestFeature } from "@/features/request/hooks/useRequestFeature"
 import type { ResponseFeature } from "@/features/response/hooks/useResponseFeature";
 import type { ColorFeature } from "@/features/color/hooks/useColorFeature";
 import type { DescriptionFeature } from "@/features/description/hooks/useDescriptionFeature";
+import { EndpointBar } from "@/features/endpoint/components/EndpointBar";
 import { HttpMethodBadge } from "@/features/endpoint/components/HttpMethodBadge";
 import { useLayoutTheme } from "../hooks/useLayoutTheme";
 
-type DefaultLayoutProps = {
+type CompactLayoutProps = {
   endpoint: EndpointFeature;
   request: RequestFeature;
   response: ResponseFeature;
@@ -24,13 +24,13 @@ type DefaultLayoutProps = {
   description: DescriptionFeature;
 };
 
-export function DefaultLayout({
+export function CompactLayout({
   endpoint,
   request,
   response,
   color,
   description,
-}: DefaultLayoutProps) {
+}: CompactLayoutProps) {
   const { theme } = useLayoutTheme();
 
   return (
@@ -59,15 +59,15 @@ export function DefaultLayout({
         <AutoLayout
           direction="vertical"
           spacing={12}
-          padding={{ top: 11, left: 16, right: 16, bottom: 16 }}
+          padding={{ top: 7, left: 12, right: 12, bottom: 12 }}
           width="fill-parent"
         >
           <EndpointBar>
             <>
               <HttpMethodBadge
                 method={endpoint.state.httpMethod}
-                padding={{ horizontal: 16, vertical: 8 }}
-                fontSize={theme.text.body}
+                padding={{ horizontal: 8, vertical: 4 }}
+                fontSize={14}
               />
 
               <Input
@@ -75,7 +75,7 @@ export function DefaultLayout({
                 onTextEditEnd={(e) => {
                   endpoint.state.setEndpointPath(e.characters);
                 }}
-                fontSize={theme.text.body}
+                fontSize={14}
                 fill="#333333"
                 fontWeight={600}
                 placeholder="/api/endpoint/path"
@@ -92,7 +92,7 @@ export function DefaultLayout({
 
           {(request.state.isRequestEnabled ||
             response.state.isResponseEnabled) && (
-            <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
+            <AutoLayout direction="vertical" spacing={8} width="fill-parent">
               <RequestButton request={request} />
               <ResponseButton response={response} />
             </AutoLayout>

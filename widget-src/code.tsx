@@ -9,6 +9,7 @@ import { useColorFeature } from "@/features/color/hooks/useColorFeature";
 import { useDescriptionFeature } from "@/features/description/hooks/useDescriptionFeature";
 import { useLayoutFeature } from "@/features/layout/hooks/useLayoutFeature";
 import { DefaultLayout } from "@/features/layout/components/DefaultLayout";
+import { CompactLayout } from "./features/layout/components/CompactLayout";
 
 function Widget() {
   try {
@@ -21,15 +22,29 @@ function Widget() {
 
     useWidgetMenu([color, layout, endpoint, request, response, description]);
 
-    return (
-      <DefaultLayout
-        endpoint={endpoint}
-        request={request}
-        response={response}
-        color={color}
-        description={description}
-      />
-    );
+    switch (layout.state.layoutTheme) {
+      case "Compact":
+        return (
+          <CompactLayout
+            endpoint={endpoint}
+            request={request}
+            response={response}
+            color={color}
+            description={description}
+          />
+        );
+
+      default:
+        return (
+          <DefaultLayout
+            endpoint={endpoint}
+            request={request}
+            response={response}
+            color={color}
+            description={description}
+          />
+        );
+    }
   } catch (error) {
     console.error(`[DEBUG] Error in Widget function:`, error);
 

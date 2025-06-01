@@ -1,10 +1,12 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { HttpMethod } from '@/shared/constants/httpMethods';
+import { HttpMethod } from "@/shared/constants/httpMethods";
 
 type HttpMethodBadgeProps = {
   method: HttpMethod;
+  padding: WidgetJSX.Padding;
+  fontSize: number;
 };
 
 const METHOD_COLORS: Record<HttpMethod, string> = {
@@ -18,17 +20,20 @@ const METHOD_COLORS: Record<HttpMethod, string> = {
   ANY: "#9E9E9E",
 };
 
-export function HttpMethodBadge({ method }: HttpMethodBadgeProps) {
+export function HttpMethodBadge({
+  method,
+  padding,
+  fontSize,
+}: HttpMethodBadgeProps) {
   return (
     <AutoLayout
-      padding={{ horizontal: 16, vertical: 8 }}
+      padding={padding}
       cornerRadius={8}
       fill={METHOD_COLORS[method]}
-      width={85}
       horizontalAlignItems="center"
       verticalAlignItems="center"
     >
-      <Text fontSize={16} fill="#FFFFFF" fontWeight={600}>
+      <Text fontSize={fontSize} fill="#FFFFFF" fontWeight={600}>
         {method}
       </Text>
     </AutoLayout>
