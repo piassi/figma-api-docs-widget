@@ -1,36 +1,53 @@
-Below are the steps to get your widget running. You can also find instructions at:
+<p align="center">
+    <img width="20%" src="assets/api-docs-icon.png" alt="API Docs Logo" />
+    <h1 align="center">API Docs</h1>
+</p>
+<p align="center">
+    A free, open-source Figma tool for documenting REST API endpoints directly in your design files.
+</p>
 
-https://www.figma.com/widget-docs/setup-guide/
+<p align="center">
+    <img src="https://img.shields.io/badge/figma-tool-orange" alt="Figma Tool">
+    <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
+    <img src="https://img.shields.io/badge/built%20with-TypeScript-blue" alt="Built with TypeScript">
+    <img src="https://img.shields.io/badge/open%20source-❤️-red" alt="Open Source">
+</p>
 
-This widget template uses TypeScript and NPM, two standard tools in creating JavaScript applications.
+## Features
 
-First, download Node.js which comes with NPM. This will allow you to install TypeScript and other
-libraries. You can find the download link here:
+- **Custom API Endpoints** - Set any REST API path
+- **Color-Coded Endpoints** - Set custom colors according to service or any other differentiation
+- **Request & Response Bodies** - Document expected payloads
+- **Multiple Status Codes** - 200 OK, 401 Unauthorized, etc.
+- **Descriptions** - Add context and documentation
+- **Works in Figma & FigJam** - Use in design files and whiteboards
 
-https://nodejs.org/en/download/
+## Screenshot
 
-Next, install TypeScript, esbuild and the latest type definitions by running:
+![Screenshot of FigType widget](assets/cover.jpg)
 
+## Quick Start
+
+1. Add API Docs to your Figma canvas
+2. Click the HTTP method to change it
+3. Set your API endpoint path
+4. Add description and configure responses
+5. Done! Share with your team
+
+## Development
+
+```bash
 npm install
+npm run watch    # Start development
+npm run build    # Build for production
+```
 
-If you are familiar with JavaScript, TypeScript will look very familiar. In fact, valid JavaScript code
-is already valid Typescript code.
+## License
 
-TypeScript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+MIT License - use freely in any project, commercial or personal. See [LICENSE](LICENSE) for details.
 
-For more information, visit https://www.typescriptlang.org/
+---
 
-Using TypeScript requires a compiler to convert TypeScript (widget-src/code.tsx) into JavaScript (dist/code.js)
-for the browser to run. We use esbuild to do this for us.
-
-We recommend writing TypeScript code using Visual Studio code:
-
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Open this directory in Visual Studio Code.
-3. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-   then select "npm: watch". You will have to do this again every time
-   you reopen Visual Studio Code.
-
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+<p align="center">
+    <strong>Made with ❤️ for the design and development community</strong>
+</p>

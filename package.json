@@ -1,7 +1,7 @@
 {
-  "name": "figpoints-widget",
+  "name": "figpoints-api-docs-widget",
   "version": "1.0.0",
-  "description": "Your Figma widget",
+  "description": "A free, open-source Figma tool for documenting REST API endpoints directly in your design files.",
   "scripts": {
     "prebuild": "node scripts/embed-html.js",
     "build": "npm run prebuild && esbuild widget-src/code.tsx --bundle --outfile=dist/code.js --target=es6",
