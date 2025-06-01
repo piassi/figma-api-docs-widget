@@ -22,7 +22,7 @@ export function HttpMethodBadge({ method }: HttpMethodBadgeProps) {
   return (
     <AutoLayout
       padding={{ horizontal: 16, vertical: 8 }}
-      cornerRadius={10}
+      cornerRadius={8}
       fill={METHOD_COLORS[method]}
       width={85}
       horizontalAlignItems="center"
