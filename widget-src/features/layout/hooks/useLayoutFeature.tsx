@@ -1,8 +1,8 @@
-import type { Feature } from '@/types';
+import type { Feature } from "@/types";
 import {
   useLayoutState,
   type LayoutState,
-  LAYOUT_OPTIONS,
+  LAYOUT_THEMES,
   isValidLayoutType,
 } from "./useLayoutState";
 
@@ -16,16 +16,16 @@ export function useLayoutFeature(): LayoutFeature {
     menuOptions: [
       {
         itemType: "dropdown",
-        propertyName: "layoutType",
+        propertyName: "layoutTheme",
         tooltip: "Layout",
-        selectedOption: state.layoutType,
-        options: LAYOUT_OPTIONS.map((layout) => ({
+        selectedOption: state.layoutTheme,
+        options: LAYOUT_THEMES.map((layout) => ({
           option: layout,
           label: layout,
         })),
         handler: (propertyValue) => {
           if (propertyValue && isValidLayoutType(propertyValue)) {
-            state.setLayoutType(propertyValue);
+            state.setLayoutTheme(propertyValue);
           }
         },
       },

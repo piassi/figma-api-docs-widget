@@ -1,8 +1,6 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { DEFAULT_LAYOUT_WIDTH } from '@/features/layout/constants';
-
 type PanelProps = {
   isVisible: boolean;
   title: string;
@@ -29,7 +27,7 @@ export function Panel({
       fill="#FFFFFF"
       stroke="#E0E0E0"
       strokeWidth={1}
-      width={DEFAULT_LAYOUT_WIDTH}
+      width="fill-parent"
     >
       <AutoLayout
         direction="horizontal"

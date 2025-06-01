@@ -13,7 +13,7 @@ import type { RequestFeature } from "@/features/request/hooks/useRequestFeature"
 import type { ResponseFeature } from "@/features/response/hooks/useResponseFeature";
 import type { ColorFeature } from "@/features/color/hooks/useColorFeature";
 import type { DescriptionFeature } from "@/features/description/hooks/useDescriptionFeature";
-import { DEFAULT_LAYOUT_WIDTH } from "@/features/layout/constants";
+import { useLayoutTheme } from "../hooks/useLayoutTheme";
 
 type DefaultLayoutProps = {
   endpoint: EndpointFeature;
@@ -30,6 +30,8 @@ export function DefaultLayout({
   color,
   description,
 }: DefaultLayoutProps) {
+  const { theme } = useLayoutTheme();
+
   return (
     <AutoLayout direction="vertical" spacing={8} padding={0}>
       <AutoLayout
@@ -39,7 +41,7 @@ export function DefaultLayout({
         cornerRadius={12}
         fill="#FFFFFF"
         stroke="#E6E6E6"
-        width={DEFAULT_LAYOUT_WIDTH}
+        width={theme.widgetWidth}
       >
         <AutoLayout
           width="fill-parent"
