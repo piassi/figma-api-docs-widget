@@ -90,6 +90,8 @@ export function Popup({
         cornerRadius={4}
         fill="#F8F8F8"
         width="fill-parent"
+        onClick={openEditor}
+        tooltip="Click to edit JSON"
       >
         {content.trim() === "" ? (
           <Text fontSize={12} fill="#999999">

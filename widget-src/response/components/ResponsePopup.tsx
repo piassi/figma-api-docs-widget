@@ -175,6 +175,8 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
               width="fill-parent"
               stroke="#E6E6E6"
               strokeWidth={1}
+              onClick={() => openEditor(responseItem.id, responseItem.content)}
+              tooltip="Click to edit JSON"
             >
               {responseItem.content.trim() === "" ? (
                 <Text fontSize={12} fill="#999999">
