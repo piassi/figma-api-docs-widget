@@ -1,8 +1,8 @@
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-import { AddIcon } from "../../../components/icons/AddIcon";
-import { Panel } from "../../../components/Panel";
+import { AddIcon } from "../../../shared/components/icons/AddIcon";
+import { Panel } from "../../../shared/components/Panel";
 import { ResponseItem } from "./ResponseItem";
 import { ResponseFeature } from "../hooks/useResponseFeature";
 

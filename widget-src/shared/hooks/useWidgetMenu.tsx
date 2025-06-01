@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { usePropertyMenu } = widget;
 
-import type { Feature, MenuOption, MenuOptionHandler } from "../types";
+import type { Feature, MenuOption, MenuOptionHandler } from "../../types";
 
 export function useWidgetMenu(features: Feature<unknown>[]) {
   const allMenuOptions = features.reduce<MenuOption[]>((acc, feature) => {

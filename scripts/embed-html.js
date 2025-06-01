@@ -15,7 +15,7 @@ const uiPanels = [
   }
 ];
 
-const outputPath = path.join(__dirname, '../widget-src/utils/htmlLoader.ts');
+const outputPath = path.join(__dirname, '../widget-src/shared/utils/htmlLoader.ts');
 
 try {
   let tsContent = `/**
@@ -52,7 +52,7 @@ export const ${panel.name} = \`${escapedContent}\`;
   // Write the TypeScript file
   fs.writeFileSync(outputPath, tsContent, 'utf8');
   
-  console.log('✅ HTML content embedded into widget-src/utils/htmlLoader.ts');
+  console.log('✅ HTML content embedded into widget-src/shared/utils/htmlLoader.ts');
   console.log(`   - ${uiPanels.length} UI panel(s) processed:`);
   uiPanels.forEach(panel => {
     console.log(`     • ${panel.name} from ${path.basename(panel.inputPath)}`);

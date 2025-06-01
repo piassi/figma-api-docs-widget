@@ -5,7 +5,7 @@ import {
   HttpStatus,
   getStatusMessage,
   getStatusColor,
-} from "../../../constants/httpStatuses";
+} from "../../../shared/constants/httpStatuses";
 
 type StatusBadgeProps = {
   status: HttpStatus;

@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-import { useWidgetMenu } from "./hooks/useWidgetMenu";
+import { useWidgetMenu } from "./shared/hooks/useWidgetMenu";
 import { useEndpointFeature } from "./features/endpoint/hooks/useEndpointFeature";
 import { useRequestFeature } from "./features/request/hooks/useRequestFeature";
 import { useResponseFeature } from "./features/response/hooks/useResponseFeature";

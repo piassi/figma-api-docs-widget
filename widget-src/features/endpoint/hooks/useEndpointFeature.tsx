@@ -1,7 +1,7 @@
 import {
   HTTP_METHODS,
   isValidHttpMethod,
-} from "../../../constants/httpMethods";
+} from "../../../shared/constants/httpMethods";
 import { useEndpointState, type EndpointState } from "./useEndpointState";
 import type { Feature } from "../../../types";
 

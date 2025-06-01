@@ -1,8 +1,8 @@
-import { Button } from "../../../components/Button";
+import { Button } from "../../../shared/components/Button";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
-} from "../../../components/icons/index";
+} from "../../../shared/components/icons/index";
 import { RequestFeature } from "../hooks/useRequestFeature";
 
 type RequestButtonProps = {
