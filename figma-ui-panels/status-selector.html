@@ -71,7 +71,7 @@
     
     .status-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
       gap: 8px;
     }
     
@@ -79,7 +79,7 @@
       background: white;
       border: 1px solid #ddd;
       border-radius: 8px;
-      padding: 12px 8px;
+      padding: 10px 6px;
       cursor: pointer;
       text-align: center;
       transition: all 0.2s ease;
@@ -87,15 +87,8 @@
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      min-height: 65px;
+      min-height: 45px;
       justify-content: center;
-    }
-    
-    .status-button:hover {
-      background: #f8f9fa;
-      border-color: #007AFF;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
     
     .status-button.current {
@@ -105,10 +98,14 @@
       transform: translateY(-1px);
       box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
     }
-    
-    .status-button.current:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+    .status-button.current:hover,
+    .status-button:hover {
+      color: black;
+      background: #f8f9fa;
+      border-color: #007AFF;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
     
     .status-code {
@@ -156,11 +153,6 @@
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <div class="title">Select Status Code</div>
-      <button class="close-btn" onclick="closeSelector()" title="Close">×</button>
-    </div>
-    
     <div class="category">
       <div class="category-title">2xx Success</div>
       <div class="status-grid">
