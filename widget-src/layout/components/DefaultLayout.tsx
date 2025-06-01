@@ -33,29 +33,48 @@ export function DefaultLayout({
     <AutoLayout direction="vertical" spacing={16} padding={0}>
       <AutoLayout
         direction="vertical"
-        spacing={16}
-        padding={20}
+        spacing={0}
+        padding={0}
         cornerRadius={12}
-        fill={color.state.widgetColor}
+        fill="#FFFFFF"
         stroke="#E6E6E6"
         width={500}
       >
-        <EndpointBar
-          httpMethod={endpoint.state.httpMethod}
-          endpointPath={endpoint.state.endpointPath}
-          onEndpointPathChange={endpoint.state.setEndpointPath}
-          placeholder="/api/endpoint/path"
+        <AutoLayout
+          width="fill-parent"
+          height={5}
+          fill={color.state.widgetColor}
+          cornerRadius={{
+            topLeft: 12,
+            topRight: 12,
+            bottomLeft: 0,
+            bottomRight: 0,
+          }}
         />
 
-        <DescriptionField description={description} />
+        <AutoLayout
+          direction="vertical"
+          spacing={16}
+          padding={20}
+          width="fill-parent"
+        >
+          <EndpointBar
+            httpMethod={endpoint.state.httpMethod}
+            endpointPath={endpoint.state.endpointPath}
+            onEndpointPathChange={endpoint.state.setEndpointPath}
+            placeholder="/api/endpoint/path"
+          />
 
-        {(request.state.isRequestEnabled ||
-          response.state.isResponseEnabled) && (
-          <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
-            <RequestButton request={request} />
-            <ResponseButton response={response} />
-          </AutoLayout>
-        )}
+          <DescriptionField description={description} />
+
+          {(request.state.isRequestEnabled ||
+            response.state.isResponseEnabled) && (
+            <AutoLayout direction="horizontal" spacing={16} width="fill-parent">
+              <RequestButton request={request} />
+              <ResponseButton response={response} />
+            </AutoLayout>
+          )}
+        </AutoLayout>
       </AutoLayout>
 
       <RequestPopup request={request} />
