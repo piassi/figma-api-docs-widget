@@ -2,13 +2,13 @@ const { widget } = figma;
 const { AutoLayout } = widget;
 
 import { useWidgetMenu } from "./hooks/useWidgetMenu";
-import { useEndpointFeature } from "./endpoint/hooks/useEndpointFeature";
-import { useRequestFeature } from "./request/hooks/useRequestFeature";
-import { useResponseFeature } from "./response/hooks/useResponseFeature";
-import { useColorFeature } from "./color/hooks/useColorFeature";
-import { useDescriptionFeature } from "./description/hooks/useDescriptionFeature";
-import { useLayoutFeature } from "./layout/hooks/useLayoutFeature";
-import { DefaultLayout } from "./layout/components/DefaultLayout";
+import { useEndpointFeature } from "./features/endpoint/hooks/useEndpointFeature";
+import { useRequestFeature } from "./features/request/hooks/useRequestFeature";
+import { useResponseFeature } from "./features/response/hooks/useResponseFeature";
+import { useColorFeature } from "./features/color/hooks/useColorFeature";
+import { useDescriptionFeature } from "./features/description/hooks/useDescriptionFeature";
+import { useLayoutFeature } from "./features/layout/hooks/useLayoutFeature";
+import { DefaultLayout } from "./features/layout/components/DefaultLayout";
 
 function Widget() {
   try {

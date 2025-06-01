@@ -1,7 +1,7 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { DEFAULT_LAYOUT_WIDTH } from "../layout/constants";
+import { DEFAULT_LAYOUT_WIDTH } from "../features/layout/constants";
 
 type PanelProps = {
   isVisible: boolean;
