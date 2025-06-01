@@ -1,53 +1,24 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { HighlightedText } from "./HighlightedText";
-import { EditIcon } from "./icons/index";
-import { JSON_EDITOR_HTML } from "../utils/htmlLoader";
 import { DEFAULT_LAYOUT_WIDTH } from "../layout/constants";
 
 type PopupProps = {
   isVisible: boolean;
   title: string;
-  content: string;
-  onContentChange?: (content: string) => void;
+  children: FigmaDeclarativeNode;
+  headerActions?: FigmaDeclarativeNode;
 };
 
 export function Popup({
   isVisible,
   title,
-  content,
-  onContentChange,
+  children,
+  headerActions,
 }: PopupProps) {
   if (!isVisible) {
     return null;
   }
-
-  const openEditor = () => {
-    return new Promise<void>((resolve) => {
-      figma.showUI(JSON_EDITOR_HTML, {
-        width: 550,
-        height: 500,
-        title: "JSON Editor",
-      });
-
-      figma.ui.onmessage = (message) => {
-        if (message.type === "request-content") {
-          figma.ui.postMessage({
-            type: "init-content",
-            content: content,
-          });
-        } else if (message.type === "save-content") {
-          onContentChange && onContentChange(message.content);
-          figma.closePlugin();
-          resolve();
-        } else if (message.type === "cancel") {
-          figma.closePlugin();
-          resolve();
-        }
-      };
-    });
-  };
 
   return (
     <AutoLayout
@@ -69,38 +40,11 @@ export function Popup({
         <Text fontSize={16} fill="#333333" fontWeight={600} width="fill-parent">
           {title}
         </Text>
-        {onContentChange && (
-          <AutoLayout
-            onClick={openEditor}
-            tooltip="Edit JSON"
-            padding={4}
-            cornerRadius={4}
-            fill="#00000000"
-            horizontalAlignItems="center"
-            verticalAlignItems="center"
-          >
-            <EditIcon />
-          </AutoLayout>
-        )}
+
+        {headerActions}
       </AutoLayout>
 
-      <AutoLayout
-        direction="vertical"
-        padding={16}
-        cornerRadius={4}
-        fill="#F8F8F8"
-        width="fill-parent"
-        onClick={openEditor}
-        tooltip="Click to edit JSON"
-      >
-        {content.trim() === "" ? (
-          <Text fontSize={12} fill="#999999">
-            Empty request body
-          </Text>
-        ) : (
-          <HighlightedText content={content} />
-        )}
-      </AutoLayout>
+      {children}
     </AutoLayout>
   );
 }

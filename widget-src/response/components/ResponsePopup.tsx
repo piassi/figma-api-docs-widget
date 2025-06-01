@@ -1,14 +1,10 @@
 const { widget } = figma;
-const { AutoLayout, Text } = widget;
+const { AutoLayout } = widget;
 
-import { HighlightedText } from "../../components/HighlightedText";
-import { EditIcon, DeleteIcon } from "../../components/icons/index";
 import { AddIcon } from "../../components/icons/AddIcon";
-import { StatusBadge } from "./StatusBadge";
+import { Popup } from "../../components/Popup";
+import { ResponseItem } from "./ResponseItem";
 import { ResponseFeature } from "../hooks/useResponseFeature";
-import { JSON_EDITOR_HTML, STATUS_SELECTOR_HTML } from "../../utils/htmlLoader";
-import { HttpStatus } from "../../constants/httpStatuses";
-import { DEFAULT_LAYOUT_WIDTH } from "../../layout/constants";
 
 type ResponsePopUpProps = {
   response: ResponseFeature;
@@ -18,89 +14,11 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
   if (!response.state.isResponseEnabled || !response.state.showResponsesPopup)
     return null;
 
-  const openEditor = (responseId: string, content: string) => {
-    return new Promise<void>((resolve) => {
-      figma.showUI(JSON_EDITOR_HTML, {
-        width: 550,
-        height: 500,
-        title: "JSON Editor",
-      });
-
-      figma.ui.onmessage = (message) => {
-        const messageType = message.pluginMessage?.type || message.type;
-
-        if (messageType === "request-content") {
-          figma.ui.postMessage({
-            type: "init-content",
-            content: content,
-          });
-        } else if (messageType === "save-content") {
-          const messageContent =
-            message.pluginMessage?.content || message.content;
-          response.state.updateResponse(responseId, messageContent);
-          figma.closePlugin();
-          resolve();
-        } else if (messageType === "cancel") {
-          figma.closePlugin();
-          resolve();
-        }
-      };
-    });
-  };
-
-  const openStatusSelector = (
-    responseId: string,
-    currentStatus: HttpStatus
-  ) => {
-    return new Promise<void>((resolve) => {
-      figma.showUI(STATUS_SELECTOR_HTML, {
-        width: 460,
-        height: 600,
-        title: "Select Status Code",
-      });
-
-      figma.ui.onmessage = (message) => {
-        const messageType = message.pluginMessage?.type || message.type;
-
-        if (messageType === "request-current-status") {
-          figma.ui.postMessage({
-            type: "init-status-selector",
-            currentStatus: currentStatus,
-          });
-        } else if (messageType === "status-selected") {
-          const messageStatus = message.pluginMessage?.status || message.status;
-          response.state.updateResponseStatus(responseId, messageStatus);
-          figma.closePlugin();
-          resolve();
-        } else if (messageType === "status-selector-closed") {
-          figma.closePlugin();
-          resolve();
-        }
-      };
-    });
-  };
-
   return (
-    <AutoLayout
-      direction="vertical"
-      spacing={12}
-      padding={16}
-      cornerRadius={8}
-      fill="#FFFFFF"
-      stroke="#E0E0E0"
-      strokeWidth={1}
-      width={DEFAULT_LAYOUT_WIDTH}
-    >
-      <AutoLayout
-        direction="horizontal"
-        spacing={8}
-        width="fill-parent"
-        verticalAlignItems="center"
-      >
-        <Text fontSize={16} fill="#333333" fontWeight={600} width="fill-parent">
-          Responses ({response.state.responses.length})
-        </Text>
-
+    <Popup
+      isVisible={true}
+      title={`Responses (${response.state.responses.length})`}
+      headerActions={
         <AutoLayout
           onClick={response.state.addResponse}
           tooltip="Add new response"
@@ -112,83 +30,20 @@ export const ResponsePopUp = ({ response }: ResponsePopUpProps) => {
         >
           <AddIcon size={16} color="#666666" />
         </AutoLayout>
-      </AutoLayout>
-
+      }
+    >
       <AutoLayout direction="vertical" spacing={16} width="fill-parent">
         {response.state.responses.map((responseItem) => (
-          <AutoLayout
+          <ResponseItem
             key={responseItem.id}
-            direction="vertical"
-            spacing={8}
-            width="fill-parent"
-          >
-            <AutoLayout
-              direction="horizontal"
-              spacing={4}
-              width="fill-parent"
-              verticalAlignItems="center"
-            >
-              <StatusBadge
-                status={responseItem.statusCode}
-                onClick={() =>
-                  openStatusSelector(responseItem.id, responseItem.statusCode)
-                }
-                tooltip="Click to change status code"
-              />
-
-              <AutoLayout height={1} width="fill-parent" />
-
-              {response.state.responses.length > 1 && (
-                <AutoLayout
-                  onClick={() => response.state.removeResponse(responseItem.id)}
-                  tooltip="Delete response"
-                  padding={4}
-                  cornerRadius={4}
-                  fill="#00000000"
-                  horizontalAlignItems="center"
-                  verticalAlignItems="center"
-                >
-                  <DeleteIcon size={14} />
-                </AutoLayout>
-              )}
-
-              <AutoLayout
-                onClick={() =>
-                  openEditor(responseItem.id, responseItem.content)
-                }
-                tooltip="Edit JSON"
-                padding={4}
-                cornerRadius={4}
-                fill="#00000000"
-                horizontalAlignItems="center"
-                verticalAlignItems="center"
-              >
-                <EditIcon size={14} />
-              </AutoLayout>
-            </AutoLayout>
-
-            <AutoLayout
-              direction="vertical"
-              padding={12}
-              cornerRadius={4}
-              fill="#F8F8F8"
-              width="fill-parent"
-              stroke="#E6E6E6"
-              strokeWidth={1}
-              onClick={() => openEditor(responseItem.id, responseItem.content)}
-              tooltip="Click to edit JSON"
-            >
-              {responseItem.content.trim() === "" ? (
-                <Text fontSize={12} fill="#999999">
-                  Empty response body
-                </Text>
-              ) : (
-                <HighlightedText content={responseItem.content} />
-              )}
-            </AutoLayout>
-          </AutoLayout>
+            response={responseItem}
+            onContentChange={response.state.updateResponse}
+            onStatusChange={response.state.updateResponseStatus}
+            onDelete={response.state.removeResponse}
+            showDeleteButton={response.state.responses.length > 1}
+          />
         ))}
       </AutoLayout>
-    </AutoLayout>
+    </Popup>
   );
 };
