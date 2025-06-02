@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Read Node.js version from .nvmrc
+      run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+      
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Type checking
+      run: npm run tsc
+      
+    - name: Lint code
+      run: npm run lint
+      
+    - name: Build project
+      run: npm run build
+      
+    - name: Check for build artifacts
+      run: |
+        if [ ! -f "dist/code.js" ]; then
+          echo "Build failed: dist/code.js not found"
+          exit 1
+        fi
+        echo "✅ Build successful: dist/code.js created" 
