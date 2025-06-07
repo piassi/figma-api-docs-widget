@@ -89,7 +89,10 @@
         {
           "patterns": [
             {
-              "group": ["../../../*", "../../*"],
+              "group": [
+                "../../../*",
+                "../../*"
+              ],
               "message": "Use path alias '@/' instead of relative imports going up more than one level"
             }
           ]

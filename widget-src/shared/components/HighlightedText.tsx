@@ -1,96 +1,87 @@
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-import { tokenizeJson, JsonToken } from '@/shared/utils/jsonHighlighter';
+interface HighlightedTextProps {
+  code: string;
+}
 
-type HighlightedTextProps = {
-  content: string;
-};
+// Simple memoization cache
+const cache = new Map<string, string>();
 
-const FONT_SIZE = 12;
-const FONT_FAMILY = "Fira Code";
-const WIDTH = "fill-parent";
+function HighlightedText({ code }: HighlightedTextProps) {
+  const formatJSON = (jsonString: string): string => {
+    // Check cache first
+    const cacheKey = `format_${jsonString.length}_${jsonString.slice(0, 100)}`;
+    if (cache.has(cacheKey)) {
+      return cache.get(cacheKey)!;
+    }
 
-export function HighlightedText({ content }: HighlightedTextProps) {
-  try {
-    const tokens = tokenizeJson(content);
+    try {
+      const parsed = JSON.parse(jsonString);
+      const formatted = JSON.stringify(parsed, null, 2);
+      cache.set(cacheKey, formatted);
+      return formatted;
+    } catch (error) {
+      console.warn("Failed to parse JSON:", error);
+      cache.set(cacheKey, jsonString);
+      return jsonString;
+    }
+  };
 
-    if (tokens.length === 0) {
-      return (
+  const renderHighlightedCode = () => {
+    try {
+      // Format JSON (cached)
+      const formattedCode = formatJSON(code);
+
+      // Split into lines
+      const allLines = formattedCode.split("\n");
+
+      // Chunk lines together to reduce component count
+      const LINES_PER_CHUNK = 30;
+      const chunks: string[] = [];
+
+      for (let i = 0; i < allLines.length; i += LINES_PER_CHUNK) {
+        const chunkLines = allLines.slice(i, i + LINES_PER_CHUNK);
+
+        // Add line numbers and combine into single string
+        const numberedLines = chunkLines.map((line, idx) => {
+          const lineNum = ("   " + (i + idx + 1).toString()).slice(-3);
+          return `${lineNum}  ${line}`;
+        });
+
+        chunks.push(numberedLines.join("\n"));
+      }
+
+      // Create one Text component per chunk
+      const chunkComponents = chunks.map((chunkContent, chunkIndex) => (
         <Text
-          fontSize={FONT_SIZE}
-          fill="#333333"
-          fontFamily={FONT_FAMILY}
-          width={WIDTH}
+          key={chunkIndex}
+          fontSize={11}
+          fontFamily="Fira Code"
+          fill="#333"
+          width="fill-parent"
         >
-          {content}
+          {chunkContent}
+        </Text>
+      ));
+
+      return (
+        <AutoLayout direction="vertical" spacing={4} width="fill-parent">
+          {chunkComponents}
+        </AutoLayout>
+      );
+    } catch (error) {
+      console.error("Error rendering JSON:", error);
+      return (
+        <Text fontSize={11} fill="#333" fontFamily="Fira Code">
+          {code.slice(0, 1000)}
+          {code.length > 1000 ? "..." : ""}
         </Text>
       );
     }
+  };
 
-    return (
-      <AutoLayout direction="vertical" spacing={0} width="fill-parent">
-        {renderTokensAsLines(tokens)}
-      </AutoLayout>
-    );
-  } catch (error) {
-    console.error("Error in HighlightedText:", error);
-    // Fallback to plain text on error
-    return (
-      <Text
-        fontSize={FONT_SIZE}
-        fill="#333333"
-        fontFamily={FONT_FAMILY}
-        width={WIDTH}
-      >
-        {content}
-      </Text>
-    );
-  }
+  return renderHighlightedCode();
 }
 
-function renderTokensAsLines(tokens: JsonToken[]) {
-  const lines: JsonToken[][] = [];
-  let currentLine: JsonToken[] = [];
-
-  for (const token of tokens) {
-    if (token.value.includes("\n")) {
-      const parts = token.value.split("\n");
-      for (let i = 0; i < parts.length; i++) {
-        if (parts[i]) {
-          currentLine.push({ ...token, value: parts[i] });
-        }
-        if (i < parts.length - 1) {
-          lines.push(currentLine);
-          currentLine = [];
-        }
-      }
-    } else {
-      currentLine.push(token);
-    }
-  }
-
-  if (currentLine.length > 0) {
-    lines.push(currentLine);
-  }
-
-  return lines.map((lineTokens, lineIndex) => (
-    <AutoLayout
-      key={lineIndex}
-      direction="horizontal"
-      spacing={0}
-      width="fill-parent"
-    >
-      {lineTokens.map((token, tokenIndex) => (
-        <Text
-          key={`${lineIndex}-${tokenIndex}`}
-          fontSize={FONT_SIZE}
-          fill={token.color}
-          fontFamily={FONT_FAMILY}
-        >
-          {token.value}
-        </Text>
-      ))}
-    </AutoLayout>
-  ));
-}
+export { HighlightedText };
