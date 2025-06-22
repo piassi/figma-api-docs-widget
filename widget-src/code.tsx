@@ -8,6 +8,7 @@ import { useResponseFeature } from "@/features/response/hooks/useResponseFeature
 import { useColorFeature } from "@/features/color/hooks/useColorFeature";
 import { useDescriptionFeature } from "@/features/description/hooks/useDescriptionFeature";
 import { useLayoutFeature } from "@/features/layout/hooks/useLayoutFeature";
+import { useWidthControlFeature } from "@/features/width-control/hooks/useWidthControlFeature";
 import { DefaultLayout } from "@/features/layout/components/DefaultLayout";
 import { CompactLayout } from "./features/layout/components/CompactLayout";
 
@@ -19,8 +20,17 @@ function Widget() {
     const color = useColorFeature();
     const description = useDescriptionFeature();
     const layout = useLayoutFeature();
+    const widthControl = useWidthControlFeature();
 
-    useWidgetMenu([color, layout, endpoint, request, response, description]);
+    useWidgetMenu([
+      color,
+      layout,
+      endpoint,
+      request,
+      response,
+      description,
+      widthControl,
+    ]);
 
     switch (layout.state.layoutTheme) {
       case "Compact":
@@ -31,6 +41,7 @@ function Widget() {
             response={response}
             color={color}
             description={description}
+            widthControl={widthControl}
           />
         );
 
@@ -42,6 +53,7 @@ function Widget() {
             response={response}
             color={color}
             description={description}
+            widthControl={widthControl}
           />
         );
     }

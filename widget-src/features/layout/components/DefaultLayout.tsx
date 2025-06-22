@@ -13,6 +13,7 @@ import type { RequestFeature } from "@/features/request/hooks/useRequestFeature"
 import type { ResponseFeature } from "@/features/response/hooks/useResponseFeature";
 import type { ColorFeature } from "@/features/color/hooks/useColorFeature";
 import type { DescriptionFeature } from "@/features/description/hooks/useDescriptionFeature";
+import type { WidthControlFeature } from "@/features/width-control/hooks/useWidthControlFeature";
 import { HttpMethodBadge } from "@/features/endpoint/components/HttpMethodBadge";
 import { useLayoutTheme } from "../hooks/useLayoutTheme";
 
@@ -22,6 +23,7 @@ type DefaultLayoutProps = {
   response: ResponseFeature;
   color: ColorFeature;
   description: DescriptionFeature;
+  widthControl: WidthControlFeature;
 };
 
 export function DefaultLayout({
@@ -30,8 +32,11 @@ export function DefaultLayout({
   response,
   color,
   description,
+  widthControl,
 }: DefaultLayoutProps) {
-  const { theme } = useLayoutTheme();
+  const { theme } = useLayoutTheme({
+    customWidth: widthControl.state.widgetWidth,
+  });
 
   return (
     <AutoLayout direction="vertical" spacing={8} padding={0}>
